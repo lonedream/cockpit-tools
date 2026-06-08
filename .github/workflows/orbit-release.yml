@@ -82,6 +82,9 @@ jobs:
           $version = "${{ steps.app_version.outputs.VERSION }}"
           Copy-Item "target/release/bundle/nsis/*_${version}_x64-setup.exe" release-assets -Force
           Copy-Item "target/release/bundle/msi/*_${version}_x64_en-US.msi" release-assets -Force
+          Get-ChildItem release-assets -File | Where-Object { $_.Name.Contains(" ") } | ForEach-Object {
+            Rename-Item -LiteralPath $_.FullName -NewName ($_.Name -replace " ", ".")
+          }
           Get-ChildItem release-assets | Format-Table Name,Length
 
       - name: Sign updater assets
