@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Cockpit Tools",
+  "productName": "Orbit Desk",
   "version": "0.25.3",
   "identifier": "com.jlcodes.cockpit-tools",
   "build": {
@@ -14,7 +14,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "Cockpit Tools",
+        "title": "Orbit Desk",
         "width": 1280,
         "height": 800,
         "minWidth": 900,
@@ -27,7 +27,7 @@
       },
       {
         "label": "floating-card",
-        "title": "Cockpit Tools",
+        "title": "Orbit Desk",
         "create": false,
         "width": 250,
         "height": 290,
@@ -50,9 +50,7 @@
     "active": true,
     "targets": "all",
     "createUpdaterArtifacts": true,
-    "externalBin": [
-      "../sidecars/cockpit-cliproxy/bin/cockpit-cliproxy"
-    ],
+    "externalBin": ["../sidecars/cockpit-cliproxy/bin/cockpit-cliproxy"],
     "icon": [
       "icons/48x48.png",
       "icons/32x32.png",
@@ -79,23 +77,20 @@
       "../src/assets/icons/zed.png": "native-menu-icons/zed.png"
     },
     "macOS": {
-      "bundleName": "Cockpit Tools",
+      "bundleName": "Orbit Desk",
       "infoPlist": "Info.plist"
     }
   },
   "plugins": {
     "deep-link": {
       "desktop": {
-        "schemes": [
-          "cockpit-tools",
-          "cockpittools"
-        ]
+        "schemes": ["cockpit-tools", "cockpittools"]
       }
     },
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEMxRkU1RTdBRDdCRUUzM0QKUldROTQ3N1hlbDcrd1ZVQ2E3b1ZoVUdXL3BWQmpjdzNnWllNUW1LNHVwcE9wdGI1Q1UxQmdnQ0oK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDQ2MjAxODRCQTVFNTg5OTAKUldTUWllV2xTeGdnUmxMQkxxTjFHK0szUzlacVZZUjRqMW1xemxwbFJMK0U1VlFkdGZCeU9jWjAK",
       "endpoints": [
-        "https://github.com/jlcodes99/cockpit-tools/releases/latest/download/latest.json"
+        "https://github.com/lonedream/cockpit-tools/releases/latest/download/latest.json"
       ]
     }
   }

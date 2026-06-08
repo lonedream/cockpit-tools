@@ -74,11 +74,15 @@ const PAGE_PLATFORM_MAP: Partial<Record<Page, PlatformId>> = {
 };
 
 const APP_DISPLAY_NAME =
-  import.meta.env.VITE_COCKPIT_TOOLS_PROFILE === 'dev' ? 'Cockpit Tools Dev' : 'Cockpit Tools';
+  import.meta.env.VITE_COCKPIT_TOOLS_PROFILE === 'dev' ? 'Orbit Desk Dev' : 'Orbit Desk';
 
 const CLASSIC_NAV_MIN_SCALE = 0.5;
 const CLASSIC_NAV_SCALE_EPSILON = 0.004;
 const CLASSIC_NAV_SCROLL_EPSILON = 4;
+const SHOW_DASHBOARD_ENTRY = false;
+const SHOW_AUXILIARY_NAVIGATION = false;
+const SHOW_UPDATE_NAV_ENTRY = false;
+const SHOW_API_RELAY_NAV_ENTRY = false;
 
 function renderEntryIcon(entry: SideNavEntry, size: number) {
   if (entry.kind === 'api-relay') {
@@ -183,7 +187,8 @@ export function SideNav({
 
   const hiddenSet = useMemo(() => new Set(hiddenEntryIds), [hiddenEntryIds]);
   const sidebarSet = useMemo(() => new Set(sidebarEntryIds), [sidebarEntryIds]);
-  const apiRelayEntryVisible = sponsorEntryVisible && apiRelaySidebarVisible;
+  const apiRelayEntryVisible =
+    SHOW_API_RELAY_NAV_ENTRY && sponsorEntryVisible && apiRelaySidebarVisible;
 
   const orderedEntries = useMemo<SideNavEntry[]>(() => {
     const platformEntries: SideNavEntry[] = orderedEntryIds
@@ -343,7 +348,7 @@ export function SideNav({
   const isMoreActive = !!currentEntryId && !sidebarMenuEntryIdSet.has(currentEntryId);
   const shouldLockActiveOnMore = showMore;
 
-  const shouldShowUpdateEntry = updateActionState !== 'hidden'
+  const shouldShowUpdateEntry = SHOW_UPDATE_NAV_ENTRY && updateActionState !== 'hidden'
     && (
       updateRemindersEnabled
       || updateActionState === 'downloading'
@@ -902,18 +907,20 @@ export function SideNav({
         className={`nav-items${isClassicLayout && !classicNavNeedsScroll ? ' nav-items-no-scroll' : ''}`}
         ref={navItemsRef}
       >
-        <button
-          className={`nav-item ${page === 'dashboard' && !shouldLockActiveOnMore ? 'active' : ''}`}
-          onClick={() => setPage('dashboard')}
-          title={t('nav.dashboard')}
-        >
-          <GaugeCircle size={isClassicLayout ? classicMainIconSize : 20} />
-          {showClassicLabels ? (
-            <span className="nav-item-text">{t('nav.dashboard')}</span>
-          ) : !isClassicLayout ? (
-            <span className="tooltip">{t('nav.dashboard')}</span>
-          ) : null}
-        </button>
+        {SHOW_DASHBOARD_ENTRY && (
+          <button
+            className={`nav-item ${page === 'dashboard' && !shouldLockActiveOnMore ? 'active' : ''}`}
+            onClick={() => setPage('dashboard')}
+            title={t('nav.dashboard')}
+          >
+            <GaugeCircle size={isClassicLayout ? classicMainIconSize : 20} />
+            {showClassicLabels ? (
+              <span className="nav-item-text">{t('nav.dashboard')}</span>
+            ) : !isClassicLayout ? (
+              <span className="tooltip">{t('nav.dashboard')}</span>
+            ) : null}
+          </button>
+        )}
 
         {sidebarMenuEntries.map((entry) => {
           const active = currentEntryId === entry.id && !shouldLockActiveOnMore;
@@ -934,19 +941,21 @@ export function SideNav({
           );
         })}
 
-        <button
-          ref={moreButtonRef}
-          className={`nav-item ${showMore || isMoreActive ? 'active' : ''}`}
-          onClick={() => setShowMore((prev) => !prev)}
-          title={t('nav.morePlatforms', '更多平台')}
-        >
-          <LayoutGrid size={isClassicLayout ? classicMainIconSize : 20} />
-          {showClassicLabels ? (
-            <span className="nav-item-text">{t('nav.morePlatforms', '更多平台')}</span>
-          ) : !isClassicLayout ? (
-            <span className="tooltip">{t('nav.morePlatforms', '更多平台')}</span>
-          ) : null}
-        </button>
+        {moreMenuEntries.length > 0 && (
+          <button
+            ref={moreButtonRef}
+            className={`nav-item ${showMore || isMoreActive ? 'active' : ''}`}
+            onClick={() => setShowMore((prev) => !prev)}
+            title={t('nav.morePlatforms', '更多平台')}
+          >
+            <LayoutGrid size={isClassicLayout ? classicMainIconSize : 20} />
+            {showClassicLabels ? (
+              <span className="nav-item-text">{t('nav.morePlatforms', '更多平台')}</span>
+            ) : !isClassicLayout ? (
+              <span className="tooltip">{t('nav.morePlatforms', '更多平台')}</span>
+            ) : null}
+          </button>
+        )}
 
         {morePopoverContent && (
           isClassicLayout && typeof document !== 'undefined'
@@ -960,27 +969,31 @@ export function SideNav({
         <div className="nav-bottom-actions" ref={bottomActionsRef}>
 
 
-          <button
-            className={`nav-item ${page === '2fa' && !shouldLockActiveOnMore ? 'active' : ''}`}
-            onClick={() => setPage('2fa')}
-            title={t('nav.2faManager', '2FA / MFA 管理')}
-          >
-            <ShieldCheck size={isClassicLayout ? classicMainIconSize : 20} />
-            {showClassicLabels ? (
-              <span className="nav-item-text">{t('nav.2faManager', '2FA / MFA 管理')}</span>
-            ) : null}
-          </button>
+          {SHOW_AUXILIARY_NAVIGATION && (
+            <>
+              <button
+                className={`nav-item ${page === '2fa' && !shouldLockActiveOnMore ? 'active' : ''}`}
+                onClick={() => setPage('2fa')}
+                title={t('nav.2faManager', '2FA / MFA 管理')}
+              >
+                <ShieldCheck size={isClassicLayout ? classicMainIconSize : 20} />
+                {showClassicLabels ? (
+                  <span className="nav-item-text">{t('nav.2faManager', '2FA / MFA 管理')}</span>
+                ) : null}
+              </button>
 
-          <button
-            className="nav-item"
-            onClick={onOpenLogViewer}
-            title={t('nav.logs', '日志')}
-          >
-            <FileText size={isClassicLayout ? classicMainIconSize : 20} />
-            {showClassicLabels ? (
-              <span className="nav-item-text">{t('nav.logs', '日志')}</span>
-            ) : null}
-          </button>
+              <button
+                className="nav-item"
+                onClick={onOpenLogViewer}
+                title={t('nav.logs', '日志')}
+              >
+                <FileText size={isClassicLayout ? classicMainIconSize : 20} />
+                {showClassicLabels ? (
+                  <span className="nav-item-text">{t('nav.logs', '日志')}</span>
+                ) : null}
+              </button>
+            </>
+          )}
 
           <button
             className={`nav-item ${page === 'settings' && !shouldLockActiveOnMore ? 'active' : ''}`}

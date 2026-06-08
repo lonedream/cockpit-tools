@@ -1,0 +1,146 @@
+name: Orbit Desk Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  windows-release:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Rust setup
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Go setup
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: sidecars/cockpit-cliproxy/go.mod
+          cache-dependency-path: sidecars/cockpit-cliproxy/go.sum
+
+      - name: Node.js setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Sync versions
+        run: npm run sync-version
+
+      - name: Read app version
+        id: app_version
+        shell: pwsh
+        run: |
+          $version = node -e "console.log(require('./package.json').version)"
+          "VERSION=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Validate tag matches version
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        run: |
+          $expected = "v${{ steps.app_version.outputs.VERSION }}"
+          if ($env:GITHUB_REF_NAME -ne $expected) {
+            Write-Error "Tag ($env:GITHUB_REF_NAME) does not match package.json version ($expected)."
+            exit 1
+          }
+
+      - name: Validate updater signing secrets
+        shell: pwsh
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: |
+          if (-not $env:TAURI_SIGNING_PRIVATE_KEY) {
+            Write-Error "Missing GitHub secret TAURI_SIGNING_PRIVATE_KEY."
+            exit 1
+          }
+          if (-not $env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD) {
+            Write-Error "Missing GitHub secret TAURI_SIGNING_PRIVATE_KEY_PASSWORD."
+            exit 1
+          }
+
+      - name: Build app
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: npm run tauri -- build
+
+      - name: Stage release assets
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force release-assets | Out-Null
+          $version = "${{ steps.app_version.outputs.VERSION }}"
+          Copy-Item "target/release/bundle/nsis/*_${version}_x64-setup.exe" release-assets -Force
+          Copy-Item "target/release/bundle/msi/*_${version}_x64_en-US.msi" release-assets -Force
+          Get-ChildItem release-assets | Format-Table Name,Length
+
+      - name: Sign updater assets
+        shell: pwsh
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: |
+          $privateKeyPath = Join-Path $env:RUNNER_TEMP "orbit-desk-updater.key"
+          Set-Content -Path $privateKeyPath -Value $env:TAURI_SIGNING_PRIVATE_KEY -NoNewline -Encoding ASCII
+          Get-ChildItem release-assets -File | Where-Object { $_.Extension -in ".exe", ".msi" } | ForEach-Object {
+            npx tauri signer sign --private-key-path $privateKeyPath --password "$env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD" $_.FullName
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+          Get-ChildItem release-assets -Filter "*.sig" | Format-Table Name,Length
+
+      - name: Create release notes
+        shell: pwsh
+        run: |
+          $version = "${{ steps.app_version.outputs.VERSION }}"
+          $body = @()
+          $body += "Orbit Desk v$version"
+          $body += ""
+          $body += "Windows installers and updater metadata."
+          $body -join "`n" | Set-Content -Encoding UTF8 release-notes.md
+
+      - name: Build latest.json
+        shell: pwsh
+        run: |
+          $publishedAt = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+          node scripts/release/build_orbit_windows_latest_json.cjs `
+            --version "${{ steps.app_version.outputs.VERSION }}" `
+            --repo "${{ github.repository }}" `
+            --assets-dir release-assets `
+            --notes-file release-notes.md `
+            --published-at "$publishedAt" `
+            --output release-assets/latest.json
+
+      - name: Generate SHA256SUMS
+        shell: pwsh
+        run: |
+          $lines = Get-ChildItem release-assets -File |
+            Where-Object { $_.Name -ne "SHA256SUMS.txt" } |
+            Sort-Object Name |
+            ForEach-Object {
+              $hash = (Get-FileHash -Algorithm SHA256 $_.FullName).Hash.ToLowerInvariant()
+              "$hash  $($_.Name)"
+            }
+          $lines | Set-Content -Encoding ASCII release-assets/SHA256SUMS.txt
+          Get-Content release-assets/SHA256SUMS.txt
+
+      - name: Create or update GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.app_version.outputs.VERSION }}
+          name: Orbit Desk v${{ steps.app_version.outputs.VERSION }}
+          body_path: release-notes.md
+          draft: false
+          prerelease: false
+          make_latest: true
+          files: |
+            release-assets/*

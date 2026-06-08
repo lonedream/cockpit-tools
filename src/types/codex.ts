@@ -503,7 +503,7 @@ function normalizeCodexAuthFilePlanType(
 
 function getCodexPlanBadgeLabel(account: CodexAccount): string {
   if (isCodexNewApiAccount(account)) {
-    return account.plan_type?.trim() || "Cockpit Api";
+    return account.plan_type?.trim() || "Orbit API";
   }
   const baseLabel = getCodexPlanDisplayName(account.plan_type);
   if (normalizeCodexPlanKey(account.plan_type) !== "pro") {

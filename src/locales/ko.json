@@ -184,7 +184,7 @@
         "relativeHours": "{{hours}}시간",
         "relativeHoursMinutes": "{{hours}}시간 {{minutes}}분",
         "relativeMinutes": "{{minutes}}분",
-        "relativeWithAbsolute": "{{relative}} ({{absolute}})​"
+        "relativeWithAbsolute": "{{relative}} ({{absolute}})"
       },
       "credits": {
         "leftInline": "{{left}} 남음",
@@ -218,7 +218,7 @@
       "desc": "이 영역은 모든 페이지의 우측 상단에 고정되어 캠페인 또는 브랜드 광고 노출에 적합합니다.",
       "action": "자세히 보기"
     },
-    "appName": "Cockpit Tools​",
+    "appName": "Orbit Desk",
     "collapse": "접기",
     "confirmDelete": "삭제 확인",
     "confirmDeleteTag": "태그 삭제 확인",
@@ -228,13 +228,13 @@
     "selectAll": "전체 선택"
   },
   "nav": {
-    "overview": "Antigravity IDE​",
+    "overview": "Antigravity IDE",
     "accounts": "계정 관리",
     "wakeup": "깨우기 작업",
     "settings": "설정",
-    "codex": "Codex​",
-    "githubCopilot": "GitHub Copilot​",
-    "windsurf": "Windsurf​",
+    "codex": "Codex",
+    "githubCopilot": "GitHub Copilot",
+    "windsurf": "Windsurf",
     "dashboard": "대시보드",
     "morePlatforms": "더 많은 플랫폼",
     "instances": "멀티 인스턴스",
@@ -244,11 +244,11 @@
       "restart": "재시작",
       "installing": "설치 중"
     },
-    "gemini": "Gemini Cli​",
-    "codebuddy": "CodeBuddy​",
-    "qoder": "Qoder​",
-    "trae": "Trae​",
-    "codebuddyCn": "CodeBuddy CN​",
+    "gemini": "Gemini Cli",
+    "codebuddy": "CodeBuddy",
+    "qoder": "Qoder",
+    "trae": "Trae",
+    "codebuddyCn": "CodeBuddy CN",
     "zed": "Zed 플랫폼",
     "expandSidebar": "사이드바 확장",
     "collapseSidebar": "사이드바 축소",
@@ -265,12 +265,12 @@
   },
   "sponsors": {
     "pageTitle": "스폰서",
-    "pageDesc": "Cockpit Tools를 지원해 주시는 스폰서에게 감사드립니다.",
+    "pageDesc": "Orbit Desk를 지원해 주시는 스폰서에게 감사드립니다.",
     "loading": "스폰서 불러오는 중...",
     "emptyTitle": "아직 스폰서가 없습니다",
     "emptyDesc": "원격 스폰서 모듈이 현재 비활성화되어 있습니다.",
     "listAriaLabel": "스폰서 목록",
-    "defaultDescription": "Cockpit Tools를 지원해 주셔서 감사합니다.",
+    "defaultDescription": "Orbit Desk를 지원해 주셔서 감사합니다.",
     "openSponsor": "열기"
   },
   "platformLayout": {
@@ -522,7 +522,7 @@
       "force": {
         "title": "강제 재시작",
         "principle": "--user-data-dir로 프로세스를 찾아 강제 종료(SIGKILL / taskkill /F)한 다음, 대상 인스턴스를 다시 시작합니다.",
-        "commandMac": "macOS/Linux: pkill -9 -f \"--user-data-dir <dir>\"​",
+        "commandMac": "macOS/Linux: pkill -9 -f \"--user-data-dir <dir>\"",
         "commandWin": "Windows: taskkill /F /PID <pid> (--user-data-dir 일치 항목)",
         "pros": "단일 인스턴스를 정확하게 재시작할 수 있습니다.",
         "cons": "“예기치 않은 종료” 경고가 발생할 수 있으며 저장되지 않은 데이터 손실 위험이 있습니다."
@@ -558,7 +558,7 @@
   },
   "settings": {
     "title": "앱 설정",
-    "subtitle": "Cockpit Tools 환경을 설정합니다.",
+    "subtitle": "Orbit Desk 환경을 설정합니다.",
     "tabs": {
       "general": "일반",
       "network": "네트워크",
@@ -716,7 +716,7 @@
       "sideNavLayoutClassic": "클래식 레이아웃",
       "antigravityDualSwitchNoRestart": "재시작 없이 이중 전환",
       "antigravityDualSwitchNoRestartDesc": "계정 전환 시 로컬 계정 데이터 기록과 확장 프로그램의 원활한 전환을 한 번에 수행하며, Antigravity IDE를 재시작하지 않습니다.",
-      "appAutoLaunch": "로그인 시 Cockpit Tools 시작",
+      "appAutoLaunch": "로그인 시 Orbit Desk 시작",
       "appAutoLaunchDesc": "시스템 로그인 후 앱을 자동으로 시작합니다",
       "startupWakeupDisabled": "비활성화",
       "startupWakeupImmediate": "즉시 깨우기",
@@ -805,7 +805,7 @@
       "firewallHint": "URL에 접속할 수 없으면 시스템 방화벽 설정을 확인하세요.",
       "proxyTitle": "전역 프록시",
       "proxyEnabled": "전역 프록시 사용",
-      "proxyEnabledDesc": "Cockpit이 시작하는 관리 대상 플랫폼 프로세스에 프록시 환경 변수를 주입합니다.",
+      "proxyEnabledDesc": "Orbit이 시작하는 관리 대상 플랫폼 프로세스에 프록시 환경 변수를 주입합니다.",
       "proxyUrl": "프록시 URL",
       "proxyUrlDesc": "예시: http://127.0.0.1:7890 또는 socks5://127.0.0.1:7890",
       "proxyUrlPlaceholder": "예: http://127.0.0.1:7890",
@@ -815,7 +815,7 @@
       "proxyUrlRequired": "전역 프록시를 켠 경우 프록시 URL은 비워둘 수 없습니다."
     },
     "about": {
-      "appName": "Cockpit Tools​",
+      "appName": "Orbit Desk",
       "slogan": "전문적인 계정 관리 솔루션",
       "author": "제작자",
       "wechat": "WeChat 플러스",
@@ -958,7 +958,7 @@
       "passwordSavedPlaceholder": "저장됨; 유지하려면 비워 두십시오",
       "clearPassword": "지우기",
       "remoteDirTitle": "원격 디렉토리",
-      "remoteDirDesc": "이 디렉토리 내의 Cockpit 백업 파일만 관리됩니다.",
+      "remoteDirDesc": "이 디렉토리 내의 Orbit 백업 파일만 관리됩니다.",
       "statusTitle": "동기화 상태",
       "statusDesc": "원격 복구는 수동 선택이 필요하며 로컬 데이터를 자동으로 덮어쓰지 않습니다.",
       "lastUpload": "최근 업로드: {{time}}",
@@ -969,7 +969,7 @@
       "syncAction": "설정 동기화",
       "syncLatestConfirm": "최신 원격 백업 {{name}}을 가져와 로컬로 동기화하시겠습니까? 이렇게 하면 기존 로컬 데이터가 덮어씌워집니다.",
       "remoteListTitle": "원격 백업",
-      "remoteListDesc": "Cockpit 자동/수동 백업 이름과 일치하는 JSON 및 ZIP 파일만 표시됩니다.",
+      "remoteListDesc": "Orbit 자동/수동 백업 이름과 일치하는 JSON 및 ZIP 파일만 표시됩니다.",
       "emptyTitle": "원격 백업 없음",
       "emptyDesc": "설정을 저장한 다음 백업을 생성하고 업로드하십시오.",
       "unknownTime": "미상",
@@ -1037,13 +1037,13 @@
       "authInvalid": "잘못된 자격 증명",
       "refreshFailed": "새로고침 실패",
       "normal": "정상",
-      "forbidden": "403​",
+      "forbidden": "403",
       "forbidden_tooltip": "API가 403 Forbidden을 반환했습니다. 계정이 Gemini Code Assist에 접근할 수 없습니다",
       "forbidden_msg": "계정 금지됨, 자동 새로고침 건너뜀"
     },
     "tier": {
-      "pro": "PRO​",
-      "ultra": "ULTRA​"
+      "pro": "PRO",
+      "ultra": "ULTRA"
     },
     "credits": {
       "label": "AI 크레딧"
@@ -1288,7 +1288,7 @@
       "importBtn": "가져오기",
       "oauthAction": "OAuth 인증",
       "fromExtension": "플러그인에서 가져오기",
-      "syncBadge": "Antigravity Cockpit 플러그인 계정 동기화",
+      "syncBadge": "Antigravity Orbit 플러그인 계정 동기화",
       "fromLocalDB": "로컬 DB에서 가져오기",
       "localDBDesc": "이 기기의 Antigravity IDE 클라이언트에서 로그인 계정 읽기",
       "toolsDescMigrate": "~/.antigravity_tools/에서 계정 마이그레이션",
@@ -1409,17 +1409,17 @@
     },
     "format": {
       "noReply": "(응답 없음)",
-      "durationMs": "{{ms}}ms​",
+      "durationMs": "{{ms}}ms",
       "tokens": "토큰={{prompt}}+{{completion}}={{total}}",
       "traceId": "추적 ID={{traceId}}",
-      "detailJoiner": ", ​",
-      "message": "[[{{model}}]]: {{reply}}{{suffix}}​",
-      "none": "--​",
+      "detailJoiner": ", ",
+      "message": "[[{{model}}]]: {{reply}}{{suffix}}",
+      "none": "--",
       "today": "오늘 {{time}}",
       "tomorrow": "내일 {{time}}",
-      "weekdayWithTime": "{{day}} {{time}}​",
+      "weekdayWithTime": "{{day}} {{time}}",
       "notSelected": "선택 안 됨",
-      "joiner": ", ​",
+      "joiner": ", ",
       "moreItems": "{{items}} ({{total}}개)",
       "quotaReset": "할당량 재설정 자동 깨우기",
       "crontab": "크론탭: {{expr}}",
@@ -1646,7 +1646,7 @@
         },
         "force": {
           "principle": "CODEX_HOME으로 프로세스를 찾아 강제 종료(SIGKILL / taskkill /F)한 다음, 대상 인스턴스를 다시 시작합니다.",
-          "commandMac": "macOS: pkill -9 -f \"CODEX_HOME=<dir>\"​",
+          "commandMac": "macOS: pkill -9 -f \"CODEX_HOME=<dir>\"",
           "commandWin": "Windows: taskkill /F /PID <pid> (CODEX_HOME 일치 항목)"
         }
       }
@@ -1707,7 +1707,7 @@
     },
     "exportFormat": {
       "label": "내보내기 형식",
-      "cockpitTools": "Cockpit Tools​",
+      "cockpitTools": "Orbit Desk",
       "sub2api": "sub2api 형식",
       "cpa": "cpa 형식",
       "downloadAll": "모두 다운로드",
@@ -1817,7 +1817,7 @@
         "accountRequests": "{{count}}건 요청",
         "accountTokens": "{{count}} 토큰",
         "accountResult": "성공 {{success}} / 실패 {{failed}}",
-        "accountTokensCompact": "{{value}}​",
+        "accountTokensCompact": "{{value}}",
         "images": "이미지 요청",
         "imagesDetail": "생성 {{generate}} / 편집 {{edit}} / 권한 {{blocked}}",
         "estimatedCost": "예상 가치",
@@ -1882,7 +1882,7 @@
       "modelIdViewOnly": "보기 전용",
       "quotaPool": {
         "title": "할당량 풀",
-        "hourlyShort": "5h​",
+        "hourlyShort": "5h",
         "weeklyShort": "주",
         "viewFull": "전체 통계 보기",
         "modalTitle": "API 서비스 할당량 풀",
@@ -2019,11 +2019,11 @@
       "requestFailedManualRetry": "네트워크를 확인하세요. 최신 할당량을 가져오지 못했습니다. 새로고침해 다시 시도하세요."
     },
     "plan": {
-      "free": "FREE​",
-      "plus": "PLUS​",
-      "pro": "PRO​",
-      "team": "TEAM​",
-      "enterprise": "ENTERPRISE​"
+      "free": "FREE",
+      "plus": "PLUS",
+      "pro": "PRO",
+      "team": "TEAM",
+      "enterprise": "ENTERPRISE"
     },
     "list": {
       "showCodeReviewQuota": "Code Review 할당량 표시"
@@ -2031,7 +2031,7 @@
     "time": {
       "today": "오늘 {{time}}",
       "tomorrow": "내일 {{time}}",
-      "dateTime": "{{date}} {{time}}​"
+      "dateTime": "{{date}} {{time}}"
     },
     "view": {
       "compact": "간결 보기"
@@ -2340,67 +2340,67 @@
       },
       "providers": {
         "openai_official": {
-          "name": "OpenAI Official​"
+          "name": "OpenAI Official"
         },
         "azure_openai": {
-          "name": "Azure OpenAI​"
+          "name": "Azure OpenAI"
         },
         "packycode": {
-          "name": "PackyCode​"
+          "name": "PackyCode"
         },
         "cubence": {
-          "name": "Cubence​"
+          "name": "Cubence"
         },
         "aigocode": {
-          "name": "AIGoCode​"
+          "name": "AIGoCode"
         },
         "rightcode": {
-          "name": "RightCode​"
+          "name": "RightCode"
         },
         "sssaicode": {
-          "name": "SSSAiCode​"
+          "name": "SSSAiCode"
         },
         "micu": {
-          "name": "Micu​"
+          "name": "Micu"
         },
         "x_code_api": {
-          "name": "X-Code API​"
+          "name": "X-Code API"
         },
         "ctok_ai": {
-          "name": "CTok.ai​"
+          "name": "CTok.ai"
         },
         "aihubmix": {
-          "name": "AiHubMix​"
+          "name": "AiHubMix"
         },
         "dmxapi": {
-          "name": "DMXAPI​"
+          "name": "DMXAPI"
         },
         "compshare": {
-          "name": "Compshare​"
+          "name": "Compshare"
         },
         "openrouter": {
-          "name": "OpenRouter​"
+          "name": "OpenRouter"
         },
         "aicodemirror": {
-          "name": "AICodeMirror​"
+          "name": "AICodeMirror"
         },
         "aicoding": {
-          "name": "AICoding​"
+          "name": "AICoding"
         },
         "crazyrouter": {
-          "name": "CrazyRouter​"
+          "name": "CrazyRouter"
         },
         "deepseek": {
-          "name": "DeepSeek​"
+          "name": "DeepSeek"
         },
         "moonshot": {
-          "name": "Moonshot​"
+          "name": "Moonshot"
         },
         "siliconflow": {
-          "name": "SiliconFlow​"
+          "name": "SiliconFlow"
         },
         "cockpit_api": {
-          "name": "Cockpit Api​"
+          "name": "Orbit API"
         }
       },
       "oauthBinding": {
@@ -2555,7 +2555,7 @@
         "models": "모델 목록 API 오류",
         "parse": "응답 파싱 실패",
         "httpStatus": "상태 {{status}}",
-        "message": "{{title}}: {{detail}}. {{suggestion}}​"
+        "message": "{{title}}: {{detail}}. {{suggestion}}"
       },
       "testSuggestion": {
         "addApiKey": "테스트 전에 이 공급자에 API Key를 추가하세요.",
@@ -2705,7 +2705,7 @@
       "saveFailed": "계정 메모 저장 실패: {{error}}"
     },
     "cockpitApi": {
-      "panelTitle": "Cockpit Api 서비스 패널",
+      "panelTitle": "Orbit API 서비스 패널",
       "servicePanel": "서비스 패널",
       "balance": "잔액",
       "requests": "요청",
@@ -3002,9 +3002,9 @@
       "totalAccounts": "전체 계정 수"
     },
     "panels": {
-      "antigravity": "Antigravity IDE​",
-      "codex": "Codex​",
-      "githubCopilot": "GitHub Copilot​",
+      "antigravity": "Antigravity IDE",
+      "codex": "Codex",
+      "githubCopilot": "GitHub Copilot",
       "planDistribution": "플랜 분포",
       "current": "현재 계정",
       "recommended": "추천 계정",
@@ -3250,7 +3250,7 @@
       "batchDelimiterSpace": "공백",
       "batchDelimiterComma": "쉼표",
       "batchDelimiterPipe": "파이프",
-      "batchDelimiterDash": "----​",
+      "batchDelimiterDash": "----",
       "batchDelimiterCustom": "사용자 지정",
       "batchJsonDesc": "각 항목에 email 과 password 가 들어 있는 JSON 배열을 붙여넣으세요.",
       "batchTextDesc": "한 줄에 한 계정씩 입력하고 선택한 구분자로 엄격히 파싱합니다.",
@@ -3273,7 +3273,7 @@
       "batchPartial": "성공 {{success}}개, 실패 {{failed}}개",
       "batchFailed": "{{failed}}개 계정 일괄 가져오기 실패",
       "batchFailureEntryWithLine": "{{line}}번째 항목 ({{email}}): {{error}}",
-      "batchFailureEntry": "{{email}}: {{error}}​",
+      "batchFailureEntry": "{{email}}: {{error}}",
       "batchFailureMore": "{{count}}개 추가 실패"
     },
     "oauth": {
@@ -3330,7 +3330,7 @@
       "bonusUsageLine": "{{used}} 사용 / {{total}} 총",
       "planUsageCoveredLine": "{{used}} 사용됨 / {{total}} 계획에 포함됨",
       "expiryDays": "{{days}}일",
-      "expiryUnknown": "—​",
+      "expiryUnknown": "—",
       "resetNow": "곧 재설정",
       "resetInHours": "{{hours}}h 후에 재설정됩니다.",
       "resetInMinutes": "{{minutes}}m 후에 재설정됩니다."
@@ -3342,11 +3342,11 @@
       "estUsage": "예상 용법"
     },
     "plan": {
-      "free": "Kiro Free​",
-      "individual": "Kiro Individual​",
-      "pro": "Kiro Pro​",
-      "business": "Kiro Business​",
-      "enterprise": "Kiro Enterprise​",
+      "free": "Kiro Free",
+      "individual": "Kiro Individual",
+      "pro": "Kiro Pro",
+      "business": "Kiro Business",
+      "enterprise": "Kiro Enterprise",
       "unknown": "알려지지 않은"
     },
     "flowNotice": {
@@ -3425,7 +3425,7 @@
     "startHint": "시작 버튼 또는 스페이스를 누르세요",
     "rankTitle": "로컬 기록 순위",
     "rankCurrent": "현재",
-    "rankNoData": "--​",
+    "rankNoData": "--",
     "restart": "다시 시작",
     "pause": "일시정지",
     "resume": "계속",
@@ -3448,7 +3448,7 @@
     "rankingShort": "로컬",
     "rankingEmpty": "로컬 기록이 없습니다",
     "rankingClear": "로컬 기록 지우기",
-    "rankingRankShort": "#{{rank}}​",
+    "rankingRankShort": "#{{rank}}",
     "minimize": "최소화",
     "resumeGameNav": "게임 계속하기",
     "closeConfirmTitle": "이번 플레이를 종료할까요?",
@@ -3795,9 +3795,9 @@
       "leftOfTotal": "남은 양 / 전체",
       "usage": "사용량",
       "usageResets": "사용량 재설정",
-      "usedPercent": "{{value}}%​",
-      "remainingOfTotal": "{{remaining}} / {{total}}​",
-      "resetAtWithRelative": "{{absolute}} ({{relative}})​"
+      "usedPercent": "{{value}}%",
+      "remainingOfTotal": "{{remaining}} / {{total}}",
+      "resetAtWithRelative": "{{absolute}} ({{relative}})"
     },
     "tierText": {
       "pro": "Google One AI Pro의 Gemini Code Assist",
@@ -3902,7 +3902,7 @@
       }
     },
     "quota": {
-      "usedOfTotal": "{{used}} / {{total}}​"
+      "usedOfTotal": "{{used}} / {{total}}"
     }
   },
   "qoder": {
@@ -3924,8 +3924,8 @@
       "title": "사용량 개요",
       "viewDetails": "자세히 보기",
       "includedCredits": "플랜 포함 크레딧",
-      "usedOfTotal": "{{used}} / {{total}}​",
-      "usedEmpty": "-- / --​",
+      "usedOfTotal": "{{used}} / {{total}}",
+      "usedEmpty": "-- / --",
       "upgradeHint": "월간 한도를 늘리려면 플랜을 업그레이드하세요",
       "upgradeAction": "업그레이드"
     },
@@ -4116,7 +4116,7 @@
       }
     },
     "quota": {
-      "usedOfTotal": "{{used}} / {{total}}​"
+      "usedOfTotal": "{{used}} / {{total}}"
     },
     "checkin": {
       "title": "일일 체크인",
@@ -4223,7 +4223,7 @@
     "plan": "플랜",
     "cycle": "주기",
     "status": "상태",
-    "pager": "{{current}} / {{total}}​",
+    "pager": "{{current}} / {{total}}",
     "badges": {
       "recommended": "추천"
     },
@@ -4237,7 +4237,7 @@
       "backToCurrent": "돌아가기",
       "switchToThisAccount": "전환",
       "openDetails": "상세 열기",
-      "openCockpitTools": "Cockpit Tools 열기"
+      "openCockpitTools": "Orbit Desk 열기"
     },
     "empty": {
       "title": "계정 없음",
@@ -4360,7 +4360,7 @@
   },
   "relay": {
     "pageTitle": "전용 중계소",
-    "pageDesc": "Cockpit Tools 사용자를 위한 제휴 API 서비스이며 Codex API Key 계정에 사용할 수 있습니다.",
+    "pageDesc": "Orbit Desk 사용자를 위한 제휴 API 서비스이며 Codex API Key 계정에 사용할 수 있습니다.",
     "loading": "중계소를 불러오는 중...",
     "emptyTitle": "중계소 비활성화",
     "emptyDesc": "현재 원격 설정에서 전용 중계소가 활성화되지 않았습니다.",
@@ -4390,7 +4390,7 @@
   "apiKeyFun": {
     "eyebrow": "중계 서비스",
     "title": "APIKEY.FUN 릴레이",
-    "description": "Cockpit 공식 중계 서비스로, 안정적이고 개방적이며 비용 효율적인 대형 모델 API 접속을 제공합니다. Claude, OpenAI, Gemini 등 주요 모델을 지원하며 Codex, Gemini CLI, Claude Code 및 기타 개발 도구에서 통합 구성하기에 적합합니다. Cockpit 전용 링크로 가입하면 충전 금액에 대해 영구적으로 최대 5% 할인을 받을 수 있습니다.",
+    "description": "Orbit 공식 중계 서비스로, 안정적이고 개방적이며 비용 효율적인 대형 모델 API 접속을 제공합니다. Claude, OpenAI, Gemini 등 주요 모델을 지원하며 Codex, Gemini CLI, Claude Code 및 기타 개발 도구에서 통합 구성하기에 적합합니다. Orbit 전용 링크로 가입하면 충전 금액에 대해 영구적으로 최대 5% 할인을 받을 수 있습니다.",
     "register": "전용 가입 링크",
     "docs": "공식 문서",
     "viewNow": "바로 보기",
@@ -4448,7 +4448,7 @@
       "apiScript": "스크립트 연동 기본 파라미터를 복사합니다."
     },
     "apply": {
-      "codexTitle": "Codex​",
+      "codexTitle": "Codex",
       "codexDesc": "Responses 프로토콜과 현재 API Key로 ~/.codex/config.toml 및 auth.json을 씁니다.",
       "geminiTitle": "Gemini CLI 설정",
       "geminiDesc": "~/.gemini/.env를 쓰고 settings.json 인증 모드를 gemini-api-key로 설정합니다.",
@@ -4475,12 +4475,12 @@
       "lastRemaining": "이전 잔액 {{value}}",
       "notQueried": "조회 안 함",
       "deleteButton": "삭제",
-      "editAlias": "Edit alias​",
-      "renamePlaceholder": "Enter alias...​",
+      "editAlias": "Edit alias",
+      "renamePlaceholder": "Enter alias...",
       "createdAt": "{{time}} 추가",
       "saveFlash": "방금 저장됨"
     },
-    "copyKey": "Copy Key​",
-    "clearKey": "Clear input​"
+    "copyKey": "Copy Key",
+    "clearKey": "Clear input"
   }
 }

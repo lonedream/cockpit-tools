@@ -33,14 +33,14 @@ export const ALL_PLATFORM_IDS: PlatformId[] = [
   'workbuddy',
 ];
 
-export const MENU_HIDDEN_PLATFORM_IDS: PlatformId[] = [];
+export const MENU_VISIBLE_PLATFORM_IDS: PlatformId[] = ['codex'];
 
-export const MENU_VISIBLE_PLATFORM_IDS: PlatformId[] = ALL_PLATFORM_IDS.filter(
-  (platformId) => !MENU_HIDDEN_PLATFORM_IDS.includes(platformId),
+export const MENU_HIDDEN_PLATFORM_IDS: PlatformId[] = ALL_PLATFORM_IDS.filter(
+  (platformId) => !MENU_VISIBLE_PLATFORM_IDS.includes(platformId),
 );
 
 export function isMenuVisiblePlatform(platformId: PlatformId): boolean {
-  return !MENU_HIDDEN_PLATFORM_IDS.includes(platformId);
+  return MENU_VISIBLE_PLATFORM_IDS.includes(platformId);
 }
 
 export const PLATFORM_PAGE_MAP: Record<PlatformId, Page> = {

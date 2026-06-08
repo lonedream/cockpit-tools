@@ -218,7 +218,7 @@
       "loginSuccess": "登录成功",
       "switchAccount": "切换账号"
     },
-    "appName": "Cockpit Tools",
+    "appName": "Orbit Desk",
     "collapse": "收起",
     "confirmDelete": "确认删除",
     "confirmDeleteTag": "确认删除标签",
@@ -250,7 +250,7 @@
       "backToCurrent": "返回",
       "switchToThisAccount": "切换",
       "openDetails": "打开详情页",
-      "openCockpitTools": "打开 Cockpit Tools"
+      "openCockpitTools": "打开 Orbit Desk"
     },
     "empty": {
       "title": "暂无账号",
@@ -311,17 +311,17 @@
   },
   "sponsors": {
     "pageTitle": "赞助商",
-    "pageDesc": "感谢以下赞助商支持 Cockpit Tools。",
+    "pageDesc": "感谢以下赞助商支持 Orbit Desk。",
     "loading": "正在加载赞助商...",
     "emptyTitle": "暂无赞助商",
     "emptyDesc": "当前远端未开启赞助商模块。",
     "listAriaLabel": "赞助商列表",
-    "defaultDescription": "感谢支持 Cockpit Tools。",
+    "defaultDescription": "感谢支持 Orbit Desk。",
     "openSponsor": "查看"
   },
   "relay": {
     "pageTitle": "专属中转站",
-    "pageDesc": "为 Cockpit Tools 用户提供的合作 API 服务，可用于 Codex API Key 账号。",
+    "pageDesc": "为 Orbit Desk 用户提供的合作 API 服务，可用于 Codex API Key 账号。",
     "loading": "正在加载中转站...",
     "emptyTitle": "中转站未开启",
     "emptyDesc": "当前远端配置未开启专属中转站。",
@@ -351,7 +351,7 @@
   "apiKeyFun": {
     "eyebrow": "中转站",
     "title": "APIKEY.FUN 中转站",
-    "description": "Cockpit 官方中转站，为用户提供稳定、开放、高性价比的大模型 API 接入服务。支持 Claude、OpenAI、Gemini 等主流模型，适合在 Codex、Gemini CLI、Claude Code 及其他开发工具中统一配置使用。通过 Cockpit 专属链接注册，可享受最高充值永久 95 折优惠。",
+    "description": "Orbit 官方中转站，为用户提供稳定、开放、高性价比的大模型 API 接入服务。支持 Claude、OpenAI、Gemini 等主流模型，适合在 Codex、Gemini CLI、Claude Code 及其他开发工具中统一配置使用。通过 Orbit 专属链接注册，可享受最高充值永久 95 折优惠。",
     "register": "专属注册链接",
     "docs": "官方文档",
     "viewNow": "立即查看",
@@ -729,7 +729,7 @@
   },
   "settings": {
     "title": "应用设置",
-    "subtitle": "个性化您的 Cockpit Tools 体验。",
+    "subtitle": "个性化您的 Orbit Desk 体验。",
     "tabs": {
       "general": "通用",
       "network": "网络服务",
@@ -849,7 +849,7 @@
       "passwordSavedPlaceholder": "已保存，留空保持不变",
       "clearPassword": "清除",
       "remoteDirTitle": "远端目录",
-      "remoteDirDesc": "只管理该目录下的 Cockpit 备份文件。",
+      "remoteDirDesc": "只管理该目录下的 Orbit 备份文件。",
       "statusTitle": "同步状态",
       "statusDesc": "远端恢复需要手动选择备份，不会静默覆盖本地数据。",
       "lastUpload": "最近上传：{{time}}",
@@ -860,7 +860,7 @@
       "syncAction": "同步配置",
       "syncLatestConfirm": "确认拉取最新的远端备份 {{name}} 并同步到本地？此操作将覆盖本地现有数据。",
       "remoteListTitle": "远端备份",
-      "remoteListDesc": "仅显示匹配 Cockpit 自动/手动备份命名的 JSON 与 ZIP 文件。",
+      "remoteListDesc": "仅显示匹配 Orbit 自动/手动备份命名的 JSON 与 ZIP 文件。",
       "emptyTitle": "暂无远端备份",
       "emptyDesc": "保存设置后可以生成并上传一份备份。",
       "unknownTime": "未知",
@@ -943,7 +943,7 @@
       "floatingCardStartupDesc": "应用启动后默认展示悬浮账号卡片",
       "floatingCardAlwaysOnTop": "悬浮卡片默认置顶",
       "floatingCardAlwaysOnTopDesc": "新打开的悬浮卡片窗口默认保持置顶",
-      "appAutoLaunch": "开机自启动 Cockpit Tools",
+      "appAutoLaunch": "开机自启动 Orbit Desk",
       "appAutoLaunchDesc": "系统登录后自动启动应用",
       "startupWakeupDisabled": "关闭",
       "startupWakeupImmediate": "立即唤醒",
@@ -1129,7 +1129,7 @@
       "firewallHint": "如果访问不了，请检查系统防火墙设置。",
       "proxyTitle": "全局代理",
       "proxyEnabled": "启用全局代理",
-      "proxyEnabledDesc": "对 Cockpit 启动的受管平台进程统一注入代理环境变量",
+      "proxyEnabledDesc": "对 Orbit 启动的受管平台进程统一注入代理环境变量",
       "proxyUrl": "代理地址",
       "proxyUrlDesc": "示例：http://127.0.0.1:7890 或 socks5://127.0.0.1:7890",
       "proxyUrlPlaceholder": "例如：http://127.0.0.1:7890",
@@ -1139,7 +1139,7 @@
       "proxyUrlRequired": "启用全局代理时，代理地址不能为空。"
     },
     "about": {
-      "appName": "Cockpit Tools",
+      "appName": "Orbit Desk",
       "slogan": "专业账号管理解决方案",
       "author": "主作者",
       "wechat": "微信公众号",
@@ -1459,7 +1459,7 @@
       "importBtn": "导入",
       "oauthAction": "OAuth 授权",
       "fromExtension": "从插件导入",
-      "syncBadge": "同步 Antigravity Cockpit 插件账号",
+      "syncBadge": "同步 Antigravity Orbit 插件账号",
       "fromLocalDB": "从本地数据库导入",
       "localDBDesc": "读取本机 Antigravity IDE 客户端登录账号",
       "toolsDescMigrate": "从 ~/.antigravity_tools/ 迁移历史账号",
@@ -1893,7 +1893,7 @@
     },
     "exportFormat": {
       "label": "导出格式",
-      "cockpitTools": "Cockpit Tools",
+      "cockpitTools": "Orbit Desk",
       "sub2api": "sub2api 格式",
       "cpa": "cpa 格式",
       "downloadAll": "一键下载全部",
@@ -2215,7 +2215,7 @@
       },
       "providers": {
         "cockpit_api": {
-          "name": "Cockpit Api"
+          "name": "Orbit API"
         },
         "openai_official": {
           "name": "OpenAI Official"
@@ -2305,7 +2305,7 @@
       }
     },
     "cockpitApi": {
-      "panelTitle": "Cockpit Api 服务面板",
+      "panelTitle": "Orbit API 服务面板",
       "servicePanel": "服务面板",
       "balance": "额度",
       "requests": "请求",

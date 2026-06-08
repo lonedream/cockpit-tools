@@ -184,7 +184,7 @@
         "relativeHours": "{{hours}} ساعة",
         "relativeHoursMinutes": "{{hours}} ساعة {{minutes}} دقيقة",
         "relativeMinutes": "{{minutes}} دقيقة",
-        "relativeWithAbsolute": "{{relative}} ({{absolute}})​"
+        "relativeWithAbsolute": "{{relative}} ({{absolute}})"
       },
       "credits": {
         "leftInline": "{{left}} متبقي",
@@ -218,7 +218,7 @@
       "desc": "تُثبَّت هذه المنطقة في أعلى يمين جميع الصفحات لعرض الحملات أو إعلانات العلامة التجارية.",
       "action": "عرض التفاصيل"
     },
-    "appName": "Cockpit Tools​",
+    "appName": "Orbit Desk",
     "collapse": "طي",
     "confirmDelete": "تأكيد الحذف",
     "confirmDeleteTag": "تأكيد حذف الوسم",
@@ -235,7 +235,7 @@
     "plan": "الخطة",
     "cycle": "الدورة",
     "status": "الحالة",
-    "pager": "{{current}} / {{total}}​",
+    "pager": "{{current}} / {{total}}",
     "badges": {
       "recommended": "موصى به"
     },
@@ -249,7 +249,7 @@
       "backToCurrent": "رجوع",
       "switchToThisAccount": "تبديل",
       "openDetails": "فتح التفاصيل",
-      "openCockpitTools": "فتح Cockpit Tools"
+      "openCockpitTools": "فتح Orbit Desk"
     },
     "empty": {
       "title": "لا توجد حسابات",
@@ -274,13 +274,13 @@
     "lockedPlatform": "المنصة مقفلة بواسطة المثيل"
   },
   "nav": {
-    "overview": "Antigravity IDE​",
+    "overview": "Antigravity IDE",
     "accounts": "إدارة الحسابات",
     "wakeup": "مهام الاستيقاظ",
     "settings": "الإعدادات",
-    "codex": "Codex​",
-    "githubCopilot": "GitHub Copilot​",
-    "windsurf": "Windsurf​",
+    "codex": "Codex",
+    "githubCopilot": "GitHub Copilot",
+    "windsurf": "Windsurf",
     "dashboard": "لوحة التحكم",
     "morePlatforms": "المزيد من المنصات",
     "instances": "مثيلات متعددة",
@@ -290,11 +290,11 @@
       "restart": "إعادة التشغيل",
       "installing": "جارٍ التثبيت"
     },
-    "gemini": "Gemini Cli​",
-    "codebuddy": "CodeBuddy​",
-    "qoder": "Qoder​",
-    "trae": "Trae​",
-    "codebuddyCn": "CodeBuddy CN​",
+    "gemini": "Gemini Cli",
+    "codebuddy": "CodeBuddy",
+    "qoder": "Qoder",
+    "trae": "Trae",
+    "codebuddyCn": "CodeBuddy CN",
     "zed": "منصة Zed",
     "expandSidebar": "توسيع الشريط الجانبي",
     "collapseSidebar": "طي الشريط الجانبي",
@@ -311,12 +311,12 @@
   },
   "sponsors": {
     "pageTitle": "الرعاة",
-    "pageDesc": "شكرًا للرعاة التاليين على دعم Cockpit Tools.",
+    "pageDesc": "شكرًا للرعاة التاليين على دعم Orbit Desk.",
     "loading": "جارٍ تحميل الرعاة...",
     "emptyTitle": "لا يوجد رعاة حاليًا",
     "emptyDesc": "وحدة الرعاة البعيدة معطّلة حاليًا.",
     "listAriaLabel": "قائمة الرعاة",
-    "defaultDescription": "شكرًا لدعم Cockpit Tools.",
+    "defaultDescription": "شكرًا لدعم Orbit Desk.",
     "openSponsor": "فتح"
   },
   "platformLayout": {
@@ -604,7 +604,7 @@
   },
   "settings": {
     "title": "إعدادات التطبيق",
-    "subtitle": "قم بتخصيص تجربة Antigravity Cockpit Tools الخاصة بك.",
+    "subtitle": "قم بتخصيص تجربة Orbit Desk الخاصة بك.",
     "tabs": {
       "general": "عام",
       "network": "خدمات الشبكة",
@@ -759,7 +759,7 @@
       "sideNavLayoutClassic": "التخطيط الكلاسيكي",
       "antigravityDualSwitchNoRestart": "تبديل ثنائي بدون إعادة تشغيل",
       "antigravityDualSwitchNoRestartDesc": "عند تبديل الحساب، يتم تنفيذ كتابة بيانات الحساب محليًا والتبديل السلس عبر الإضافة في تدفق واحد، دون إعادة تشغيل Antigravity IDE.",
-      "appAutoLaunch": "تشغيل Cockpit Tools عند تسجيل الدخول",
+      "appAutoLaunch": "تشغيل Orbit Desk عند تسجيل الدخول",
       "appAutoLaunchDesc": "تشغيل التطبيق تلقائيًا بعد تسجيل الدخول إلى النظام",
       "startupWakeupDisabled": "معطل",
       "startupWakeupImmediate": "تنبيه فوري",
@@ -851,7 +851,7 @@
       "firewallHint": "إذا تعذر الوصول إلى الرابط، فتحقق من إعدادات جدار الحماية في النظام.",
       "proxyTitle": "وكيل عام",
       "proxyEnabled": "تفعيل الوكيل العام",
-      "proxyEnabledDesc": "إدخال متغيرات بيئة الوكيل في عمليات المنصات المُدارة التي يشغّلها Cockpit.",
+      "proxyEnabledDesc": "إدخال متغيرات بيئة الوكيل في عمليات المنصات المُدارة التي يشغّلها Orbit.",
       "proxyUrl": "عنوان الوكيل",
       "proxyUrlDesc": "مثال: http://127.0.0.1:7890 أو socks5://127.0.0.1:7890",
       "proxyUrlPlaceholder": "مثال: http://127.0.0.1:7890",
@@ -861,7 +861,7 @@
       "proxyUrlRequired": "لا يمكن أن يكون عنوان الوكيل فارغًا عند تفعيل الوكيل العام."
     },
     "about": {
-      "appName": "Cockpit Tools​",
+      "appName": "Orbit Desk",
       "slogan": "حل احترافي لإدارة الحسابات",
       "author": "المؤلف الرئيسي",
       "wechat": "حساب WeChat الرسمي",
@@ -1004,7 +1004,7 @@
       "passwordSavedPlaceholder": "تم الحفظ؛ اتركها فارغة للاحتفاظ بها",
       "clearPassword": "مسح",
       "remoteDirTitle": "المجلد البعيد",
-      "remoteDirDesc": "يتم إدارة ملفات نسخ Cockpit الاحتياطي في هذا المجلد فقط.",
+      "remoteDirDesc": "يتم إدارة ملفات نسخ Orbit الاحتياطي في هذا المجلد فقط.",
       "statusTitle": "حالة المزامنة",
       "statusDesc": "يتطلب الاسترداد البعيد اختياراً يدوياً ولا يستبدل البيانات المحلية بصمت أبداً.",
       "lastUpload": "آخر رفع: {{time}}",
@@ -1015,7 +1015,7 @@
       "syncAction": "مزامنة الإعدادات",
       "syncLatestConfirm": "هل أنت متأكد من رغبتك في سحب آخر نسخة احتياطية بعيدة {{name}} ومزامنتها محلياً؟ سيؤدي هذا إلى استبدال البيانات المحلية الحالية.",
       "remoteListTitle": "النسخ الاحتياطي البعيد",
-      "remoteListDesc": "يتم عرض ملفات JSON وZIP المطابقة لأسماء نسخ Cockpit الاحتياطي التلقائي/اليدوي فقط.",
+      "remoteListDesc": "يتم عرض ملفات JSON وZIP المطابقة لأسماء نسخ Orbit الاحتياطي التلقائي/اليدوي فقط.",
       "emptyTitle": "لا توجد نسخ احتياطية عن بعد",
       "emptyDesc": "احفظ الإعدادات، ثم أنشئ نسخة احتياطية وارفعها.",
       "unknownTime": "غير معروف",
@@ -1083,13 +1083,13 @@
       "authInvalid": "بيانات اعتماد غير صالحة",
       "refreshFailed": "فشل التحديث",
       "normal": "طبيعي",
-      "forbidden": "403​",
+      "forbidden": "403",
       "forbidden_tooltip": "أرجعت API خطأ 403 Forbidden، الحساب لا يملك صلاحية استخدام Gemini Code Assist",
       "forbidden_msg": "الحساب لا يملك صلاحية، تم تخطي التحديث التلقائي"
     },
     "tier": {
-      "pro": "PRO​",
-      "ultra": "ULTRA​"
+      "pro": "PRO",
+      "ultra": "ULTRA"
     },
     "credits": {
       "label": "رصيد الذكاء الاصطناعي"
@@ -1334,7 +1334,7 @@
       "importBtn": "استيراد",
       "oauthAction": "تفويض OAuth",
       "fromExtension": "استيراد من الملحق",
-      "syncBadge": "مزامنة حسابات ملحق Antigravity Cockpit",
+      "syncBadge": "مزامنة حسابات ملحق Antigravity Orbit",
       "fromLocalDB": "استيراد من قاعدة البيانات المحلية",
       "localDBDesc": "قراءة حسابات تسجيل الدخول من عميل Antigravity IDE على هذا الجهاز",
       "toolsDescMigrate": "ترحيل الحسابات من ~/.antigravity_tools/",
@@ -1383,7 +1383,7 @@
     "bindFailed": "فشل الربط: {{error}}",
     "jsonRequired": "يرجى إدخال أو لصق محتوى JSON",
     "example": "مثال",
-    "actionRunning": "{{action}}...​",
+    "actionRunning": "{{action}}...",
     "actionSuccess": "{{action}} تم بنجاح",
     "actionFailed": "{{action}} فشل: {{error}}"
   },
@@ -1459,11 +1459,11 @@
       "tokens": "الرموز={{prompt}}+{{completion}}={{total}}",
       "traceId": "معرف التتبع={{traceId}}",
       "detailJoiner": "، ",
-      "message": "[[{{model}}]]: {{reply}}{{suffix}}​",
-      "none": "--​",
+      "message": "[[{{model}}]]: {{reply}}{{suffix}}",
+      "none": "--",
       "today": "اليوم {{time}}",
       "tomorrow": "غداً {{time}}",
-      "weekdayWithTime": "{{day}} {{time}}​",
+      "weekdayWithTime": "{{day}} {{time}}",
       "notSelected": "غير محدد",
       "joiner": "، ",
       "moreItems": "{{items}} ({{total}} عناصر)",
@@ -1753,7 +1753,7 @@
     },
     "exportFormat": {
       "label": "تنسيق التصدير",
-      "cockpitTools": "Cockpit Tools​",
+      "cockpitTools": "Orbit Desk",
       "sub2api": "تنسيق sub2api",
       "cpa": "تنسيق cpa",
       "downloadAll": "تنزيل الكل",
@@ -1863,7 +1863,7 @@
         "accountRequests": "{{count}} طلب",
         "accountTokens": "{{count}} رمز",
         "accountResult": "نجاح {{success}} / فشل {{failed}}",
-        "accountTokensCompact": "{{value}}​",
+        "accountTokensCompact": "{{value}}",
         "images": "طلبات الصور",
         "imagesDetail": "إنشاء {{generate}} / تعديل {{edit}} / صلاحية {{blocked}}",
         "estimatedCost": "القيمة المقدرة",
@@ -1928,7 +1928,7 @@
       "modelIdViewOnly": "عرض فقط",
       "quotaPool": {
         "title": "مجمع الحصة",
-        "hourlyShort": "5h​",
+        "hourlyShort": "5h",
         "weeklyShort": "أسبوع",
         "viewFull": "عرض الإحصاء الكامل",
         "modalTitle": "مجمع حصة خدمة API",
@@ -2065,11 +2065,11 @@
       "requestFailedManualRetry": "تحقّق من الشبكة. لم يتم جلب أحدث حصة. حدّث للمحاولة مجددًا."
     },
     "plan": {
-      "free": "FREE​",
-      "plus": "PLUS​",
-      "pro": "PRO​",
-      "team": "TEAM​",
-      "enterprise": "ENTERPRISE​"
+      "free": "FREE",
+      "plus": "PLUS",
+      "pro": "PRO",
+      "team": "TEAM",
+      "enterprise": "ENTERPRISE"
     },
     "list": {
       "showCodeReviewQuota": "إظهار حصة Code Review"
@@ -2077,7 +2077,7 @@
     "time": {
       "today": "اليوم {{time}}",
       "tomorrow": "غدًا {{time}}",
-      "dateTime": "{{date}} {{time}}​"
+      "dateTime": "{{date}} {{time}}"
     },
     "view": {
       "compact": "عرض مضغوط"
@@ -2386,67 +2386,67 @@
       },
       "providers": {
         "openai_official": {
-          "name": "OpenAI Official​"
+          "name": "OpenAI Official"
         },
         "azure_openai": {
-          "name": "Azure OpenAI​"
+          "name": "Azure OpenAI"
         },
         "packycode": {
-          "name": "PackyCode​"
+          "name": "PackyCode"
         },
         "cubence": {
-          "name": "Cubence​"
+          "name": "Cubence"
         },
         "aigocode": {
-          "name": "AIGoCode​"
+          "name": "AIGoCode"
         },
         "rightcode": {
-          "name": "RightCode​"
+          "name": "RightCode"
         },
         "sssaicode": {
-          "name": "SSSAiCode​"
+          "name": "SSSAiCode"
         },
         "micu": {
-          "name": "Micu​"
+          "name": "Micu"
         },
         "x_code_api": {
-          "name": "X-Code API​"
+          "name": "X-Code API"
         },
         "ctok_ai": {
-          "name": "CTok.ai​"
+          "name": "CTok.ai"
         },
         "aihubmix": {
-          "name": "AiHubMix​"
+          "name": "AiHubMix"
         },
         "dmxapi": {
-          "name": "DMXAPI​"
+          "name": "DMXAPI"
         },
         "compshare": {
-          "name": "Compshare​"
+          "name": "Compshare"
         },
         "openrouter": {
-          "name": "OpenRouter​"
+          "name": "OpenRouter"
         },
         "aicodemirror": {
-          "name": "AICodeMirror​"
+          "name": "AICodeMirror"
         },
         "aicoding": {
-          "name": "AICoding​"
+          "name": "AICoding"
         },
         "crazyrouter": {
-          "name": "CrazyRouter​"
+          "name": "CrazyRouter"
         },
         "deepseek": {
-          "name": "DeepSeek​"
+          "name": "DeepSeek"
         },
         "moonshot": {
-          "name": "Moonshot​"
+          "name": "Moonshot"
         },
         "siliconflow": {
-          "name": "SiliconFlow​"
+          "name": "SiliconFlow"
         },
         "cockpit_api": {
-          "name": "Cockpit Api​"
+          "name": "Orbit API"
         }
       },
       "oauthBinding": {
@@ -2601,7 +2601,7 @@
         "models": "خلل في واجهة النماذج",
         "parse": "فشل تحليل الاستجابة",
         "httpStatus": "الحالة {{status}}",
-        "message": "{{title}}: {{detail}}. {{suggestion}}​"
+        "message": "{{title}}: {{detail}}. {{suggestion}}"
       },
       "testSuggestion": {
         "addApiKey": "أضف مفتاح API لهذا المزوّد قبل الاختبار.",
@@ -2751,7 +2751,7 @@
       "saveFailed": "فشل حفظ ملاحظة الحساب: {{error}}"
     },
     "cockpitApi": {
-      "panelTitle": "لوحة خدمة Cockpit Api",
+      "panelTitle": "لوحة خدمة Orbit API",
       "servicePanel": "لوحة الخدمة",
       "balance": "الرصيد",
       "requests": "الطلبات",
@@ -3048,9 +3048,9 @@
       "totalAccounts": "إجمالي الحسابات"
     },
     "panels": {
-      "antigravity": "Antigravity IDE​",
-      "codex": "Codex​",
-      "githubCopilot": "GitHub Copilot​",
+      "antigravity": "Antigravity IDE",
+      "codex": "Codex",
+      "githubCopilot": "GitHub Copilot",
       "planDistribution": "توزيع الخطط",
       "current": "الحساب الحالي",
       "recommended": "الحساب الموصى به",
@@ -3296,7 +3296,7 @@
       "batchDelimiterSpace": "مسافة",
       "batchDelimiterComma": "فاصلة",
       "batchDelimiterPipe": "خط عمودي",
-      "batchDelimiterDash": "----​",
+      "batchDelimiterDash": "----",
       "batchDelimiterCustom": "مخصص",
       "batchJsonDesc": "ألصق مصفوفة JSON تحتوي كل خانة فيها على email و password.",
       "batchTextDesc": "أدخل حسابًا واحدًا في كل سطر وسيجري التحليل بدقة حسب الفاصل المحدد.",
@@ -3319,7 +3319,7 @@
       "batchPartial": "تم بنجاح {{success}} وفشل {{failed}}",
       "batchFailed": "فشل الاستيراد الدفعي لـ {{failed}} حسابًا",
       "batchFailureEntryWithLine": "العنصر {{line}} ({{email}}): {{error}}",
-      "batchFailureEntry": "{{email}}: {{error}}​",
+      "batchFailureEntry": "{{email}}: {{error}}",
       "batchFailureMore": "فشل {{count}} أخرى"
     },
     "oauth": {
@@ -3376,7 +3376,7 @@
       "bonusUsageLine": "{{used}} مستخدم / {{total}} إجمالي",
       "planUsageCoveredLine": "{{used}} مستخدم / {{total}} مغطى في الخطة",
       "expiryDays": "{{days}} يوم",
-      "expiryUnknown": "—​",
+      "expiryUnknown": "—",
       "resetNow": "سيُعاد التعيين قريبًا",
       "resetInHours": "تتم إعادة الضبط خلال {{hours}} ساعة",
       "resetInMinutes": "تتم إعادة الضبط خلال {{minutes}} دقيقة"
@@ -3388,11 +3388,11 @@
       "estUsage": "EST. الاستخدام"
     },
     "plan": {
-      "free": "Kiro Free​",
-      "individual": "Kiro Individual​",
-      "pro": "Kiro Pro​",
-      "business": "Kiro Business​",
-      "enterprise": "Kiro Enterprise​",
+      "free": "Kiro Free",
+      "individual": "Kiro Individual",
+      "pro": "Kiro Pro",
+      "business": "Kiro Business",
+      "enterprise": "Kiro Enterprise",
       "unknown": "مجهول"
     },
     "flowNotice": {
@@ -3471,7 +3471,7 @@
     "startHint": "اضغط بدء أو مفتاح المسافة",
     "rankTitle": "التصنيف المحلي التاريخي",
     "rankCurrent": "الحالي",
-    "rankNoData": "--​",
+    "rankNoData": "--",
     "restart": "إعادة البدء",
     "pause": "إيقاف مؤقت",
     "resume": "متابعة",
@@ -3494,7 +3494,7 @@
     "rankingShort": "محلي",
     "rankingEmpty": "لا توجد سجلات محلية بعد",
     "rankingClear": "مسح السجل المحلي",
-    "rankingRankShort": "#{{rank}}​",
+    "rankingRankShort": "#{{rank}}",
     "minimize": "تصغير",
     "resumeGameNav": "متابعة اللعبة",
     "closeConfirmTitle": "إنهاء هذه الجولة؟",
@@ -3841,9 +3841,9 @@
       "leftOfTotal": "المتبقي / الإجمالي",
       "usage": "المستخدم",
       "usageResets": "إعادة تعيين الاستخدام",
-      "usedPercent": "{{value}}%​",
-      "remainingOfTotal": "{{remaining}} / {{total}}​",
-      "resetAtWithRelative": "{{absolute}} ({{relative}})​"
+      "usedPercent": "{{value}}%",
+      "remainingOfTotal": "{{remaining}} / {{total}}",
+      "resetAtWithRelative": "{{absolute}} ({{relative}})"
     },
     "tierText": {
       "pro": "Gemini Code Assist ضمن Google One AI Pro",
@@ -3948,7 +3948,7 @@
       }
     },
     "quota": {
-      "usedOfTotal": "{{used}} / {{total}}​"
+      "usedOfTotal": "{{used}} / {{total}}"
     }
   },
   "qoder": {
@@ -3970,8 +3970,8 @@
       "title": "نظرة عامة على الاستخدام",
       "viewDetails": "عرض التفاصيل",
       "includedCredits": "الأرصدة ضمن الخطة",
-      "usedOfTotal": "{{used}} / {{total}}​",
-      "usedEmpty": "-- / --​",
+      "usedOfTotal": "{{used}} / {{total}}",
+      "usedEmpty": "-- / --",
       "upgradeHint": "قم بترقية الخطة لزيادة الحصة الشهرية",
       "upgradeAction": "ترقية"
     },
@@ -4162,7 +4162,7 @@
       }
     },
     "quota": {
-      "usedOfTotal": "{{used}} / {{total}}​"
+      "usedOfTotal": "{{used}} / {{total}}"
     },
     "checkin": {
       "title": "التسجيل اليومي",
@@ -4360,7 +4360,7 @@
   },
   "relay": {
     "pageTitle": "ترحيل حصري",
-    "pageDesc": "خدمة API شريكة لمستخدمي Cockpit Tools ويمكن استخدامها مع حسابات Codex API Key.",
+    "pageDesc": "خدمة API شريكة لمستخدمي Orbit Desk ويمكن استخدامها مع حسابات Codex API Key.",
     "loading": "جارٍ تحميل الترحيل...",
     "emptyTitle": "الترحيل غير مفعّل",
     "emptyDesc": "لم تفعّل الإعدادات البعيدة خدمة الترحيل الحصرية.",
@@ -4390,7 +4390,7 @@
   "apiKeyFun": {
     "eyebrow": "وسيط",
     "title": "ترحيل APIKEY.FUN",
-    "description": "وسيط Cockpit الرسمي يوفر وصولًا مستقرًا ومفتوحًا وعالي الكفاءة من حيث التكلفة إلى واجهات API للنماذج الكبيرة. يدعم نماذج رئيسية مثل Claude وOpenAI وGemini، وهو مناسب للتكوين الموحد في Codex وGemini CLI وClaude Code وأدوات التطوير الأخرى. عند التسجيل عبر رابط Cockpit الحصري، يمكنك الحصول على خصم دائم يصل إلى 5% على عمليات الشحن.",
+    "description": "وسيط Orbit الرسمي يوفر وصولًا مستقرًا ومفتوحًا وعالي الكفاءة من حيث التكلفة إلى واجهات API للنماذج الكبيرة. يدعم نماذج رئيسية مثل Claude وOpenAI وGemini، وهو مناسب للتكوين الموحد في Codex وGemini CLI وClaude Code وأدوات التطوير الأخرى. عند التسجيل عبر رابط Orbit الحصري، يمكنك الحصول على خصم دائم يصل إلى 5% على عمليات الشحن.",
     "register": "رابط تسجيل حصري",
     "docs": "الوثائق الرسمية",
     "viewNow": "اعرض الآن",
@@ -4448,7 +4448,7 @@
       "apiScript": "نسخ المعلمات الأساسية للسكريبت."
     },
     "apply": {
-      "codexTitle": "Codex​",
+      "codexTitle": "Codex",
       "codexDesc": "يكتب ~/.codex/config.toml وauth.json باستخدام بروتوكول Responses وAPI Key الحالي.",
       "geminiTitle": "إعداد Gemini CLI",
       "geminiDesc": "يكتب ~/.gemini/.env ويضبط وضع المصادقة في settings.json إلى gemini-api-key.",
@@ -4475,12 +4475,12 @@
       "lastRemaining": "الرصيد السابق {{value}}",
       "notQueried": "لم يُفحص",
       "deleteButton": "حذف",
-      "editAlias": "Edit alias​",
-      "renamePlaceholder": "Enter alias...​",
+      "editAlias": "Edit alias",
+      "renamePlaceholder": "Enter alias...",
       "createdAt": "أُضيف في {{time}}",
       "saveFlash": "حُفظ الآن"
     },
-    "copyKey": "Copy Key​",
-    "clearKey": "Clear input​"
+    "copyKey": "Copy Key",
+    "clearKey": "Clear input"
   }
 }

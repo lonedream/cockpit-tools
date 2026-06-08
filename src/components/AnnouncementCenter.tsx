@@ -188,7 +188,6 @@ export function AnnouncementCenter({
     if (action.type === 'command') {
       switch (action.target) {
         case 'update.check': {
-          window.dispatchEvent(new CustomEvent('update-check-requested', { detail: { source: 'manual' } }));
           break;
         }
         case 'announcement.forceRefresh': {

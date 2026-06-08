@@ -93,7 +93,7 @@ pub fn run() {
             }
         }))
         .setup(|app| {
-            info!("Cockpit Tools 启动...");
+            info!("Orbit Desk 启动...");
             let current_exe = std::env::current_exe()
                 .map(|path| path.display().to_string())
                 .unwrap_or_else(|err| format!("unknown: {}", err));
@@ -117,7 +117,6 @@ pub fn run() {
                 modules::webkit_cache_maintenance::checkpoint_webkit_localstorage();
             });
 
-            // 初始化 Updater 插件
             #[cfg(desktop)]
             {
                 app.handle()
@@ -127,7 +126,7 @@ pub fn run() {
                     tauri_plugin_autostart::MacosLauncher::LaunchAgent,
                     None::<Vec<&'static str>>,
                 ))?;
-                info!("[Updater] Tauri Updater + Process 插件已初始化");
+                info!("[Plugins] Updater + Process + Autostart 插件已初始化");
             }
 
             // 启动时同步设置合并（移至后台线程，不阻塞窗口显示）

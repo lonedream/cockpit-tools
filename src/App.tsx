@@ -203,6 +203,10 @@ const TASKS_STORAGE_KEY = 'agtools.wakeup.tasks';
 const WAKEUP_FORCE_DISABLE_MIGRATION_KEY = 'agtools.wakeup.migration.force_disable_0_8_14';
 const TOP_RIGHT_AD_REFRESH_INTERVAL_MS = 10 * 60 * 1000;
 const EXTERNAL_IMPORT_DEDUPE_WINDOW_MS = 30 * 1000;
+const APP_UPDATES_ENABLED = true;
+const SHOW_GLOBAL_PROMO_BANNER = false;
+const SHOW_SPONSOR_ENTRY = false;
+const SHOW_LOG_ENTRY = false;
 
 type WakeupHistoryRecord = {
   id: string;
@@ -489,7 +493,7 @@ function MainApp() {
   const sideNavClassicFirstSyncDone = useSideNavLayoutStore((state) => state.classicFirstSyncDone);
   const markSideNavClassicFirstSyncDone = useSideNavLayoutStore((state) => state.markClassicFirstSyncDone);
   const syncSidebarEntriesFromDashboard = usePlatformLayoutStore((state) => state.syncSidebarEntriesFromDashboard);
-  const [page, setPage] = useState<Page>('dashboard');
+  const [page, setPage] = useState<Page>('codex');
   const [showUpdateNotification, setShowUpdateNotification] = useState(false);
   const [updateNotificationKey, setUpdateNotificationKey] = useState(0);
   const [showCloseDialog, setShowCloseDialog] = useState(false);
@@ -540,8 +544,8 @@ function MainApp() {
   const sponsorModuleState = useSponsorStore((state) => state.state);
   const fetchSponsorModuleState = useSponsorStore((state) => state.fetchState);
   const sponsorModuleInitialized = useSponsorStore((state) => state.initialized);
-  const sponsorEntryVisible = Boolean(sponsorModuleState.sponsorModule);
-  const [topRightAdVisible, setTopRightAdVisible] = useState(true);
+  const sponsorEntryVisible = SHOW_SPONSOR_ENTRY && Boolean(sponsorModuleState.sponsorModule);
+  const [topRightAdVisible, setTopRightAdVisible] = useState(false);
   const trayRefreshInFlightRef = useRef(false);
   const openPlatformLayoutModal = useCallback(() => {
     setPlatformLayoutRequestedGroupId(null);
@@ -575,18 +579,22 @@ function MainApp() {
         ),
         width: 'sm',
         actions: [
-          {
-            id: 'check-update',
-            label: t('common.shared.externalImport.checkUpdate', '检查更新'),
-            variant: 'primary',
-            onClick: () => {
-              window.dispatchEvent(
-                new CustomEvent('update-check-requested', {
-                  detail: { source: 'manual' satisfies UpdateCheckSource },
-                }),
-              );
-            },
-          },
+          ...(APP_UPDATES_ENABLED
+            ? [
+                {
+                  id: 'check-update',
+                  label: t('common.shared.externalImport.checkUpdate', '检查更新'),
+                  variant: 'primary' as const,
+                  onClick: () => {
+                    window.dispatchEvent(
+                      new CustomEvent('update-check-requested', {
+                        detail: { source: 'manual' satisfies UpdateCheckSource },
+                      }),
+                    );
+                  },
+                },
+              ]
+            : []),
           {
             id: 'close',
             label: t('common.close', '关闭'),
@@ -702,10 +710,17 @@ function MainApp() {
   }, []);
 
   useEffect(() => {
+    if (!SHOW_GLOBAL_PROMO_BANNER) {
+      return;
+    }
     void fetchTopRightAdState();
   }, [fetchTopRightAdState]);
 
   useEffect(() => {
+    if (!SHOW_GLOBAL_PROMO_BANNER) {
+      setTopRightAdVisible(false);
+      return;
+    }
     const loadTopRightAdVisible = async () => {
       try {
         const config = await invoke<GeneralConfig>('get_general_config');
@@ -724,13 +739,23 @@ function MainApp() {
   }, []);
 
   useEffect(() => {
+    if (!SHOW_SPONSOR_ENTRY) {
+      return;
+    }
     void fetchSponsorModuleState();
   }, [fetchSponsorModuleState]);
 
   useEffect(() => {
+    if (!SHOW_GLOBAL_PROMO_BANNER && !SHOW_SPONSOR_ENTRY) {
+      return;
+    }
     const intervalId = window.setInterval(() => {
-      void fetchTopRightAdState();
-      void fetchSponsorModuleState();
+      if (SHOW_GLOBAL_PROMO_BANNER) {
+        void fetchTopRightAdState();
+      }
+      if (SHOW_SPONSOR_ENTRY) {
+        void fetchSponsorModuleState();
+      }
     }, TOP_RIGHT_AD_REFRESH_INTERVAL_MS);
     return () => {
       window.clearInterval(intervalId);
@@ -738,9 +763,16 @@ function MainApp() {
   }, [fetchSponsorModuleState, fetchTopRightAdState]);
 
   useEffect(() => {
+    if (!SHOW_GLOBAL_PROMO_BANNER && !SHOW_SPONSOR_ENTRY) {
+      return;
+    }
     const handleLanguageChanged = () => {
-      void fetchTopRightAdState();
-      void fetchSponsorModuleState();
+      if (SHOW_GLOBAL_PROMO_BANNER) {
+        void fetchTopRightAdState();
+      }
+      if (SHOW_SPONSOR_ENTRY) {
+        void fetchSponsorModuleState();
+      }
     };
     window.addEventListener('general-language-updated', handleLanguageChanged);
     return () => {
@@ -875,6 +907,10 @@ function MainApp() {
   }, []);
 
   useEffect(() => {
+    if (!APP_UPDATES_ENABLED) {
+      setUpdateRuntimeInfoLoaded(true);
+      return;
+    }
     let cancelled = false;
 
     invoke<UpdateRuntimeInfo>('get_update_runtime_info')
@@ -903,6 +939,10 @@ function MainApp() {
   }, [writeUpdateLog]);
 
   useEffect(() => {
+    if (!APP_UPDATES_ENABLED) {
+      setUpdateRemindersEnabled(false);
+      return;
+    }
     let cancelled = false;
     invoke<{
       auto_check?: boolean;
@@ -925,6 +965,9 @@ function MainApp() {
   }, []);
 
   useEffect(() => {
+    if (!APP_UPDATES_ENABLED) {
+      return;
+    }
     const handleUpdateReminderChanged = (event: Event) => {
       const detail = (event as CustomEvent<{ enabled?: boolean }>).detail;
       if (typeof detail?.enabled === 'boolean') {
@@ -1696,6 +1739,9 @@ function MainApp() {
 
   // Check for updates on startup
   useEffect(() => {
+    if (!APP_UPDATES_ENABLED) {
+      return;
+    }
     if (!updateRuntimeInfoLoaded) {
       return;
     }
@@ -2132,6 +2178,9 @@ function MainApp() {
 
   // Version jump detection (post-update changelog)
   useEffect(() => {
+    if (!APP_UPDATES_ENABLED) {
+      return;
+    }
     const detectVersionJump = async () => {
       const versionJumpStartedAt = performance.now();
       try {
@@ -2393,6 +2442,9 @@ function MainApp() {
   }, []);
 
   useEffect(() => {
+    if (!APP_UPDATES_ENABLED) {
+      return;
+    }
     const handleUpdateRequest = (event: Event) => {
       const detail = (event as CustomEvent<{ source?: UpdateCheckSource }>).detail;
       const source: UpdateCheckSource = detail?.source === 'manual' ? 'manual' : 'auto';
@@ -2405,6 +2457,9 @@ function MainApp() {
   }, [runModalUpdateCheck]);
 
   useEffect(() => {
+    if (!APP_UPDATES_ENABLED) {
+      return;
+    }
     let unlisten: UnlistenFn | undefined;
 
     listen<LinuxUpdateProgressPayload>('update://linux-progress', (event) => {
@@ -2962,8 +3017,9 @@ function MainApp() {
               : t('quickSettings.antigravity.appPath', '启动路径')
     : t('quickSettings.antigravity.appPath', '启动路径');
   const appPathMissingBusy = appPathSetting || appPathDetecting || appPathCodexLaunchSetting;
-  const shouldRenderUpdateNotification = showUpdateNotification
-    || (updateRemindersEnabled && updateAction.state !== 'hidden');
+  const shouldRenderUpdateNotification =
+    APP_UPDATES_ENABLED &&
+    (showUpdateNotification || (updateRemindersEnabled && updateAction.state !== 'hidden'));
 
   return (
     <div
@@ -2994,7 +3050,7 @@ function MainApp() {
         </div>
       )}
       {/* 版本跳跃通知（更新后首次启动） */}
-      {versionJumpInfo && (
+      {APP_UPDATES_ENABLED && versionJumpInfo && (
         <Suspense fallback={null}>
           <VersionJumpNotification
             info={versionJumpInfo}
@@ -3167,15 +3223,15 @@ function MainApp() {
         easterEggClickCount={easterEggClickCount}
         onEasterEggTriggerClick={handleBreakoutEntryTriggerClick}
         hasBreakoutSession={hasBreakoutSession}
-        updateActionState={updateAction.state}
+        updateActionState={APP_UPDATES_ENABLED ? updateAction.state : 'hidden'}
         updateProgress={updateAction.progress}
         onUpdateActionClick={handleQuickUpdateActionClick}
-        updateRemindersEnabled={updateRemindersEnabled}
+        updateRemindersEnabled={APP_UPDATES_ENABLED && updateRemindersEnabled}
         sponsorEntryVisible={sponsorEntryVisible}
         onOpenLogViewer={() => setShowLogViewer(true)}
       />
 
-      {sideNavLayoutMode !== 'classic' && (
+      {SHOW_LOG_ENTRY && sideNavLayoutMode !== 'classic' && (
         <button
           className="log-entry-fab"
           onClick={() => setShowLogViewer(true)}
@@ -3210,7 +3266,7 @@ function MainApp() {
               onOpenPlatformLayout={openPlatformLayoutModal}
               onEasterEggTriggerClick={handleBreakoutEntryTriggerClick}
               topCenterBanner={
-                topRightAdVisible && topRightAdState.ads.length > 0 ? (
+                SHOW_GLOBAL_PROMO_BANNER && topRightAdVisible && topRightAdState.ads.length > 0 ? (
                   <TopCenterPromoBanner reserveWhenEmpty={false} />
                 ) : null
               }

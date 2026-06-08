@@ -210,7 +210,7 @@ type ExternalImportBundleParseMessages = {
 
 const CODEX_REFRESH_TOKEN_PATTERN = /rt_[A-Za-z0-9._-]+/g;
 const COCKPIT_API_PROVIDER_ID = 'cockpit_api';
-const COCKPIT_API_PROVIDER_NAME = 'Cockpit Api';
+const COCKPIT_API_PROVIDER_NAME = 'Orbit API';
 const COCKPIT_TOOLS_IMPORT_PATH_MARKERS = [
   '/api/cockpit-tools/import/',
   '/user/api/toolsimport/',

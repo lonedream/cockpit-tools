@@ -28,7 +28,7 @@
         "actions": "Aktionen",
         "plan": "Planen",
         "addOnPromptCredits": "Zusatz-Prompt-Credits",
-        "credits": "Credits​",
+        "credits": "Credits",
         "email": "E-Mail",
         "promptCredits": "Prompt-Credits",
         "creditPackage": "Credit-Paket",
@@ -48,12 +48,12 @@
         "all": "Alle ({{count}})",
         "enterprise": "UNTERNEHMEN ({{count}})",
         "free": "KOSTENLOS ({{count}})",
-        "pro": "PRO ({{count}})​",
+        "pro": "PRO ({{count}})",
         "business": "GESCHÄFT ({{count}})",
         "individual": "EINZEL ({{count}})",
         "validAccounts": "Gültige Konten ({{count}})"
       },
-      "filterLabel": "Filter​",
+      "filterLabel": "Filter",
       "import": {
         "failedMsg": "Import fehlgeschlagen: {{error}}",
         "label": "Importieren",
@@ -184,7 +184,7 @@
         "relativeHours": "{{hours}} Std",
         "relativeHoursMinutes": "{{hours}} Std {{minutes}} Min",
         "relativeMinutes": "{{minutes}} Min",
-        "relativeWithAbsolute": "{{relative}} ({{absolute}})​"
+        "relativeWithAbsolute": "{{relative}} ({{absolute}})"
       },
       "credits": {
         "leftInline": "{{left}} verbleibend",
@@ -218,7 +218,7 @@
       "desc": "Dieser Bereich ist auf allen Seiten oben rechts fixiert und eignet sich für Kampagnen oder Markenanzeigen.",
       "action": "Details ansehen"
     },
-    "appName": "Cockpit Tools​",
+    "appName": "Orbit Desk",
     "collapse": "Einklappen",
     "confirmDelete": "Löschen bestätigen",
     "confirmDeleteTag": "Tag-Löschung bestätigen",
@@ -228,13 +228,13 @@
     "selectAll": "Alle auswählen"
   },
   "nav": {
-    "overview": "Antigravity IDE​",
+    "overview": "Antigravity IDE",
     "accounts": "Konten",
     "wakeup": "Weckaufgaben",
     "settings": "Einstellungen",
-    "codex": "Codex​",
-    "githubCopilot": "GitHub Copilot​",
-    "windsurf": "Windsurf​",
+    "codex": "Codex",
+    "githubCopilot": "GitHub Copilot",
+    "windsurf": "Windsurf",
     "dashboard": "Armaturenbrett",
     "morePlatforms": "Weitere Plattformen",
     "instances": "Multi-Instanz",
@@ -244,11 +244,11 @@
       "restart": "Neustart",
       "installing": "Installation"
     },
-    "gemini": "Gemini Cli​",
-    "codebuddy": "CodeBuddy​",
-    "qoder": "Qoder​",
-    "trae": "Trae​",
-    "codebuddyCn": "CodeBuddy CN​",
+    "gemini": "Gemini Cli",
+    "codebuddy": "CodeBuddy",
+    "qoder": "Qoder",
+    "trae": "Trae",
+    "codebuddyCn": "CodeBuddy CN",
     "zed": "Zed-Plattform",
     "expandSidebar": "Seitenleiste erweitern",
     "collapseSidebar": "Seitenleiste einklappen",
@@ -265,12 +265,12 @@
   },
   "sponsors": {
     "pageTitle": "Sponsoren",
-    "pageDesc": "Vielen Dank an diese Sponsoren für die Unterstützung von Cockpit Tools.",
+    "pageDesc": "Vielen Dank an diese Sponsoren für die Unterstützung von Orbit Desk.",
     "loading": "Sponsoren werden geladen...",
     "emptyTitle": "Noch keine Sponsoren",
     "emptyDesc": "Das Remote-Sponsorenmodul ist derzeit deaktiviert.",
     "listAriaLabel": "Sponsorenliste",
-    "defaultDescription": "Danke für die Unterstützung von Cockpit Tools.",
+    "defaultDescription": "Danke für die Unterstützung von Orbit Desk.",
     "openSponsor": "Öffnen"
   },
   "platformLayout": {
@@ -425,7 +425,7 @@
       "nameRequired": "Bitte geben Sie einen Instanznamen ein",
       "pathRequired": "Bitte wählen Sie ein Instanzverzeichnis aus",
       "bindRequired": "Bitte wählen Sie ein Konto zum Koppeln aus",
-      "optional": "Optional​",
+      "optional": "Optional",
       "launchMode": "Startmodus",
       "launchModeApp": "Desktop-App",
       "launchModeCli": "CLI-Modus",
@@ -522,7 +522,7 @@
       "force": {
         "title": "Erzwungener Neustart",
         "principle": "Sucht Prozesse anhand von --user-data-dir und beendet sie gewaltsam (SIGKILL / taskkill /F), startet dann die Zielinstanz.",
-        "commandMac": "macOS/Linux: pkill -9 -f \"--user-data-dir <dir>\"​",
+        "commandMac": "macOS/Linux: pkill -9 -f \"--user-data-dir <dir>\"",
         "commandWin": "Windows: taskkill /F /PID <pid> (Übereinstimmung mit --user-data-dir)",
         "pros": "Kann eine einzelne Instanz gezielt neu starten.",
         "cons": "Könnte Warnungen vor unerwartetem Beenden verursachen, Risiko von Datenverlust für ungespeicherte Daten."
@@ -558,7 +558,7 @@
   },
   "settings": {
     "title": "App-Einstellungen",
-    "subtitle": "Passen Sie Ihre Cockpit Tools Erfahrung an.",
+    "subtitle": "Passen Sie Ihre Orbit Desk Erfahrung an.",
     "tabs": {
       "general": "Allgemein",
       "network": "Netzwerk",
@@ -576,7 +576,7 @@
       "terminalSystem": "Systemstandard",
       "themeLight": "Hell",
       "themeDark": "Dunkel",
-      "themeSystem": "System​",
+      "themeSystem": "System",
       "uiScale": "UI-Skalierung",
       "uiScaleDesc": "UI-Skalierung anpassen",
       "accountManagement": "Kontoverwaltung",
@@ -716,7 +716,7 @@
       "sideNavLayoutClassic": "Klassisches Layout",
       "antigravityDualSwitchNoRestart": "Nahtloser Doppelwechsel (ohne Neustart)",
       "antigravityDualSwitchNoRestartDesc": "Beim Kontowechsel werden lokale Kontodaten geschrieben und der nahtlose Erweiterungswechsel in einem Ablauf ausgeführt, ohne Antigravity IDE neu zu starten.",
-      "appAutoLaunch": "Cockpit Tools beim Anmelden starten",
+      "appAutoLaunch": "Orbit Desk beim Anmelden starten",
       "appAutoLaunchDesc": "App nach der Systemanmeldung automatisch starten",
       "startupWakeupDisabled": "Deaktiviert",
       "startupWakeupImmediate": "Sofort aufwecken",
@@ -776,8 +776,8 @@
       "codexAppSpeedLaunchFailed": "Codex konnte nicht neu gestartet werden: {{error}}"
     },
     "network": {
-      "apiTitle": "Antigravity-Cockpit-API",
-      "wsService": "WebSocket Service​",
+      "apiTitle": "Orbit API",
+      "wsService": "WebSocket Service",
       "wsServiceDesc": "Externen Programmen (z. B. VS Code Erweiterung) die Verbindung erlauben",
       "preferredPort": "Bevorzugter Port",
       "preferredPortDesc": "Standard ist {{port}}, Neustart nach Änderung erforderlich",
@@ -805,7 +805,7 @@
       "firewallHint": "Wenn die URL nicht erreichbar ist, prüfen Sie die Firewall-Einstellungen Ihres Systems.",
       "proxyTitle": "Globaler Proxy",
       "proxyEnabled": "Globalen Proxy aktivieren",
-      "proxyEnabledDesc": "Proxy-Umgebungsvariablen in verwaltete Plattformprozesse injizieren, die von Cockpit gestartet werden.",
+      "proxyEnabledDesc": "Proxy-Umgebungsvariablen in verwaltete Plattformprozesse injizieren, die von Orbit gestartet werden.",
       "proxyUrl": "Proxy-URL",
       "proxyUrlDesc": "Beispiel: http://127.0.0.1:7890 oder socks5://127.0.0.1:7890",
       "proxyUrlPlaceholder": "z. B. http://127.0.0.1:7890",
@@ -815,12 +815,12 @@
       "proxyUrlRequired": "Die Proxy-URL darf nicht leer sein, wenn der globale Proxy aktiviert ist."
     },
     "about": {
-      "appName": "Cockpit Tools​",
+      "appName": "Orbit Desk",
       "slogan": "Professionelle Lösung zur Kontoverwaltung",
       "author": "Autor",
-      "wechat": "WeChat​",
+      "wechat": "WeChat",
       "github": "GitHub Repository",
-      "alipay": "Alipay​",
+      "alipay": "Alipay",
       "wechatpay": "WeChat-Bezahlung",
       "sponsor": "Sponsoren",
       "sponsorDesc": "Unterstützen Sie die Entwicklung",
@@ -958,7 +958,7 @@
       "passwordSavedPlaceholder": "Gespeichert; leer lassen, um es zu behalten",
       "clearPassword": "Löschen",
       "remoteDirTitle": "Remote-Ordner",
-      "remoteDirDesc": "Es werden nur Cockpit-Backup-Dateien in diesem Ordner verwaltet.",
+      "remoteDirDesc": "Es werden nur Orbit-Backup-Dateien in diesem Ordner verwaltet.",
       "statusTitle": "Synchronisationsstatus",
       "statusDesc": "Die Remote-Wiederherstellung erfordert eine manuelle Auswahl und überschreibt lokale Daten niemals stillschweigend.",
       "lastUpload": "Letzter Upload: {{time}}",
@@ -969,7 +969,7 @@
       "syncAction": "Einstellungen synchronisieren",
       "syncLatestConfirm": "Möchten Sie wirklich das neueste Remote-Backup {{name}} herunterladen und lokal synchronisieren? Dadurch werden bestehende lokale Daten überschrieben.",
       "remoteListTitle": "Remote-Backups",
-      "remoteListDesc": "Es werden nur JSON- und ZIP-Dateien angezeigt, die den Namen der automatischen/manuellen Cockpit-Backups entsprechen.",
+      "remoteListDesc": "Es werden nur JSON- und ZIP-Dateien angezeigt, die den Namen der automatischen/manuellen Orbit-Backups entsprechen.",
       "emptyTitle": "Keine Remote-Backups",
       "emptyDesc": "Einstellungen speichern, dann ein Backup erstellen und hochladen.",
       "unknownTime": "Unbekannt",
@@ -1036,14 +1036,14 @@
       "disabled": "Deaktiviert",
       "authInvalid": "Ungültige Anmeldeinformationen",
       "refreshFailed": "Aktualisierung fehlgeschlagen",
-      "normal": "Normal​",
-      "forbidden": "403​",
+      "normal": "Normal",
+      "forbidden": "403",
       "forbidden_tooltip": "API gab 403 Forbidden zurück, Konto hat keinen Zugriff auf Gemini Code Assist",
       "forbidden_msg": "Konto verboten, automatische Aktualisierung übersprungen"
     },
     "tier": {
-      "pro": "PRO​",
-      "ultra": "ULTRA​"
+      "pro": "PRO",
+      "ultra": "ULTRA"
     },
     "credits": {
       "label": "KI-Guthaben"
@@ -1065,8 +1065,8 @@
     "filterLabel": "Konten filtern",
     "filter": {
       "all": "Alle ({{count}})",
-      "pro": "PRO ({{count}})​",
-      "ultra": "ULTRA ({{count}})​"
+      "pro": "PRO ({{count}})",
+      "ultra": "ULTRA ({{count}})"
     },
     "sortLabel": "Sortieren",
     "sort": {
@@ -1194,7 +1194,7 @@
       "triggerManual": "Manueller Wechsel",
       "triggerAuto": "Automatischer Wechsel",
       "triggerUnknown": "Unbekannt",
-      "origin": "Initiator: {{origin}}​",
+      "origin": "Initiator: {{origin}}",
       "originDesktop": "Desktop-App",
       "originPlugin": "Erweiterung",
       "originUnknown": "Unbekannt",
@@ -1288,7 +1288,7 @@
       "importBtn": "Importieren",
       "oauthAction": "OAuth-Autorisierung",
       "fromExtension": "Von Plugin importieren",
-      "syncBadge": "Antigravity Cockpit Plugin-Konten synchronisieren",
+      "syncBadge": "Antigravity Orbit Plugin-Konten synchronisieren",
       "fromLocalDB": "Aus lokaler Datenbank importieren",
       "localDBDesc": "Login-Konten vom Antigravity IDE-Client auf diesem Rechner lesen",
       "toolsDescMigrate": "Konten von ~/.antigravity_tools/ migrieren",
@@ -1337,7 +1337,7 @@
     "bindFailed": "Verbindung fehlgeschlagen: {{error}}",
     "jsonRequired": "Bitte geben Sie den JSON-Inhalt ein oder fügen Sie ihn ein",
     "example": "Beispiel",
-    "actionRunning": "{{action}}...​",
+    "actionRunning": "{{action}}...",
     "actionSuccess": "{{action}} erfolgreich",
     "actionFailed": "{{action}} fehlgeschlagen: {{error}}"
   },
@@ -1409,20 +1409,20 @@
     },
     "format": {
       "noReply": "(Keine Antwort)",
-      "durationMs": "{{ms}}ms​",
+      "durationMs": "{{ms}}ms",
       "tokens": "Token={{prompt}}+{{completion}}={{total}}",
       "traceId": "TraceId={{traceId}}",
-      "detailJoiner": ", ​",
-      "message": "[[{{model}}]]: {{reply}}{{suffix}}​",
-      "none": "--​",
+      "detailJoiner": ", ",
+      "message": "[[{{model}}]]: {{reply}}{{suffix}}",
+      "none": "--",
       "today": "Heute {{time}}",
       "tomorrow": "Morgen {{time}}",
-      "weekdayWithTime": "{{day}} {{time}}​",
+      "weekdayWithTime": "{{day}} {{time}}",
       "notSelected": "Nicht ausgewählt",
-      "joiner": ", ​",
+      "joiner": ", ",
       "moreItems": "{{items}} ({{total}} Elemente)",
       "quotaReset": "Weckung bei Quoten-Reset",
-      "crontab": "Crontab: {{expr}}​",
+      "crontab": "Crontab: {{expr}}",
       "daily": "Täglich {{times}}{{suffix}}",
       "weekly": "Wöchentlich {{days}} {{times}}{{suffix}}",
       "interval": "Alle {{hours}} Std. ({{start}}-{{end}})",
@@ -1466,7 +1466,7 @@
     },
     "triggerSource": {
       "scheduled": "Geplant",
-      "crontab": "Crontab​",
+      "crontab": "Crontab",
       "quotaReset": "Quoten-Reset",
       "manual": "Jetzt testen",
       "unknown": "Unbekannt",
@@ -1494,7 +1494,7 @@
       "triggerMode": "Auslösemodus",
       "triggerModeHint": "1. Geplant: Auslösung zu festgelegten Zeiten.\n2. Crontab: per Ausdruck definieren.\n3. Quoten-Reset: einmal auslösen, wenn Quote voll ist.",
       "modeScheduled": "📅 Geplant",
-      "modeCrontab": "🧩 Crontab​",
+      "modeCrontab": "🧩 Crontab",
       "modeQuotaReset": "🔄 Quoten-Reset",
       "antigravityVersion": "Antigravity IDE-Version",
       "modelSelect": "Modellauswahl",
@@ -1521,7 +1521,7 @@
       "intervalSetting": "Intervall-Einstellungen",
       "intervalEvery": "Alle",
       "intervalHours": "Stunden",
-      "intervalStart": "Start​",
+      "intervalStart": "Start",
       "intervalEnd": "Ende",
       "nextRuns": "Nächste Ausführungen",
       "nextRunsEmpty": "Bitte Auslösezeiten wählen",
@@ -1646,7 +1646,7 @@
         },
         "force": {
           "principle": "Sucht Prozesse anhand von CODEX_HOME und beendet sie gewaltsam (SIGKILL / taskkill /F), startet dann die Zielinstanz.",
-          "commandMac": "macOS: pkill -9 -f \"CODEX_HOME=<dir>\"​",
+          "commandMac": "macOS: pkill -9 -f \"CODEX_HOME=<dir>\"",
           "commandWin": "Windows: taskkill /F /PID <pid> (Übereinstimmung mit CODEX_HOME)"
         }
       }
@@ -1707,7 +1707,7 @@
     },
     "exportFormat": {
       "label": "Exportformat",
-      "cockpitTools": "Cockpit Tools​",
+      "cockpitTools": "Orbit Desk",
       "sub2api": "sub2api-Format",
       "cpa": "cpa-Format",
       "downloadAll": "Alle herunterladen",
@@ -1817,13 +1817,13 @@
         "accountRequests": "{{count}} Anfragen",
         "accountTokens": "{{count}} Token",
         "accountResult": "Erfolg {{success}} / Fehler {{failed}}",
-        "accountTokensCompact": "{{value}}​",
+        "accountTokensCompact": "{{value}}",
         "images": "Bildanfragen",
         "imagesDetail": "Erzeugen {{generate}} / Bearbeiten {{edit}} / Berechtigung {{blocked}}",
         "estimatedCost": "Geschätzter Wert",
         "estimatedCostDetail": "Aus Preis-Snapshots der Anfragen summiert"
       },
-      "routingLabel": "Routing​",
+      "routingLabel": "Routing",
       "routingSaveSuccess": "API-Service-Routing wurde aktualisiert",
       "routingDescriptionAuto": "Bevorzugt Konten mit höherem Tarif und mehr Restkontingent, rotiert dann innerhalb derselben Tarifstufe.",
       "routingDescriptionQuotaHighFirst": "Bevorzugt Konten mit mehr verbleibendem Kontingent.",
@@ -1882,7 +1882,7 @@
       "modelIdViewOnly": "Nur Ansicht",
       "quotaPool": {
         "title": "Kontingentpool",
-        "hourlyShort": "5h​",
+        "hourlyShort": "5h",
         "weeklyShort": "Woche",
         "viewFull": "Vollständige Statistik anzeigen",
         "modalTitle": "Kontingentpool des API-Dienstes",
@@ -2019,11 +2019,11 @@
       "requestFailedManualRetry": "Netzwerk prüfen. Das neueste Kontingent wurde nicht abgerufen. Zum Wiederholen aktualisieren."
     },
     "plan": {
-      "free": "FREE​",
-      "plus": "PLUS​",
-      "pro": "PRO​",
-      "team": "TEAM​",
-      "enterprise": "ENTERPRISE​"
+      "free": "FREE",
+      "plus": "PLUS",
+      "pro": "PRO",
+      "team": "TEAM",
+      "enterprise": "ENTERPRISE"
     },
     "list": {
       "showCodeReviewQuota": "Code-Review-Kontingent anzeigen"
@@ -2031,14 +2031,14 @@
     "time": {
       "today": "Heute {{time}}",
       "tomorrow": "Morgen {{time}}",
-      "dateTime": "{{date}} {{time}}​"
+      "dateTime": "{{date}} {{time}}"
     },
     "view": {
       "compact": "Kompaktansicht"
     },
     "filter": {
-      "plus": "PLUS ({{count}})​",
-      "team": "TEAM ({{count}})​"
+      "plus": "PLUS ({{count}})",
+      "team": "TEAM ({{count}})"
     },
     "sort": {
       "weekly": "Wöchentliches Kontingent",
@@ -2334,73 +2334,73 @@
         "custom": "Benutzerdefiniert",
         "endpoint": "Anbieter-Endpunkt",
         "hint": "Eine kompatible Base URL wurde automatisch eingetragen. Sie können sie weiterhin manuell bearbeiten.",
-        "website": "Website​",
+        "website": "Website",
         "apiKeyPage": "API-Key-Seite",
         "getApiKey": "Schlüssel holen"
       },
       "providers": {
         "openai_official": {
-          "name": "OpenAI Official​"
+          "name": "OpenAI Official"
         },
         "azure_openai": {
-          "name": "Azure OpenAI​"
+          "name": "Azure OpenAI"
         },
         "packycode": {
-          "name": "PackyCode​"
+          "name": "PackyCode"
         },
         "cubence": {
-          "name": "Cubence​"
+          "name": "Cubence"
         },
         "aigocode": {
-          "name": "AIGoCode​"
+          "name": "AIGoCode"
         },
         "rightcode": {
-          "name": "RightCode​"
+          "name": "RightCode"
         },
         "sssaicode": {
-          "name": "SSSAiCode​"
+          "name": "SSSAiCode"
         },
         "micu": {
-          "name": "Micu​"
+          "name": "Micu"
         },
         "x_code_api": {
-          "name": "X-Code API​"
+          "name": "X-Code API"
         },
         "ctok_ai": {
-          "name": "CTok.ai​"
+          "name": "CTok.ai"
         },
         "aihubmix": {
-          "name": "AiHubMix​"
+          "name": "AiHubMix"
         },
         "dmxapi": {
-          "name": "DMXAPI​"
+          "name": "DMXAPI"
         },
         "compshare": {
-          "name": "Compshare​"
+          "name": "Compshare"
         },
         "openrouter": {
-          "name": "OpenRouter​"
+          "name": "OpenRouter"
         },
         "aicodemirror": {
-          "name": "AICodeMirror​"
+          "name": "AICodeMirror"
         },
         "aicoding": {
-          "name": "AICoding​"
+          "name": "AICoding"
         },
         "crazyrouter": {
-          "name": "CrazyRouter​"
+          "name": "CrazyRouter"
         },
         "deepseek": {
-          "name": "DeepSeek​"
+          "name": "DeepSeek"
         },
         "moonshot": {
-          "name": "Moonshot​"
+          "name": "Moonshot"
         },
         "siliconflow": {
-          "name": "SiliconFlow​"
+          "name": "SiliconFlow"
         },
         "cockpit_api": {
-          "name": "Cockpit Api​"
+          "name": "Orbit API"
         }
       },
       "oauthBinding": {
@@ -2432,7 +2432,7 @@
       "emptyTitle": "Noch keine Modellanbieter",
       "emptyDesc": "Klicken Sie oben rechts auf „Anbieter hinzufügen“, um loszulegen.",
       "baseUrl": "Basis-URL",
-      "website": "Website​",
+      "website": "Website",
       "apiKeyPage": "API-Key-Seite",
       "apiKeysCount": "{{count}} API-Keys",
       "referencesCount": "{{count}} verknüpfte Konten",
@@ -2555,7 +2555,7 @@
         "models": "Models-Endpunkt fehlerhaft",
         "parse": "Antwort konnte nicht gelesen werden",
         "httpStatus": "Status {{status}}",
-        "message": "{{title}}: {{detail}}. {{suggestion}}​"
+        "message": "{{title}}: {{detail}}. {{suggestion}}"
       },
       "testSuggestion": {
         "addApiKey": "Füge vor dem Test einen API-Key für diesen Anbieter hinzu.",
@@ -2606,7 +2606,7 @@
         "noKey": "Kein abfragbares Kontingent",
         "used": "Verbraucht",
         "limit": "Grenze",
-        "viewDetail": "Details​",
+        "viewDetail": "Details",
         "detailTitle": "Servicepanel",
         "rawFields": "Servicedaten",
         "fields": {
@@ -2705,7 +2705,7 @@
       "saveFailed": "Kontonotiz konnte nicht gespeichert werden: {{error}}"
     },
     "cockpitApi": {
-      "panelTitle": "Cockpit Api Dienstpanel",
+      "panelTitle": "Orbit API Dienstpanel",
       "servicePanel": "Dienstpanel",
       "balance": "Guthaben",
       "requests": "Anfragen",
@@ -3002,9 +3002,9 @@
       "totalAccounts": "Gesamtanzahl"
     },
     "panels": {
-      "antigravity": "Antigravity IDE​",
-      "codex": "Codex​",
-      "githubCopilot": "GitHub Copilot​",
+      "antigravity": "Antigravity IDE",
+      "codex": "Codex",
+      "githubCopilot": "GitHub Copilot",
       "planDistribution": "Planverteilung",
       "current": "Aktuelles Konto",
       "recommended": "Empfohlenes Konto",
@@ -3250,7 +3250,7 @@
       "batchDelimiterSpace": "Leerzeichen",
       "batchDelimiterComma": "Komma",
       "batchDelimiterPipe": "Senkrechter Strich",
-      "batchDelimiterDash": "----​",
+      "batchDelimiterDash": "----",
       "batchDelimiterCustom": "Benutzerdefiniert",
       "batchJsonDesc": "Fügen Sie ein JSON-Array ein, bei dem jeder Eintrag email und password enthält.",
       "batchTextDesc": "Geben Sie pro Zeile ein Konto ein; geparst wird strikt nach dem gewählten Trennzeichen.",
@@ -3273,7 +3273,7 @@
       "batchPartial": "{{success}} importiert, {{failed}} fehlgeschlagen",
       "batchFailed": "Stapelimport für {{failed}} Konto/Konten fehlgeschlagen",
       "batchFailureEntryWithLine": "Eintrag {{line}} ({{email}}): {{error}}",
-      "batchFailureEntry": "{{email}}: {{error}}​",
+      "batchFailureEntry": "{{email}}: {{error}}",
       "batchFailureMore": "{{count}} weitere fehlgeschlagen"
     },
     "oauth": {
@@ -3299,7 +3299,7 @@
       "addOnCreditsAvailableLabel": "Verfügbare Zusatz-Credits"
     },
     "columns": {
-      "plan": "Tag​"
+      "plan": "Tag"
     },
     "usageSummary": {
       "dailyQuota": "Tägliche Quotennutzung",
@@ -3330,7 +3330,7 @@
       "bonusUsageLine": "{{used}} verwendet / {{total}} insgesamt",
       "planUsageCoveredLine": "{{used}} verwendet / {{total}} im Plan abgedeckt",
       "expiryDays": "{{days}} Tage",
-      "expiryUnknown": "—​",
+      "expiryUnknown": "—",
       "resetNow": "Bald zurücksetzen",
       "resetInHours": "Wird in {{hours}}h zurückgesetzt",
       "resetInMinutes": "Wird in {{minutes}}m zurückgesetzt"
@@ -3342,11 +3342,11 @@
       "estUsage": "Schätzung: Verwendung"
     },
     "plan": {
-      "free": "Kiro Free​",
-      "individual": "Kiro Individual​",
-      "pro": "Kiro Pro​",
-      "business": "Kiro Business​",
-      "enterprise": "Kiro Enterprise​",
+      "free": "Kiro Free",
+      "individual": "Kiro Individual",
+      "pro": "Kiro Pro",
+      "business": "Kiro Business",
+      "enterprise": "Kiro Enterprise",
       "unknown": "Unbekannt"
     },
     "flowNotice": {
@@ -3383,7 +3383,7 @@
     "subscription": "Abonnement",
     "injectToCursor": "Zu Cursor wechseln",
     "quota": {
-      "onDemand": "On-Demand​"
+      "onDemand": "On-Demand"
     },
     "title": "Cursor-Kontoverwaltung",
     "instances": {
@@ -3425,12 +3425,12 @@
     "startHint": "Auf Start klicken oder Leertaste drücken",
     "rankTitle": "Lokales historisches Ranking",
     "rankCurrent": "Aktuell",
-    "rankNoData": "--​",
+    "rankNoData": "--",
     "restart": "Neu starten",
     "pause": "Pausieren",
     "resume": "Fortsetzen",
     "paused": "Pausiert",
-    "level": "Level {{level}}​",
+    "level": "Level {{level}}",
     "levelScore": "Level-Punktzahl {{score}}",
     "levelCleared": "Level geschafft",
     "nextLevel": "Nächstes Level",
@@ -3439,7 +3439,7 @@
     "historyEmpty": "Noch keine Einträge",
     "historyClear": "Leeren",
     "historyScoreShort": "Punkte {{score}}",
-    "historyLevelShort": "Lv {{level}}​",
+    "historyLevelShort": "Lv {{level}}",
     "historyDurationShort": "Zeit {{duration}}",
     "historyReasonGameOver": "Spiel vorbei",
     "historyReasonManualExit": "Manuell beendet",
@@ -3448,7 +3448,7 @@
     "rankingShort": "Lokal",
     "rankingEmpty": "Noch keine lokalen Einträge",
     "rankingClear": "Lokales Ranking leeren",
-    "rankingRankShort": "#{{rank}}​",
+    "rankingRankShort": "#{{rank}}",
     "minimize": "Minimieren",
     "resumeGameNav": "Spiel fortsetzen",
     "closeConfirmTitle": "Diesen Lauf beenden?",
@@ -3795,9 +3795,9 @@
       "leftOfTotal": "Übrig / Gesamt",
       "usage": "Verbraucht",
       "usageResets": "Nutzung wird zurückgesetzt",
-      "usedPercent": "{{value}}%​",
-      "remainingOfTotal": "{{remaining}} / {{total}}​",
-      "resetAtWithRelative": "{{absolute}} ({{relative}})​"
+      "usedPercent": "{{value}}%",
+      "remainingOfTotal": "{{remaining}} / {{total}}",
+      "resetAtWithRelative": "{{absolute}} ({{relative}})"
     },
     "tierText": {
       "pro": "Gemini Code Assist für Google One AI Pro",
@@ -3902,7 +3902,7 @@
       }
     },
     "quota": {
-      "usedOfTotal": "{{used}} / {{total}}​"
+      "usedOfTotal": "{{used}} / {{total}}"
     }
   },
   "qoder": {
@@ -3924,8 +3924,8 @@
       "title": "Nutzungsübersicht",
       "viewDetails": "Details anzeigen",
       "includedCredits": "Im Tarif enthaltene Credits",
-      "usedOfTotal": "{{used}} / {{total}}​",
-      "usedEmpty": "-- / --​",
+      "usedOfTotal": "{{used}} / {{total}}",
+      "usedEmpty": "-- / --",
       "upgradeHint": "Upgrade des Tarifs erhöht das monatliche Kontingent",
       "upgradeAction": "Tarif erhöhen"
     },
@@ -4116,7 +4116,7 @@
       }
     },
     "quota": {
-      "usedOfTotal": "{{used}} / {{total}}​"
+      "usedOfTotal": "{{used}} / {{total}}"
     },
     "checkin": {
       "title": "Täglicher Check-in",
@@ -4223,7 +4223,7 @@
     "plan": "Tarif",
     "cycle": "Zyklus",
     "status": "Zustand",
-    "pager": "{{current}} / {{total}}​",
+    "pager": "{{current}} / {{total}}",
     "badges": {
       "recommended": "Empfohlen"
     },
@@ -4237,7 +4237,7 @@
       "backToCurrent": "Zurück",
       "switchToThisAccount": "Wechseln",
       "openDetails": "Details öffnen",
-      "openCockpitTools": "Cockpit Tools öffnen"
+      "openCockpitTools": "Orbit Desk öffnen"
     },
     "empty": {
       "title": "Keine Konten",
@@ -4360,7 +4360,7 @@
   },
   "relay": {
     "pageTitle": "Exklusives Relay",
-    "pageDesc": "Partner-API-Dienst für Cockpit Tools Nutzer, verwendbar mit Codex API-Key-Konten.",
+    "pageDesc": "Partner-API-Dienst für Orbit Desk Nutzer, verwendbar mit Codex API-Key-Konten.",
     "loading": "Relay wird geladen...",
     "emptyTitle": "Relay deaktiviert",
     "emptyDesc": "Die Remote-Konfiguration hat das exklusive Relay nicht aktiviert.",
@@ -4390,7 +4390,7 @@
   "apiKeyFun": {
     "eyebrow": "Vermittler",
     "title": "APIKEY.FUN Relay",
-    "description": "Der offizielle Cockpit-Relay bietet stabilen, offenen und kosteneffizienten API-Zugriff auf Large Models. Unterstützt werden führende Modelle wie Claude, OpenAI und Gemini; die Nutzung eignet sich für eine einheitliche Konfiguration in Codex, Gemini CLI, Claude Code und weiteren Entwicklerwerkzeugen. Über den exklusiven Cockpit-Link registriert erhalten Sie dauerhaft bis zu 5% Rabatt auf Aufladungen.",
+    "description": "Der offizielle Orbit-Relay bietet stabilen, offenen und kosteneffizienten API-Zugriff auf Large Models. Unterstützt werden führende Modelle wie Claude, OpenAI und Gemini; die Nutzung eignet sich für eine einheitliche Konfiguration in Codex, Gemini CLI, Claude Code und weiteren Entwicklerwerkzeugen. Über den exklusiven Orbit-Link registriert erhalten Sie dauerhaft bis zu 5% Rabatt auf Aufladungen.",
     "register": "Exklusiver Link",
     "docs": "Offizielle Doku",
     "viewNow": "Jetzt ansehen",
@@ -4448,7 +4448,7 @@
       "apiScript": "Basisparameter für Skripte kopieren."
     },
     "apply": {
-      "codexTitle": "Codex​",
+      "codexTitle": "Codex",
       "codexDesc": "Schreibt ~/.codex/config.toml und auth.json mit Responses-Protokoll und aktuellem API Key.",
       "geminiTitle": "Gemini-CLI-Konfig",
       "geminiDesc": "Schreibt ~/.gemini/.env und setzt den Auth-Modus in settings.json auf gemini-api-key.",
@@ -4475,12 +4475,12 @@
       "lastRemaining": "Letzter Saldo {{value}}",
       "notQueried": "Nicht geprüft",
       "deleteButton": "Löschen",
-      "editAlias": "Edit alias​",
-      "renamePlaceholder": "Enter alias...​",
+      "editAlias": "Edit alias",
+      "renamePlaceholder": "Enter alias...",
       "createdAt": "Hinzugefügt {{time}}",
       "saveFlash": "Gerade gespeichert"
     },
-    "copyKey": "Copy Key​",
-    "clearKey": "Clear input​"
+    "copyKey": "Copy Key",
+    "clearKey": "Clear input"
   }
 }

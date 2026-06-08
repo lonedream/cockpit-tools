@@ -209,6 +209,8 @@ const ANTIGRAVITY_SEAMLESS_SWITCH_UNLOCK_REQUIRED_TAPS = 10;
 const UNLOCK_FIREWORKS_VISIBLE_MS = 6000;
 const AUTO_SWITCH_SCOPE_ALL_ACCOUNTS: AutoSwitchAccountScopeMode = 'all_accounts';
 const AUTO_SWITCH_SCOPE_SELECTED_ACCOUNTS: AutoSwitchAccountScopeMode = 'selected_accounts';
+const SHOW_ABOUT_TAB = false;
+const SHOW_APP_UPDATE_SETTINGS = false;
 const FALLBACK_PLATFORM_SETTINGS_ORDER: Record<PlatformId, number> = {
   antigravity: 0,
   antigravity_ide: 1,
@@ -286,6 +288,12 @@ export function SettingsPage() {
   const setSideNavLayoutMode = useSideNavLayoutStore((state) => state.setMode);
   const [activeTab, setActiveTab] = useState<'general' | 'network' | 'data' | 'about'>('general');
   const [availableTerminals, setAvailableTerminals] = useState<string[]>(['system']);
+
+  useEffect(() => {
+    if (!SHOW_ABOUT_TAB && activeTab === 'about') {
+      setActiveTab('general');
+    }
+  }, [activeTab]);
 
   useEffect(() => {
     invoke<string[]>('get_available_terminals')
@@ -590,6 +598,13 @@ export function SettingsPage() {
 
   useEffect(() => {
     getVersion().then(ver => setAppVersion(`v${ver}`));
+    if (!SHOW_APP_UPDATE_SETTINGS) {
+      setAutoInstall(false);
+      setUpdateRemindersEnabled(false);
+      setAutoInstallLoaded(true);
+      setUpdateRemindersLoaded(true);
+      return;
+    }
     // Load auto_install setting first to avoid overwriting existing value on initial render
     invoke<{
       auto_check: boolean;
@@ -612,6 +627,9 @@ export function SettingsPage() {
   }, []);
 
   useEffect(() => {
+    if (!SHOW_APP_UPDATE_SETTINGS && !SHOW_ABOUT_TAB) {
+      return;
+    }
     const handleStarted = (event: Event) => {
       const detail = (event as CustomEvent<{ source?: UpdateCheckSource }>).detail;
       if (detail?.source !== 'manual') {
@@ -1050,6 +1068,9 @@ export function SettingsPage() {
 
   // Save auto_install setting when changed
   useEffect(() => {
+    if (!SHOW_APP_UPDATE_SETTINGS) {
+      return;
+    }
     if (!autoInstallLoaded && !autoInstallTouchedRef.current) {
       return;
     }
@@ -1078,6 +1099,9 @@ export function SettingsPage() {
 
   // Save update reminder setting when changed
   useEffect(() => {
+    if (!SHOW_APP_UPDATE_SETTINGS) {
+      return;
+    }
     if (!updateRemindersLoaded && !updateRemindersTouchedRef.current) {
       return;
     }
@@ -1938,7 +1962,7 @@ export function SettingsPage() {
 
   // 检查更新
   const handleCheckUpdate = () => {
-    if (updateChecking) {
+    if (!SHOW_APP_UPDATE_SETTINGS || updateChecking) {
       return;
     }
     window.dispatchEvent(
@@ -1981,6 +2005,9 @@ export function SettingsPage() {
   };
 
   const handleOpenReleaseHistory = () => {
+    if (!SHOW_ABOUT_TAB) {
+      return;
+    }
     setReleaseHistoryOpen(true);
     void loadReleaseHistory();
   };
@@ -2065,12 +2092,14 @@ export function SettingsPage() {
           >
             {t('settings.tabs.data', '数据管理')}
           </button>
-          <button 
-            className={`filter-tab ${activeTab === 'about' ? 'active' : ''}`}
-            onClick={() => setActiveTab('about')}
-          >
-            {t('settings.tabs.about')}
-          </button>
+          {SHOW_ABOUT_TAB && (
+            <button 
+              className={`filter-tab ${activeTab === 'about' ? 'active' : ''}`}
+              onClick={() => setActiveTab('about')}
+            >
+              {t('settings.tabs.about')}
+            </button>
+          )}
         </div>
       </div>
 
@@ -2189,45 +2218,49 @@ export function SettingsPage() {
                 </div>
               </div>
 
-              <div className="settings-row">
-                <div className="row-label">
-                  <div className="row-title">{t('settings.general.autoUpdate')}</div>
-                  <div className="row-desc">{t('settings.general.autoUpdateDesc')}</div>
-                </div>
-                <div className="row-control">
-                  <select
-                    className="settings-select"
-                    value={autoInstall ? 'true' : 'false'}
-                    onChange={(e) => {
-                      autoInstallTouchedRef.current = true;
-                      setAutoInstall(e.target.value === 'true');
-                    }}
-                  >
-                    <option value="false">{t('settings.general.autoUpdateOff')}</option>
-                    <option value="true">{t('settings.general.autoUpdateOn')}</option>
-                  </select>
-                </div>
-              </div>
+              {SHOW_APP_UPDATE_SETTINGS && (
+                <>
+                  <div className="settings-row">
+                    <div className="row-label">
+                      <div className="row-title">{t('settings.general.autoUpdate')}</div>
+                      <div className="row-desc">{t('settings.general.autoUpdateDesc')}</div>
+                    </div>
+                    <div className="row-control">
+                      <select
+                        className="settings-select"
+                        value={autoInstall ? 'true' : 'false'}
+                        onChange={(e) => {
+                          autoInstallTouchedRef.current = true;
+                          setAutoInstall(e.target.value === 'true');
+                        }}
+                      >
+                        <option value="false">{t('settings.general.autoUpdateOff')}</option>
+                        <option value="true">{t('settings.general.autoUpdateOn')}</option>
+                      </select>
+                    </div>
+                  </div>
 
-              <div className="settings-row">
-                <div className="row-label">
-                  <div className="row-title">{t('settings.general.updateReminder')}</div>
-                  <div className="row-desc">{t('settings.general.updateReminderDesc')}</div>
-                </div>
-                <div className="row-control">
-                  <select
-                    className="settings-select"
-                    value={updateRemindersEnabled ? 'true' : 'false'}
-                    onChange={(e) => {
-                      updateRemindersTouchedRef.current = true;
-                      setUpdateRemindersEnabled(e.target.value === 'true');
-                    }}
-                  >
-                    <option value="true">{t('settings.general.updateReminderOn')}</option>
-                    <option value="false">{t('settings.general.updateReminderOff')}</option>
-                  </select>
-                </div>
-              </div>
+                  <div className="settings-row">
+                    <div className="row-label">
+                      <div className="row-title">{t('settings.general.updateReminder')}</div>
+                      <div className="row-desc">{t('settings.general.updateReminderDesc')}</div>
+                    </div>
+                    <div className="row-control">
+                      <select
+                        className="settings-select"
+                        value={updateRemindersEnabled ? 'true' : 'false'}
+                        onChange={(e) => {
+                          updateRemindersTouchedRef.current = true;
+                          setUpdateRemindersEnabled(e.target.value === 'true');
+                        }}
+                      >
+                        <option value="true">{t('settings.general.updateReminderOn')}</option>
+                        <option value="false">{t('settings.general.updateReminderOff')}</option>
+                      </select>
+                    </div>
+                  </div>
+                </>
+              )}
 
               {isMacOS && (
                 <>
@@ -5310,7 +5343,7 @@ export function SettingsPage() {
         {/* === Network Tab === */}
         {activeTab === 'network' && (
           <>
-            <div className="group-title">Antigravity Cockpit API</div>
+            <div className="group-title">Orbit API</div>
             <div className="settings-group">
               <div className="settings-row">
                 <div className="row-label">
@@ -5586,7 +5619,7 @@ export function SettingsPage() {
         )}
 
         {/* === About Tab === */}
-        {activeTab === 'about' && (
+        {SHOW_ABOUT_TAB && activeTab === 'about' && (
           <div className="about-container">
             <div className="about-logo-section">
               <div
@@ -5677,7 +5710,7 @@ export function SettingsPage() {
         )}
         </div>
       </div>
-      {releaseHistoryOpen && (
+      {SHOW_ABOUT_TAB && releaseHistoryOpen && (
         <div className="modal-overlay" onClick={handleCloseReleaseHistory}>
           <div className="modal settings-release-history-modal" onClick={(event) => event.stopPropagation()}>
             <div className="modal-header">

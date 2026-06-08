@@ -1299,7 +1299,7 @@ export function CodexAccountsPage() {
     () => [
       {
         value: "cockpit_tools",
-        label: t("codex.exportFormat.cockpitTools", "Cockpit Tools"),
+        label: t("codex.exportFormat.cockpitTools", "Orbit Desk"),
       },
       {
         value: "sub2api",
@@ -9441,7 +9441,7 @@ export function CodexAccountsPage() {
           <div className="modal-header cockpit-api-panel-header">
             <div>
               <h2>
-                {t("codex.cockpitApi.panelTitle", "Cockpit Api 服务面板")}
+                {t("codex.cockpitApi.panelTitle", "Orbit API 服务面板")}
               </h2>
               <span className="cockpit-api-panel-subtitle">
                 {maskAccountText(panelDisplayName)}

@@ -22,26 +22,12 @@ pub const PLATFORM_QODER: &str = "qoder";
 pub const PLATFORM_TRAE: &str = "trae";
 pub const PLATFORM_WORKBUDDY: &str = "workbuddy";
 
-pub const SUPPORTED_PLATFORM_IDS: [&str; 13] = [
-    PLATFORM_ANTIGRAVITY,
+pub const SUPPORTED_PLATFORM_IDS: [&str; 1] = [
     PLATFORM_CODEX,
-    PLATFORM_ZED,
-    PLATFORM_GITHUB_COPILOT,
-    PLATFORM_WINDSURF,
-    PLATFORM_KIRO,
-    PLATFORM_CURSOR,
-    PLATFORM_GEMINI,
-    PLATFORM_CODEBUDDY,
-    PLATFORM_CODEBUDDY_CN,
-    PLATFORM_QODER,
-    PLATFORM_TRAE,
-    PLATFORM_WORKBUDDY,
 ];
 
 pub const SORT_MODE_AUTO: &str = "auto";
 pub const SORT_MODE_MANUAL: &str = "manual";
-
-const DEFAULT_CODEBUDDY_GROUP_ID: &str = "codebuddy-suite";
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -84,16 +70,7 @@ fn default_tray_platforms() -> Vec<String> {
 }
 
 fn default_platform_groups() -> Vec<TrayLayoutGroup> {
-    vec![TrayLayoutGroup {
-        id: DEFAULT_CODEBUDDY_GROUP_ID.to_string(),
-        name: "CodeBuddy".to_string(),
-        platform_ids: vec![
-            PLATFORM_CODEBUDDY.to_string(),
-            PLATFORM_CODEBUDDY_CN.to_string(),
-            PLATFORM_WORKBUDDY.to_string(),
-        ],
-        default_platform_id: PLATFORM_CODEBUDDY.to_string(),
-    }]
+    Vec::new()
 }
 
 fn default_ordered_entries() -> Vec<String> {

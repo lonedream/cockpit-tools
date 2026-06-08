@@ -12,16 +12,16 @@
     "enabled": "Đã bật",
     "disabled": "Đã tắt",
     "close": "Đóng",
-    "open": "Open​",
-    "copy": "Copy​",
+    "open": "Open",
+    "copy": "Copy",
     "copied": "Đã sao chép",
-    "add": "Add​",
-    "enable": "Enable​",
-    "disable": "Disable​",
-    "none": "None​",
+    "add": "Add",
+    "enable": "Enable",
+    "disable": "Disable",
+    "none": "None",
     "detail": "Chi tiết",
     "editable": "Có thể chỉnh sửa",
-    "preview": "Preview​",
+    "preview": "Preview",
     "shared": {
       "addAccount": "Thêm tài khoản",
       "columns": {
@@ -184,7 +184,7 @@
         "relativeHours": "{{hours}} giờ",
         "relativeHoursMinutes": "{{hours}} giờ {{minutes}} phút",
         "relativeMinutes": "{{minutes}} phút",
-        "relativeWithAbsolute": "{{relative}} ({{absolute}})​"
+        "relativeWithAbsolute": "{{relative}} ({{absolute}})"
       },
       "credits": {
         "leftInline": "còn {{left}}",
@@ -218,7 +218,7 @@
       "desc": "Khu vực này được cố định ở góc trên bên phải trên mọi trang, phù hợp cho chiến dịch hoặc quảng cáo thương hiệu.",
       "action": "Xem chi tiết"
     },
-    "appName": "Cockpit Tools​",
+    "appName": "Orbit Desk",
     "collapse": "Thu gọn",
     "confirmDelete": "Xác nhận xóa",
     "confirmDeleteTag": "Xác nhận xóa thẻ",
@@ -228,13 +228,13 @@
     "selectAll": "Chọn tất cả"
   },
   "nav": {
-    "overview": "Antigravity IDE​",
+    "overview": "Antigravity IDE",
     "accounts": "Quản lý tài khoản",
-    "wakeup": "Wakeup Tasks​",
+    "wakeup": "Wakeup Tasks",
     "settings": "Cài đặt",
-    "codex": "Codex​",
-    "githubCopilot": "GitHub Copilot​",
-    "windsurf": "Windsurf​",
+    "codex": "Codex",
+    "githubCopilot": "GitHub Copilot",
+    "windsurf": "Windsurf",
     "dashboard": "Bảng điều khiển",
     "morePlatforms": "Thêm nền tảng",
     "instances": "Đa Phiên Bản",
@@ -244,11 +244,11 @@
       "restart": "Khởi động lại",
       "installing": "Đang cài đặt"
     },
-    "gemini": "Gemini Cli​",
-    "codebuddy": "CodeBuddy​",
-    "qoder": "Qoder​",
-    "trae": "Trae​",
-    "codebuddyCn": "CodeBuddy CN​",
+    "gemini": "Gemini Cli",
+    "codebuddy": "CodeBuddy",
+    "qoder": "Qoder",
+    "trae": "Trae",
+    "codebuddyCn": "CodeBuddy CN",
     "zed": "Nền tảng Zed",
     "expandSidebar": "Mở rộng thanh bên",
     "collapseSidebar": "Thu gọn thanh bên",
@@ -265,12 +265,12 @@
   },
   "sponsors": {
     "pageTitle": "Nhà tài trợ",
-    "pageDesc": "Cảm ơn các nhà tài trợ đã hỗ trợ Cockpit Tools.",
+    "pageDesc": "Cảm ơn các nhà tài trợ đã hỗ trợ Orbit Desk.",
     "loading": "Đang tải nhà tài trợ...",
     "emptyTitle": "Chưa có nhà tài trợ",
     "emptyDesc": "Mô-đun nhà tài trợ từ xa hiện đang tắt.",
     "listAriaLabel": "Danh sách nhà tài trợ",
-    "defaultDescription": "Cảm ơn bạn đã hỗ trợ Cockpit Tools.",
+    "defaultDescription": "Cảm ơn bạn đã hỗ trợ Orbit Desk.",
     "openSponsor": "Mở"
   },
   "platformLayout": {
@@ -522,7 +522,7 @@
       "force": {
         "title": "Khởi động lại bắt buộc",
         "principle": "Xác định các tiến trình qua --user-data-dir và buộc đóng chúng (SIGKILL / taskkill /F), sau đó bắt đầu phiên bản đích.",
-        "commandMac": "macOS/Linux: pkill -9 -f \"--user-data-dir <dir>\"​",
+        "commandMac": "macOS/Linux: pkill -9 -f \"--user-data-dir <dir>\"",
         "commandWin": "Windows: taskkill /F /PID <pid> (khớp với --user-data-dir)",
         "pros": "Có thể khởi động lại chính xác một phiên bản duy nhất.",
         "cons": "Có thể gây ra cảnh báo \"đóng bất ngờ\", rủi ro mất dữ liệu chưa lưu."
@@ -558,7 +558,7 @@
   },
   "settings": {
     "title": "Cài đặt ứng dụng",
-    "subtitle": "Cá nhân hóa trải nghiệm Antigravity Cockpit Tools của bạn.",
+    "subtitle": "Cá nhân hóa trải nghiệm Orbit Desk của bạn.",
     "tabs": {
       "general": "Chung",
       "network": "Dịch vụ mạng",
@@ -716,7 +716,7 @@
       "sideNavLayoutClassic": "Bố cục cổ điển",
       "antigravityDualSwitchNoRestart": "Chuyển đôi không cần khởi động lại",
       "antigravityDualSwitchNoRestartDesc": "Khi chuyển tài khoản, việc ghi dữ liệu cục bộ và chuyển đổi liền mạch qua tiện ích mở rộng được thực hiện trong một luồng, không cần khởi động lại Antigravity IDE.",
-      "appAutoLaunch": "Khởi chạy Cockpit Tools khi đăng nhập",
+      "appAutoLaunch": "Khởi chạy Orbit Desk khi đăng nhập",
       "appAutoLaunchDesc": "Tự động khởi chạy ứng dụng sau khi đăng nhập hệ thống",
       "startupWakeupDisabled": "Tắt",
       "startupWakeupImmediate": "Đánh thức ngay",
@@ -776,7 +776,7 @@
       "codexAppSpeedLaunchFailed": "Không thể khởi động lại Codex: {{error}}"
     },
     "network": {
-      "apiTitle": "API Antigravity Cockpit",
+      "apiTitle": "API Antigravity Orbit",
       "wsService": "Dịch vụ WebSocket",
       "wsServiceDesc": "Cho phép các chương trình bên ngoài (như plugin VS Code) kết nối điều khiển",
       "preferredPort": "Cổng ưu tiên",
@@ -805,7 +805,7 @@
       "firewallHint": "Nếu URL không truy cập được, hãy kiểm tra cài đặt tường lửa của hệ thống.",
       "proxyTitle": "Proxy toàn cục",
       "proxyEnabled": "Bật proxy toàn cục",
-      "proxyEnabledDesc": "Chèn biến môi trường proxy vào các tiến trình nền tảng được Cockpit quản lý khi khởi chạy.",
+      "proxyEnabledDesc": "Chèn biến môi trường proxy vào các tiến trình nền tảng được Orbit quản lý khi khởi chạy.",
       "proxyUrl": "URL proxy",
       "proxyUrlDesc": "Ví dụ: http://127.0.0.1:7890 hoặc socks5://127.0.0.1:7890",
       "proxyUrlPlaceholder": "ví dụ: http://127.0.0.1:7890",
@@ -815,12 +815,12 @@
       "proxyUrlRequired": "Không được để trống URL proxy khi bật proxy toàn cục."
     },
     "about": {
-      "appName": "Cockpit Tools​",
+      "appName": "Orbit Desk",
       "slogan": "Giải pháp quản lý tài khoản chuyên nghiệp",
       "author": "Tác giả chính",
       "wechat": "Tài khoản WeChat chính thức",
       "github": "Kho lưu trữ mã nguồn",
-      "alipay": "Alipay​",
+      "alipay": "Alipay",
       "wechatpay": "WeChat trả tiền",
       "sponsor": "Tài trợ dự án",
       "sponsorDesc": "Hỗ trợ phát triển",
@@ -958,7 +958,7 @@
       "passwordSavedPlaceholder": "Đã lưu; để trống để giữ lại",
       "clearPassword": "Xóa",
       "remoteDirTitle": "Thư mục từ xa",
-      "remoteDirDesc": "Chỉ các tệp sao lưu Cockpit trong thư mục này mới được quản lý.",
+      "remoteDirDesc": "Chỉ các tệp sao lưu Orbit trong thư mục này mới được quản lý.",
       "statusTitle": "Trạng thái đồng bộ",
       "statusDesc": "Khôi phục từ xa yêu cầu chọn thủ công và không bao giờ âm thầm ghi đè lên dữ liệu cục bộ.",
       "lastUpload": "Tải lên cuối: {{time}}",
@@ -969,7 +969,7 @@
       "syncAction": "Đồng bộ cấu hình",
       "syncLatestConfirm": "Bạn có chắc chắn muốn tải bản sao lưu từ xa mới nhất {{name}} và đồng bộ hóa cục bộ không? Việc này sẽ ghi đè lên dữ liệu cục bộ hiện có.",
       "remoteListTitle": "Bản sao lưu từ xa",
-      "remoteListDesc": "Chỉ hiển thị các tệp JSON và ZIP khớp với tên sao lưu tự động/thủ công của Cockpit.",
+      "remoteListDesc": "Chỉ hiển thị các tệp JSON và ZIP khớp với tên sao lưu tự động/thủ công của Orbit.",
       "emptyTitle": "Không có bản sao lưu từ xa",
       "emptyDesc": "Lưu cài đặt, sau đó tạo và tải bản sao lưu lên.",
       "unknownTime": "Không xác định",
@@ -1037,13 +1037,13 @@
       "authInvalid": "Thông tin xác thực không hợp lệ",
       "refreshFailed": "Làm mới không thành công",
       "normal": "Bình thường",
-      "forbidden": "403​",
+      "forbidden": "403",
       "forbidden_tooltip": "API trả về 403 Forbidden, tài khoản không có quyền sử dụng Gemini Code Assist",
       "forbidden_msg": "Tài khoản không có quyền, đã bỏ qua tự động làm mới"
     },
     "tier": {
-      "pro": "PRO​",
-      "ultra": "ULTRA​"
+      "pro": "PRO",
+      "ultra": "ULTRA"
     },
     "credits": {
       "label": "Tín dụng AI"
@@ -1288,7 +1288,7 @@
       "importBtn": "Nhập",
       "oauthAction": "Ủy quyền OAuth",
       "fromExtension": "Nhập từ Plugin",
-      "syncBadge": "Đồng bộ tài khoản plugin Antigravity Cockpit",
+      "syncBadge": "Đồng bộ tài khoản plugin Antigravity Orbit",
       "fromLocalDB": "Nhập từ DB cục bộ",
       "localDBDesc": "Đọc tài khoản đăng nhập từ Antigravity IDE Client trên máy này",
       "toolsDescMigrate": "Di chuyển tài khoản từ ~/.antigravity_tools/",
@@ -1337,7 +1337,7 @@
     "bindFailed": "Liên kết thất bại: {{error}}",
     "jsonRequired": "Vui lòng nhập hoặc dán nội dung JSON",
     "example": "Ví dụ",
-    "actionRunning": "{{action}}...​",
+    "actionRunning": "{{action}}...",
     "actionSuccess": "{{action}} thành công",
     "actionFailed": "{{action}} thất bại: {{error}}"
   },
@@ -1409,20 +1409,20 @@
     },
     "format": {
       "noReply": "(Không có phản hồi)",
-      "durationMs": "{{ms}}ms​",
+      "durationMs": "{{ms}}ms",
       "tokens": "mã thông báo={{prompt}}+{{completion}}={{total}}",
-      "traceId": "traceId={{traceId}}​",
-      "detailJoiner": ", ​",
-      "message": "[[{{model}}]]: {{reply}}{{suffix}}​",
-      "none": "--​",
+      "traceId": "traceId={{traceId}}",
+      "detailJoiner": ", ",
+      "message": "[[{{model}}]]: {{reply}}{{suffix}}",
+      "none": "--",
       "today": "Hôm nay {{time}}",
       "tomorrow": "Ngày mai {{time}}",
-      "weekdayWithTime": "{{day}} {{time}}​",
+      "weekdayWithTime": "{{day}} {{time}}",
       "notSelected": "Chưa chọn",
-      "joiner": ", ​",
+      "joiner": ", ",
       "moreItems": "{{items}} ({{total}} mục)",
       "quotaReset": "Tự động đánh thức khi đặt lại hạn mức",
-      "crontab": "Crontab: {{expr}}​",
+      "crontab": "Crontab: {{expr}}",
       "daily": "Hàng ngày {{times}}{{suffix}}",
       "weekly": "Hàng tuần {{days}} {{times}}{{suffix}}",
       "interval": "Mỗi {{hours}} giờ ({{start}}-{{end}})",
@@ -1494,7 +1494,7 @@
       "triggerMode": "Chế độ kích hoạt",
       "triggerModeHint": "1. Lịch trình: kích hoạt vào các thời điểm đã thiết lập.\n2. Crontab: định nghĩa bằng biểu thức.\n3. Đặt lại hạn mức: kích hoạt một lần khi hạn mức đầy.",
       "modeScheduled": "📅 Lịch trình",
-      "modeCrontab": "🧩 Crontab​",
+      "modeCrontab": "🧩 Crontab",
       "modeQuotaReset": "🔄 Đặt lại hạn mức",
       "antigravityVersion": "Phiên bản Antigravity IDE",
       "modelSelect": "Chọn mô hình",
@@ -1646,7 +1646,7 @@
         },
         "force": {
           "principle": "Xác định các tiến trình qua CODEX_HOME và buộc đóng chúng (SIGKILL / taskkill /F), sau đó bắt đầu phiên bản đích.",
-          "commandMac": "macOS: pkill -9 -f \"CODEX_HOME=<dir>\"​",
+          "commandMac": "macOS: pkill -9 -f \"CODEX_HOME=<dir>\"",
           "commandWin": "Windows: taskkill /F /PID <pid> (khớp với CODEX_HOME)"
         }
       }
@@ -1707,7 +1707,7 @@
     },
     "exportFormat": {
       "label": "Định dạng xuất",
-      "cockpitTools": "Cockpit Tools​",
+      "cockpitTools": "Orbit Desk",
       "sub2api": "Định dạng sub2api",
       "cpa": "Định dạng cpa",
       "downloadAll": "Tải xuống tất cả",
@@ -1817,7 +1817,7 @@
         "accountRequests": "{{count}} yêu cầu",
         "accountTokens": "{{count}} token",
         "accountResult": "Thành công {{success}} / Thất bại {{failed}}",
-        "accountTokensCompact": "{{value}}​",
+        "accountTokensCompact": "{{value}}",
         "images": "Yêu cầu ảnh",
         "imagesDetail": "Tạo {{generate}} / Sửa {{edit}} / Quyền {{blocked}}",
         "estimatedCost": "Giá trị ước tính",
@@ -1882,7 +1882,7 @@
       "modelIdViewOnly": "Chỉ xem",
       "quotaPool": {
         "title": "Nhóm hạn mức",
-        "hourlyShort": "5h​",
+        "hourlyShort": "5h",
         "weeklyShort": "Tuần",
         "viewFull": "Xem thống kê đầy đủ",
         "modalTitle": "Nhóm hạn mức dịch vụ API",
@@ -2019,11 +2019,11 @@
       "requestFailedManualRetry": "Kiểm tra mạng. Chưa lấy được quota mới nhất. Làm mới để thử lại."
     },
     "plan": {
-      "free": "FREE​",
-      "plus": "PLUS​",
-      "pro": "PRO​",
-      "team": "TEAM​",
-      "enterprise": "ENTERPRISE​"
+      "free": "FREE",
+      "plus": "PLUS",
+      "pro": "PRO",
+      "team": "TEAM",
+      "enterprise": "ENTERPRISE"
     },
     "list": {
       "showCodeReviewQuota": "Hiển thị hạn mức Code Review"
@@ -2031,7 +2031,7 @@
     "time": {
       "today": "Hôm nay {{time}}",
       "tomorrow": "Ngày mai {{time}}",
-      "dateTime": "{{date}} {{time}}​"
+      "dateTime": "{{date}} {{time}}"
     },
     "view": {
       "compact": "Dạng thu gọn"
@@ -2340,67 +2340,67 @@
       },
       "providers": {
         "openai_official": {
-          "name": "OpenAI Official​"
+          "name": "OpenAI Official"
         },
         "azure_openai": {
-          "name": "Azure OpenAI​"
+          "name": "Azure OpenAI"
         },
         "packycode": {
-          "name": "PackyCode​"
+          "name": "PackyCode"
         },
         "cubence": {
-          "name": "Cubence​"
+          "name": "Cubence"
         },
         "aigocode": {
-          "name": "AIGoCode​"
+          "name": "AIGoCode"
         },
         "rightcode": {
-          "name": "RightCode​"
+          "name": "RightCode"
         },
         "sssaicode": {
-          "name": "SSSAiCode​"
+          "name": "SSSAiCode"
         },
         "micu": {
-          "name": "Micu​"
+          "name": "Micu"
         },
         "x_code_api": {
-          "name": "X-Code API​"
+          "name": "X-Code API"
         },
         "ctok_ai": {
-          "name": "CTok.ai​"
+          "name": "CTok.ai"
         },
         "aihubmix": {
-          "name": "AiHubMix​"
+          "name": "AiHubMix"
         },
         "dmxapi": {
-          "name": "DMXAPI​"
+          "name": "DMXAPI"
         },
         "compshare": {
-          "name": "Compshare​"
+          "name": "Compshare"
         },
         "openrouter": {
-          "name": "OpenRouter​"
+          "name": "OpenRouter"
         },
         "aicodemirror": {
-          "name": "AICodeMirror​"
+          "name": "AICodeMirror"
         },
         "aicoding": {
-          "name": "AICoding​"
+          "name": "AICoding"
         },
         "crazyrouter": {
-          "name": "CrazyRouter​"
+          "name": "CrazyRouter"
         },
         "deepseek": {
-          "name": "DeepSeek​"
+          "name": "DeepSeek"
         },
         "moonshot": {
-          "name": "Moonshot​"
+          "name": "Moonshot"
         },
         "siliconflow": {
-          "name": "SiliconFlow​"
+          "name": "SiliconFlow"
         },
         "cockpit_api": {
-          "name": "Cockpit Api​"
+          "name": "Orbit API"
         }
       },
       "oauthBinding": {
@@ -2555,7 +2555,7 @@
         "models": "Endpoint mô hình lỗi",
         "parse": "Không đọc được phản hồi",
         "httpStatus": "Trạng thái {{status}}",
-        "message": "{{title}}: {{detail}}. {{suggestion}}​"
+        "message": "{{title}}: {{detail}}. {{suggestion}}"
       },
       "testSuggestion": {
         "addApiKey": "Hãy thêm API Key cho nhà cung cấp này trước khi kiểm tra.",
@@ -2705,7 +2705,7 @@
       "saveFailed": "Không thể lưu ghi chú tài khoản: {{error}}"
     },
     "cockpitApi": {
-      "panelTitle": "Bảng dịch vụ Cockpit Api",
+      "panelTitle": "Bảng dịch vụ Orbit API",
       "servicePanel": "Bảng dịch vụ",
       "balance": "Số dư",
       "requests": "Yêu cầu",
@@ -3002,9 +3002,9 @@
       "totalAccounts": "Tổng tài khoản"
     },
     "panels": {
-      "antigravity": "Antigravity IDE​",
-      "codex": "Codex​",
-      "githubCopilot": "GitHub Copilot​",
+      "antigravity": "Antigravity IDE",
+      "codex": "Codex",
+      "githubCopilot": "GitHub Copilot",
       "planDistribution": "Phân bố gói",
       "current": "Tài khoản hiện tại",
       "recommended": "Tài khoản đề xuất",
@@ -3250,7 +3250,7 @@
       "batchDelimiterSpace": "Dấu cách",
       "batchDelimiterComma": "Dấu phẩy",
       "batchDelimiterPipe": "Gạch dọc",
-      "batchDelimiterDash": "----​",
+      "batchDelimiterDash": "----",
       "batchDelimiterCustom": "Tùy chỉnh",
       "batchJsonDesc": "Dán mảng JSON mà mỗi phần tử chứa email và password.",
       "batchTextDesc": "Nhập một tài khoản mỗi dòng và phân tích nghiêm ngặt theo ký tự phân tách đã chọn.",
@@ -3273,7 +3273,7 @@
       "batchPartial": "Thành công {{success}}, thất bại {{failed}}",
       "batchFailed": "Nhập hàng loạt thất bại với {{failed}} tài khoản",
       "batchFailureEntryWithLine": "Mục {{line}} ({{email}}): {{error}}",
-      "batchFailureEntry": "{{email}}: {{error}}​",
+      "batchFailureEntry": "{{email}}: {{error}}",
       "batchFailureMore": "{{count}} mục khác thất bại"
     },
     "oauth": {
@@ -3330,7 +3330,7 @@
       "bonusUsageLine": "{{used}} đã sử dụng / tổng cộng {{total}}",
       "planUsageCoveredLine": "{{used}} đã sử dụng / {{total}} nằm trong kế hoạch",
       "expiryDays": "{{days}} ngày",
-      "expiryUnknown": "—​",
+      "expiryUnknown": "—",
       "resetNow": "Đặt lại sớm",
       "resetInHours": "Đặt lại sau {{hours}}h",
       "resetInMinutes": "Đặt lại sau {{minutes}} phút"
@@ -3342,11 +3342,11 @@
       "estUsage": "Ước tính. Cách sử dụng"
     },
     "plan": {
-      "free": "Kiro Free​",
-      "individual": "Kiro Individual​",
-      "pro": "Kiro Pro​",
-      "business": "Kiro Business​",
-      "enterprise": "Kiro Enterprise​",
+      "free": "Kiro Free",
+      "individual": "Kiro Individual",
+      "pro": "Kiro Pro",
+      "business": "Kiro Business",
+      "enterprise": "Kiro Enterprise",
       "unknown": "Không xác định"
     },
     "flowNotice": {
@@ -3425,7 +3425,7 @@
     "startHint": "Bấm bắt đầu hoặc nhấn phím Space",
     "rankTitle": "Xếp hạng lịch sử cục bộ",
     "rankCurrent": "Hiện tại",
-    "rankNoData": "--​",
+    "rankNoData": "--",
     "restart": "Chơi lại",
     "pause": "Tạm dừng",
     "resume": "Tiếp tục",
@@ -3448,7 +3448,7 @@
     "rankingShort": "Cục bộ",
     "rankingEmpty": "Chưa có bản ghi cục bộ",
     "rankingClear": "Xóa xếp hạng cục bộ",
-    "rankingRankShort": "#{{rank}}​",
+    "rankingRankShort": "#{{rank}}",
     "minimize": "Thu nhỏ",
     "resumeGameNav": "Tiếp tục trò chơi",
     "closeConfirmTitle": "Kết thúc ván này?",
@@ -3795,9 +3795,9 @@
       "leftOfTotal": "Còn lại / Tổng",
       "usage": "Đã dùng",
       "usageResets": "Đặt lại mức dùng",
-      "usedPercent": "{{value}}%​",
-      "remainingOfTotal": "{{remaining}} / {{total}}​",
-      "resetAtWithRelative": "{{absolute}} ({{relative}})​"
+      "usedPercent": "{{value}}%",
+      "remainingOfTotal": "{{remaining}} / {{total}}",
+      "resetAtWithRelative": "{{absolute}} ({{relative}})"
     },
     "tierText": {
       "pro": "Gemini Code Assist trong Google One AI Pro",
@@ -3902,7 +3902,7 @@
       }
     },
     "quota": {
-      "usedOfTotal": "{{used}} / {{total}}​"
+      "usedOfTotal": "{{used}} / {{total}}"
     }
   },
   "qoder": {
@@ -3924,8 +3924,8 @@
       "title": "Tổng quan sử dụng",
       "viewDetails": "Xem chi tiết",
       "includedCredits": "Credits trong gói",
-      "usedOfTotal": "{{used}} / {{total}}​",
-      "usedEmpty": "-- / --​",
+      "usedOfTotal": "{{used}} / {{total}}",
+      "usedEmpty": "-- / --",
       "upgradeHint": "Nâng cấp gói để tăng hạn mức hàng tháng",
       "upgradeAction": "Nâng cấp"
     },
@@ -4116,7 +4116,7 @@
       }
     },
     "quota": {
-      "usedOfTotal": "{{used}} / {{total}}​"
+      "usedOfTotal": "{{used}} / {{total}}"
     },
     "checkin": {
       "title": "Điểm danh hằng ngày",
@@ -4223,7 +4223,7 @@
     "plan": "Gói",
     "cycle": "Chu kỳ",
     "status": "Trạng thái",
-    "pager": "{{current}} / {{total}}​",
+    "pager": "{{current}} / {{total}}",
     "badges": {
       "recommended": "Đề xuất"
     },
@@ -4237,7 +4237,7 @@
       "backToCurrent": "Quay lại",
       "switchToThisAccount": "Chuyển",
       "openDetails": "Mở chi tiết",
-      "openCockpitTools": "Mở Cockpit Tools"
+      "openCockpitTools": "Mở Orbit Desk"
     },
     "empty": {
       "title": "Không có tài khoản",
@@ -4360,7 +4360,7 @@
   },
   "relay": {
     "pageTitle": "Trạm chuyển riêng",
-    "pageDesc": "Dịch vụ API đối tác dành cho người dùng Cockpit Tools, dùng được với tài khoản Codex API Key.",
+    "pageDesc": "Dịch vụ API đối tác dành cho người dùng Orbit Desk, dùng được với tài khoản Codex API Key.",
     "loading": "Đang tải trạm chuyển...",
     "emptyTitle": "Trạm chuyển chưa bật",
     "emptyDesc": "Cấu hình từ xa chưa bật trạm chuyển riêng.",
@@ -4390,7 +4390,7 @@
   "apiKeyFun": {
     "eyebrow": "Trung chuyển",
     "title": "Relay APIKEY.FUN",
-    "description": "Relay chính thức của Cockpit cung cấp quyền truy cập API mô hình lớn ổn định, mở và có hiệu quả chi phí cao. Nền tảng hỗ trợ các mô hình phổ biến như Claude, OpenAI và Gemini, phù hợp để cấu hình thống nhất trong Codex, Gemini CLI, Claude Code và các công cụ phát triển khác. Đăng ký qua liên kết độc quyền của Cockpit để nhận ưu đãi nạp tiền vĩnh viễn lên tới 5%.",
+    "description": "Relay chính thức của Orbit cung cấp quyền truy cập API mô hình lớn ổn định, mở và có hiệu quả chi phí cao. Nền tảng hỗ trợ các mô hình phổ biến như Claude, OpenAI và Gemini, phù hợp để cấu hình thống nhất trong Codex, Gemini CLI, Claude Code và các công cụ phát triển khác. Đăng ký qua liên kết độc quyền của Orbit để nhận ưu đãi nạp tiền vĩnh viễn lên tới 5%.",
     "register": "Liên kết độc quyền",
     "docs": "Tài liệu chính thức",
     "viewNow": "Xem ngay",
@@ -4448,7 +4448,7 @@
       "apiScript": "Sao chép tham số cơ bản cho script."
     },
     "apply": {
-      "codexTitle": "Codex​",
+      "codexTitle": "Codex",
       "codexDesc": "Ghi ~/.codex/config.toml và auth.json với giao thức Responses và API Key hiện tại.",
       "geminiTitle": "Cấu hình Gemini CLI",
       "geminiDesc": "Ghi ~/.gemini/.env và đặt chế độ xác thực trong settings.json thành gemini-api-key.",
@@ -4475,12 +4475,12 @@
       "lastRemaining": "Số dư trước {{value}}",
       "notQueried": "Chưa kiểm tra",
       "deleteButton": "Xóa",
-      "editAlias": "Edit alias​",
-      "renamePlaceholder": "Enter alias...​",
+      "editAlias": "Edit alias",
+      "renamePlaceholder": "Enter alias...",
       "createdAt": "Đã thêm {{time}}",
       "saveFlash": "Vừa lưu"
     },
-    "copyKey": "Copy Key​",
-    "clearKey": "Clear input​"
+    "copyKey": "Copy Key",
+    "clearKey": "Clear input"
   }
 }

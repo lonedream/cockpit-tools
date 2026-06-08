@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 const CURRENT_VERSION: &str = env!("CARGO_PKG_VERSION");
+const UPDATES_ENABLED: bool = true;
 const DEFAULT_CHECK_INTERVAL_HOURS: u64 = 1;
 const LEGACY_DEFAULT_CHECK_INTERVAL_HOURS: u64 = 24;
 const LEGACY_PREVIOUS_DEFAULT_CHECK_INTERVAL_HOURS: u64 = 6;
@@ -110,6 +111,9 @@ fn compare_versions(latest: &str, current: &str) -> bool {
 
 /// Check if enough time has passed since last check
 pub fn should_check_for_updates(settings: &UpdateSettings) -> bool {
+    if !UPDATES_ENABLED {
+        return false;
+    }
     if !settings.auto_check {
         return false;
     }
@@ -396,6 +400,12 @@ pub fn load_update_settings() -> Result<UpdateSettings, String> {
         let _ = save_update_settings(&settings);
     }
 
+    if !UPDATES_ENABLED {
+        settings.auto_check = false;
+        settings.auto_install = false;
+        settings.remind_on_update = false;
+    }
+
     Ok(settings)
 }
 
@@ -405,7 +415,14 @@ pub fn save_update_settings(settings: &UpdateSettings) -> Result<(), String> {
 
     let settings_path = data_dir.join("update_settings.json");
 
-    let content = serde_json::to_string_pretty(settings)
+    let mut normalized = settings.clone();
+    if !UPDATES_ENABLED {
+        normalized.auto_check = false;
+        normalized.auto_install = false;
+        normalized.remind_on_update = false;
+    }
+
+    let content = serde_json::to_string_pretty(&normalized)
         .map_err(|e| format!("Failed to serialize settings: {}", e))?;
 
     crate::modules::atomic_write::write_string_atomic(&settings_path, &content)
@@ -425,6 +442,9 @@ pub fn update_last_check_time() -> Result<(), String> {
 /// Check if a version jump occurred (app was updated since last run)
 /// Returns Some(VersionJumpInfo) if the current version is higher than the last recorded version
 pub fn check_version_jump() -> Result<Option<VersionJumpInfo>, String> {
+    if !UPDATES_ENABLED {
+        return Ok(None);
+    }
     let mut settings = load_update_settings()?;
     let current = CURRENT_VERSION.to_string();
 

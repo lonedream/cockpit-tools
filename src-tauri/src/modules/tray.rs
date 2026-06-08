@@ -176,22 +176,8 @@ pub(crate) enum PlatformId {
 }
 
 impl PlatformId {
-    pub(crate) fn default_order() -> [Self; 13] {
-        [
-            Self::Antigravity,
-            Self::Codex,
-            Self::Zed,
-            Self::GitHubCopilot,
-            Self::Windsurf,
-            Self::Kiro,
-            Self::Cursor,
-            Self::Gemini,
-            Self::Codebuddy,
-            Self::CodebuddyCn,
-            Self::Qoder,
-            Self::Trae,
-            Self::Workbuddy,
-        ]
+    pub(crate) fn default_order() -> [Self; 1] {
+        [Self::Codex]
     }
 
     pub(crate) fn from_str(value: &str) -> Option<Self> {
@@ -403,7 +389,7 @@ pub fn create_tray_skeleton<R: Runtime>(
     let builder = TrayIconBuilder::with_id(TRAY_ID)
         .icon(tray_icon)
         .show_menu_on_left_click(false)
-        .tooltip("Cockpit Tools")
+        .tooltip("Orbit Desk")
         .on_menu_event(handle_menu_event)
         .on_tray_icon_event(handle_tray_event);
 
