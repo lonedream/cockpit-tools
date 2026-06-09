@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Orbit Desk",
-  "version": "0.25.5",
-  "identifier": "com.jlcodes.cockpit-tools",
+  "productName": "XM",
+  "version": "0.25.6",
+  "identifier": "xin.xingmeng.xm",
   "build": {
     "beforeDevCommand": "node scripts/prepare-tauri.cjs && npm run dev",
     "devUrl": "http://localhost:1420",
@@ -14,7 +14,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "Orbit Desk",
+        "title": "XM",
         "width": 1280,
         "height": 800,
         "minWidth": 900,
@@ -27,7 +27,7 @@
       },
       {
         "label": "floating-card",
-        "title": "Orbit Desk",
+        "title": "XM",
         "create": false,
         "width": 250,
         "height": 290,
@@ -51,7 +51,7 @@
     "targets": "all",
     "createUpdaterArtifacts": true,
     "externalBin": [
-      "../sidecars/cockpit-cliproxy/bin/cockpit-cliproxy"
+      "../sidecars/cockpit-cliproxy/bin/xm-cliproxy"
     ],
     "icon": [
       "icons/48x48.png",
@@ -79,16 +79,28 @@
       "../src/assets/icons/zed.png": "native-menu-icons/zed.png"
     },
     "macOS": {
-      "bundleName": "Orbit Desk",
+      "bundleName": "XM",
       "infoPlist": "Info.plist"
+    },
+    "publisher": "Xingmeng",
+    "shortDescription": "XM desktop client",
+    "longDescription": "XM desktop client for model account and API relay workflows.",
+    "windows": {
+      "nsis": {
+        "installMode": "currentUser",
+        "startMenuFolder": "XM"
+      },
+      "wix": {
+        "upgradeCode": "7f2c66e7-0d33-55c3-97f0-31dfc2ad8f30"
+      }
     }
   },
   "plugins": {
     "deep-link": {
       "desktop": {
         "schemes": [
-          "cockpit-tools",
-          "cockpittools"
+          "xm",
+          "xmtools"
         ]
       }
     },
@@ -98,5 +110,6 @@
         "https://github.com/lonedream/cockpit-tools/releases/latest/download/latest.json"
       ]
     }
-  }
+  },
+  "mainBinaryName": "xm"
 }

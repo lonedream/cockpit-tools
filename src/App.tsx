@@ -64,6 +64,8 @@ import {
 } from './utils/externalProviderImport';
 import { runAutoBackupCycle } from './services/scheduledBackupService';
 import { prepareCodexLocalAccessForRestart } from './services/codexLocalAccessService';
+import { normalizeXmPage, XM_SHOW_SIDE_NAV } from './config/xmProduct';
+import { isTauriRuntime } from './utils/tauriRuntime';
 
 const DashboardPage = lazy(() =>
   import('./pages/DashboardPage').then((module) => ({ default: module.DashboardPage })),
@@ -129,9 +131,6 @@ const TwoFactorAuthPage = lazy(() =>
 const ManualPage = lazy(() =>
   import('./pages/ManualPage').then((module) => ({ default: module.ManualPage })),
 );
-const ApiKeyFunPage = lazy(() =>
-  import('./pages/ApiKeyFunPage').then((module) => ({ default: module.ApiKeyFunPage })),
-);
 const InstancesPage = lazy(() =>
   import('./pages/InstancesPage').then((module) => ({ default: module.InstancesPage })),
 );
@@ -156,6 +155,9 @@ const LogViewerModal = lazy(() =>
   import('./components/LogViewerModal').then((module) => ({ default: module.LogViewerModal })),
 );
 
+function normalizeAppPage(page: Page): Page {
+  return normalizeXmPage(page === 'api-relay' ? 'codex' : page);
+}
 
 interface GeneralConfigTheme {
   theme: string;
@@ -203,7 +205,7 @@ const TASKS_STORAGE_KEY = 'agtools.wakeup.tasks';
 const WAKEUP_FORCE_DISABLE_MIGRATION_KEY = 'agtools.wakeup.migration.force_disable_0_8_14';
 const TOP_RIGHT_AD_REFRESH_INTERVAL_MS = 10 * 60 * 1000;
 const EXTERNAL_IMPORT_DEDUPE_WINDOW_MS = 30 * 1000;
-const APP_UPDATES_ENABLED = true;
+const APP_UPDATES_ENABLED = false;
 const SHOW_GLOBAL_PROMO_BANNER = false;
 const SHOW_SPONSOR_ENTRY = false;
 const SHOW_LOG_ENTRY = false;
@@ -541,10 +543,7 @@ function MainApp() {
   const { showModal, closeModal } = useGlobalModal();
   const topRightAdState = useTopRightAdStore((state) => state.state);
   const fetchTopRightAdState = useTopRightAdStore((state) => state.fetchState);
-  const sponsorModuleState = useSponsorStore((state) => state.state);
   const fetchSponsorModuleState = useSponsorStore((state) => state.fetchState);
-  const sponsorModuleInitialized = useSponsorStore((state) => state.initialized);
-  const sponsorEntryVisible = SHOW_SPONSOR_ENTRY && Boolean(sponsorModuleState.sponsorModule);
   const [topRightAdVisible, setTopRightAdVisible] = useState(false);
   const trayRefreshInFlightRef = useRef(false);
   const openPlatformLayoutModal = useCallback(() => {
@@ -644,7 +643,7 @@ function MainApp() {
       minAppVersion: normalized.minAppVersion ?? null,
       source: normalized.source ?? null,
     });
-    setPage(normalized.page);
+    setPage(normalizeAppPage(normalized.page));
     window.setTimeout(() => {
       console.info('[ExternalImport][App] 分发前端外部导入事件');
       dispatchExternalProviderImportEvent(normalized);
@@ -779,12 +778,6 @@ function MainApp() {
       window.removeEventListener('general-language-updated', handleLanguageChanged);
     };
   }, [fetchSponsorModuleState, fetchTopRightAdState]);
-
-  useEffect(() => {
-    if (sponsorModuleInitialized && page === 'api-relay' && !sponsorEntryVisible) {
-      setPage('dashboard');
-    }
-  }, [page, sponsorEntryVisible, sponsorModuleInitialized]);
 
   useEffect(() => {
     if (sideNavLayoutMode !== 'classic' || sideNavClassicFirstSyncDone) {
@@ -1652,6 +1645,10 @@ function MainApp() {
     };
 
     const initTheme = async () => {
+      if (!isTauriRuntime()) {
+        applyTheme('light');
+        return;
+      }
       try {
         const config = await invoke<GeneralConfigTheme>('get_general_config');
         applyTheme(config.theme);
@@ -1674,6 +1671,9 @@ function MainApp() {
   }, []);
 
   useEffect(() => {
+    if (!isTauriRuntime()) {
+      return;
+    }
     const syncWakeupStateOnStartup = async () => {
       let officialLsVersionMode = loadWakeupOfficialLsVersionMode();
       try {
@@ -1700,6 +1700,9 @@ function MainApp() {
   }, []);
 
   useEffect(() => {
+    if (!isTauriRuntime()) {
+      return;
+    }
     const AUTO_BACKUP_STARTUP_DELAY_MS = 5 * 60 * 1000;
     const AUTO_BACKUP_POLL_INTERVAL_MS = 60 * 60 * 1000;
     let startupTimerId: number | undefined;
@@ -2226,6 +2229,9 @@ function MainApp() {
   }, []);
 
   useEffect(() => {
+    if (!isTauriRuntime()) {
+      return;
+    }
     let unlisten: UnlistenFn | undefined;
 
     listen<string>('settings:language_changed', (event) => {
@@ -2245,6 +2251,9 @@ function MainApp() {
   }, []);
 
   useEffect(() => {
+    if (!isTauriRuntime()) {
+      return;
+    }
     let unlisten: UnlistenFn | undefined;
     let disposed = false;
 
@@ -2404,6 +2413,9 @@ function MainApp() {
   }, [closeModal, openQuickSettingsForPlatform, showModal, t]);
 
   useEffect(() => {
+    if (!isTauriRuntime()) {
+      return;
+    }
     let unlisten: UnlistenFn | undefined;
 
     const handleWakeupResult = (payload: WakeupTaskResultPayload) => {
@@ -2536,6 +2548,9 @@ function MainApp() {
   }, [t]);
 
   useEffect(() => {
+    if (!isTauriRuntime()) {
+      return;
+    }
     let unlisten: UnlistenFn | undefined;
 
     const refreshTasks = [
@@ -2616,6 +2631,9 @@ function MainApp() {
   }, []);
 
   useEffect(() => {
+    if (!isTauriRuntime()) {
+      return;
+    }
     let unlisten: UnlistenFn | undefined;
     const handlePayload = (payload: unknown) => {
       if (!payload || typeof payload !== 'object') return;
@@ -2844,6 +2862,10 @@ function MainApp() {
   useEffect(() => {
     let unlisten: UnlistenFn | undefined;
 
+    if (!isTauriRuntime()) {
+      return;
+    }
+
     listen('window:close_requested', () => {
       setShowCloseDialog(true);
     }).then((fn) => { unlisten = fn; });
@@ -2858,11 +2880,14 @@ function MainApp() {
   useEffect(() => {
     let unlisten: UnlistenFn | undefined;
 
+    if (!isTauriRuntime()) {
+      return;
+    }
+
         listen<string>('tray:navigate', (event) => {
           const target = String(event.payload || '');
           switch (target) {
             case 'overview':
-            case 'api-relay':
             case 'codex':
             case 'codex-api-service':
             case 'github-copilot':
@@ -2878,7 +2903,10 @@ function MainApp() {
             case 'zed':
             case 'manual':
             case 'settings':
-              setPage(target as Page);
+              setPage(normalizeAppPage(target as Page));
+              break;
+            case 'api-relay':
+              setPage('codex');
               break;
             default:
               break;
@@ -2894,6 +2922,10 @@ function MainApp() {
 
   useEffect(() => {
     let unlisten: UnlistenFn | undefined;
+    if (!isTauriRuntime()) {
+      return;
+    }
+
     listen('external:provider-import', (event) => {
       console.info('[ExternalImport][App] 收到 Tauri 事件 external:provider-import');
       void handleExternalProviderImportRawPayload(event.payload);
@@ -2910,6 +2942,10 @@ function MainApp() {
 
   useEffect(() => {
     let canceled = false;
+    if (!isTauriRuntime()) {
+      return;
+    }
+
     void invoke<unknown>('external_import_take_pending')
       .then((payload) => {
         if (canceled) return;
@@ -2933,6 +2969,9 @@ function MainApp() {
     if (event.button !== 0) {
       return;
     }
+    if (!isTauriRuntime()) {
+      return;
+    }
     void getCurrentWindow().startDragging().catch((error) => {
       console.warn('[Window] startDragging failed:', error);
     });
@@ -2942,7 +2981,7 @@ function MainApp() {
     const handleRequestNavigate = (e: Event) => {
       const custom = e as CustomEvent<Page>;
       if (custom.detail) {
-        setPage(custom.detail);
+        setPage(normalizeAppPage(custom.detail));
       }
     };
     window.addEventListener('app-request-navigate', handleRequestNavigate as EventListener);
@@ -3023,7 +3062,7 @@ function MainApp() {
 
   return (
     <div
-      className={`app-container${isWindowsPlatform() ? ' app-container-windows' : ''}${sideNavLayoutMode === 'classic' ? ' app-container-side-nav-classic' : ''}${sideNavLayoutMode === 'classic' && sideNavClassicCollapsed ? ' app-container-side-nav-classic-collapsed' : ''}`}
+      className={`app-container${isWindowsPlatform() ? ' app-container-windows' : ''}${sideNavLayoutMode === 'classic' ? ' app-container-side-nav-classic' : ''}${sideNavLayoutMode === 'classic' && sideNavClassicCollapsed ? ' app-container-side-nav-classic-collapsed' : ''}${XM_SHOW_SIDE_NAV ? '' : ' app-container-xm-no-side-nav'}`}
     >
       {/* 更新通知：活跃状态时保持挂载，关闭后继续保留当前更新状态 */}
       {shouldRenderUpdateNotification && (
@@ -3216,20 +3255,21 @@ function MainApp() {
       />
 
       {/* 左侧悬浮导航 */}
-      <SideNav
-        page={page}
-        setPage={setPage}
-        onOpenPlatformLayout={openPlatformLayoutModal}
-        easterEggClickCount={easterEggClickCount}
-        onEasterEggTriggerClick={handleBreakoutEntryTriggerClick}
-        hasBreakoutSession={hasBreakoutSession}
-        updateActionState={APP_UPDATES_ENABLED ? updateAction.state : 'hidden'}
-        updateProgress={updateAction.progress}
-        onUpdateActionClick={handleQuickUpdateActionClick}
-        updateRemindersEnabled={APP_UPDATES_ENABLED && updateRemindersEnabled}
-        sponsorEntryVisible={sponsorEntryVisible}
-        onOpenLogViewer={() => setShowLogViewer(true)}
-      />
+      {XM_SHOW_SIDE_NAV && (
+        <SideNav
+          page={page}
+          setPage={setPage}
+          onOpenPlatformLayout={openPlatformLayoutModal}
+          easterEggClickCount={easterEggClickCount}
+          onEasterEggTriggerClick={handleBreakoutEntryTriggerClick}
+          hasBreakoutSession={hasBreakoutSession}
+          updateActionState={APP_UPDATES_ENABLED ? updateAction.state : 'hidden'}
+          updateProgress={updateAction.progress}
+          onUpdateActionClick={handleQuickUpdateActionClick}
+          updateRemindersEnabled={APP_UPDATES_ENABLED && updateRemindersEnabled}
+          onOpenLogViewer={() => setShowLogViewer(true)}
+        />
+      )}
 
       {SHOW_LOG_ENTRY && sideNavLayoutMode !== 'classic' && (
         <button
@@ -3272,7 +3312,6 @@ function MainApp() {
               }
             />
           )}
-          {page === 'api-relay' && <ApiKeyFunPage />}
           {page === 'overview' && <AccountsPage onNavigate={setPage} />}
           {page === 'codex' && <CodexAccountsPage />}
           {page === 'codex-api-service' && <CodexApiServicePage />}
@@ -3305,7 +3344,16 @@ function MainApp() {
 }
 
 function App() {
-  const windowLabel = getCurrentWindow().label;
+  if (!isTauriRuntime()) {
+    return <MainApp />;
+  }
+
+  let windowLabel = 'main';
+  try {
+    windowLabel = getCurrentWindow().label;
+  } catch {
+    windowLabel = 'main';
+  }
   if (windowLabel === 'floating-card' || windowLabel.startsWith('instance-floating-card-')) {
     return <FloatingCardWindow />;
   }

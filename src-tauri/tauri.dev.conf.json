@@ -1,12 +1,12 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Orbit Desk Dev",
-  "identifier": "com.jlcodes.cockpit-tools.dev",
+  "productName": "XM Dev",
+  "identifier": "xin.xingmeng.xm.dev",
   "app": {
     "windows": [
       {
         "label": "main",
-        "title": "Orbit Desk Dev",
+        "title": "XM Dev",
         "width": 1280,
         "height": 800,
         "minWidth": 900,
@@ -19,7 +19,7 @@
       },
       {
         "label": "floating-card",
-        "title": "Orbit Desk Dev",
+        "title": "XM Dev",
         "create": false,
         "width": 250,
         "height": 290,

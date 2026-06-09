@@ -218,7 +218,7 @@
       "desc": "Ten obszar jest przypięty w prawym górnym rogu na wszystkich stronach i nadaje się do kampanii lub reklam marki.",
       "action": "Zobacz szczegóły"
     },
-    "appName": "Orbit Desk",
+    "appName": "XM",
     "collapse": "Zwiń",
     "confirmDelete": "Potwierdź usunięcie",
     "confirmDeleteTag": "Potwierdź usunięcie tagu",
@@ -265,12 +265,12 @@
   },
   "sponsors": {
     "pageTitle": "Sponsorzy",
-    "pageDesc": "Dziękujemy tym sponsorom za wsparcie Orbit Desk.",
+    "pageDesc": "Dziękujemy tym sponsorom za wsparcie XM.",
     "loading": "Ładowanie sponsorów...",
     "emptyTitle": "Brak sponsorów",
     "emptyDesc": "Zdalny moduł sponsorów jest obecnie wyłączony.",
     "listAriaLabel": "Lista sponsorów",
-    "defaultDescription": "Dziękujemy za wsparcie Orbit Desk.",
+    "defaultDescription": "Dziękujemy za wsparcie XM.",
     "openSponsor": "Otwórz"
   },
   "platformLayout": {
@@ -558,7 +558,7 @@
   },
   "settings": {
     "title": "Ustawienia aplikacji",
-    "subtitle": "Dostosuj działanie narzędzi Orbit Desk.",
+    "subtitle": "Dostosuj działanie narzędzi XM.",
     "tabs": {
       "general": "Ogólne",
       "network": "Sieć",
@@ -716,7 +716,7 @@
       "sideNavLayoutClassic": "Układ klasyczny",
       "antigravityDualSwitchNoRestart": "Podwójne przełączanie bez restartu",
       "antigravityDualSwitchNoRestartDesc": "Podczas przełączania konta zapis lokalnych danych i płynne przełączenie przez rozszerzenie są wykonywane w jednym przebiegu, bez restartu Antigravity IDE.",
-      "appAutoLaunch": "Uruchamiaj Orbit Desk po zalogowaniu",
+      "appAutoLaunch": "Uruchamiaj XM po zalogowaniu",
       "appAutoLaunchDesc": "Automatycznie uruchamiaj aplikację po zalogowaniu do systemu",
       "startupWakeupDisabled": "Wyłączone",
       "startupWakeupImmediate": "Wybudź natychmiast",
@@ -815,7 +815,7 @@
       "proxyUrlRequired": "Adres URL proxy nie może być pusty, gdy globalny proxy jest włączony."
     },
     "about": {
-      "appName": "Orbit Desk",
+      "appName": "XM",
       "slogan": "Profesjonalne rozwiązanie do zarządzania kontami",
       "author": "Autor",
       "wechat": "WeChat",
@@ -1707,7 +1707,7 @@
     },
     "exportFormat": {
       "label": "Format eksportu",
-      "cockpitTools": "Orbit Desk",
+      "cockpitTools": "XM",
       "sub2api": "Format sub2api",
       "cpa": "Format cpa",
       "downloadAll": "Pobierz wszystko",
@@ -2591,7 +2591,7 @@
       "builtinProviders": "Wbudowani dostawcy",
       "sponsorHint": "Adres ekskluzywnej usługi relay został uzupełniony. Po wpisaniu API Key karta automatycznie pobierze saldo i użycie.",
       "integration": {
-        "sub2api": "Zgodne z Sub2API",
+        "sub2api": "Zgodne z Compatible Relay",
         "newApi": "Zgodne z New API"
       },
       "usage": {
@@ -4237,7 +4237,7 @@
       "backToCurrent": "Wróć",
       "switchToThisAccount": "Przełącz",
       "openDetails": "Otwórz szczegóły",
-      "openCockpitTools": "Otwórz Orbit Desk"
+      "openCockpitTools": "Otwórz XM"
     },
     "empty": {
       "title": "Brak kont",
@@ -4360,7 +4360,7 @@
   },
   "relay": {
     "pageTitle": "Ekskluzywny relay",
-    "pageDesc": "Partnerska usługa API dla użytkowników Orbit Desk, dostępna dla kont Codex API Key.",
+    "pageDesc": "Partnerska usługa API dla użytkowników XM, dostępna dla kont Codex API Key.",
     "loading": "Ładowanie relay...",
     "emptyTitle": "Relay wyłączony",
     "emptyDesc": "Zdalna konfiguracja nie włączyła ekskluzywnego relay.",
@@ -4389,16 +4389,16 @@
   },
   "apiKeyFun": {
     "eyebrow": "Pośrednik",
-    "title": "Relay APIKEY.FUN",
+    "title": "Relay XM",
     "description": "Oficjalny relay Orbit zapewnia stabilny, otwarty i opłacalny dostęp API do dużych modeli. Obsługuje główne modele, takie jak Claude, OpenAI i Gemini, i nadaje się do jednolitej konfiguracji w Codex, Gemini CLI, Claude Code oraz innych narzędziach deweloperskich. Rejestrując się przez ekskluzywny link Orbit, możesz uzyskać stałą zniżkę do 5% na doładowania.",
     "register": "Link ekskluzywny",
     "docs": "Oficjalna dokumentacja",
     "viewNow": "Zobacz teraz",
     "queryTitle": "Limit klucza",
-    "queryDesc": "Wpisz API Key APIKEY.FUN, aby automatycznie sprawdzić limit.",
+    "queryDesc": "Wpisz API Key XM, aby automatycznie sprawdzić limit.",
     "keyNotSet": "Brak klucza",
     "apiKeyLabel": "Klucz API",
-    "apiKeyPlaceholder": "Wklej API Key utworzony w konsoli APIKEY.FUN",
+    "apiKeyPlaceholder": "Wklej API Key utworzony w konsoli XM",
     "hideKey": "Ukryj",
     "showKey": "Pokaż",
     "endpointLabel": "Punkt dostępu",
@@ -4409,7 +4409,7 @@
     "saving": "Zapisywanie",
     "saveSuccess": "Zapisano w Codex Provider: {{name}}",
     "toolsTitle": "Zapisz config klienta",
-    "toolsDesc": "Zapisuje lokalne pliki konfiguracji zgodnie z dokumentacją APIKEY.FUN i układem CC Switch.",
+    "toolsDesc": "Zapisuje lokalne pliki konfiguracji zgodnie z dokumentacją XM i układem CC Switch.",
     "endpoint": {
       "global": "Sieć globalna",
       "globalDesc": "Oficjalny domyślny API Base dla większości sieci.",
@@ -4475,12 +4475,12 @@
       "lastRemaining": "Ostatnie saldo {{value}}",
       "notQueried": "Nie sprawdzono",
       "deleteButton": "Usuń",
-      "editAlias": "Edit alias",
-      "renamePlaceholder": "Enter alias...",
+      "editAlias": "Edytuj alias",
+      "renamePlaceholder": "Wpisz alias...",
       "createdAt": "Dodano {{time}}",
       "saveFlash": "Zapisano"
     },
-    "copyKey": "Copy Key",
-    "clearKey": "Clear input"
+    "copyKey": "Kopiuj klucz",
+    "clearKey": "Wyczyść pole"
   }
 }

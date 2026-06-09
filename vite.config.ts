@@ -60,6 +60,13 @@ export default defineConfig(async () => ({
     port: 1420,
     strictPort: true,
     host: host || false,
+    proxy: {
+      "/xm-api": {
+        target: "http://127.0.0.1:8080",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/xm-api/, "/api"),
+      },
+    },
     hmr: host
       ? {
           protocol: "ws",

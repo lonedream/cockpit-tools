@@ -289,7 +289,7 @@ export function DashboardPage({
     setHiddenEntry,
     setApiRelayDashboardVisible,
   } = usePlatformLayoutStore();
-  const apiRelayEntryEnabled = useSponsorStore((state) => Boolean(state.state.sponsorModule));
+  const apiRelayEntryEnabled = useSponsorStore(() => false);
   const apiRelayDashboardEnabled = apiRelayEntryEnabled && apiRelayDashboardVisible;
   const hiddenEntrySet = useMemo(() => new Set(hiddenEntryIds), [hiddenEntryIds]);
   const visibleEntryOrder = useMemo(
@@ -2364,7 +2364,7 @@ export function DashboardPage({
         </div>
       </div>
 
-      <button className="card-footer-action" onClick={() => onNavigate('api-relay')}>
+      <button className="card-footer-action" onClick={() => onNavigate('codex')}>
         {t('dashboard.apiRelay.openLocalConfig', '打开本地配置页')}
       </button>
     </div>
@@ -3060,7 +3060,7 @@ export function DashboardPage({
               <button
                 className="stat-card stat-card-button"
                 key="api-relay"
-                onClick={() => onNavigate('api-relay')}
+                onClick={() => onNavigate('codex')}
                 title={t('dashboard.apiRelay.openLocalConfig', '打开本地配置页')}
               >
                 <div className="stat-icon-bg info">

@@ -1,102 +1,46 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { openUrl } from '@tauri-apps/plugin-opener';
-import { useTranslation } from 'react-i18next';
 import {
-  BookmarkPlus,
   CheckCircle2,
-  ExternalLink,
+  Copy,
   Eye,
   EyeOff,
   KeyRound,
-  Trash2,
-  Copy,
-  Pencil,
-  X,
+  LogOut,
+  RefreshCw,
+  ShieldCheck,
+  TicketCheck,
+  WalletCards,
 } from 'lucide-react';
 import {
-  queryCodexModelProviderUsage,
-  type CodexModelProviderUsageSummary,
-} from '../services/codexModelProviderService';
-import {
-  APIKEY_FUN_GLOBAL_ENDPOINT,
-  APIKEY_FUN_REGISTER_URL,
-  buildApiKeyFunProviderBaseUrl,
-} from '../utils/apikeyFunLinks';
-import apiKeyFunIcon from '../assets/icons/apikey-fun.png';
+  clearOrbitRelaySession,
+  formatOrbitRelayError,
+  loadOrbitRelaySession,
+  ORBIT_RELAY_API_BASE,
+  ORBIT_RELAY_IS_LOCAL_TESTING,
+  ORBIT_RELAY_PROVIDER_BASE_URL,
+  ORBIT_RELAY_REQUEST_API_BASE,
+  orbitRelayGetProfile,
+  orbitRelayLogin,
+  orbitRelayRedeem,
+  saveOrbitRelaySession,
+  type OrbitRelayRedeemResponse,
+  type OrbitRelaySession,
+  type OrbitRelayUser,
+} from '../services/orbitRelayService';
 import './ApiKeyFunPage.css';
-
-type ManagedApiKey = {
-  id: string;
-  key: string;
-  name: string;
-  createdAt: number;
-  lastUsedAt: number;
-  lastStatus?: 'ok' | 'bad' | 'unknown';
-  lastRemaining?: string;
-};
-
-const APIKEY_FUN_KEYS_STORAGE_KEY = 'apikey_fun_managed_keys';
-const APIKEY_FUN_AUTO_QUERY_DELAY_MS = 650;
-
-function maskKey(value: string): string {
-  const trimmed = value.trim();
-  if (!trimmed) return '';
-  if (trimmed.length <= 10) return `${trimmed.slice(0, 3)}****`;
-  return `${trimmed.slice(0, 6)}****${trimmed.slice(-4)}`;
-}
 
 function formatNumber(value?: number | null, suffix = ''): string {
   if (typeof value !== 'number' || !Number.isFinite(value)) return '--';
   const formatted = new Intl.NumberFormat(undefined, {
-    maximumFractionDigits: value >= 100 ? 0 : 4,
+    maximumFractionDigits: Math.abs(value) >= 100 ? 2 : 4,
   }).format(value);
   return suffix ? `${formatted} ${suffix}` : formatted;
 }
 
-function usagePrimaryValue(summary: CodexModelProviderUsageSummary | null): string {
-  if (!summary) return '--';
-  const unit = summary.unit ?? '';
-  if (summary.quotaUnlimited) return 'Unlimited';
-  if (typeof summary.remaining === 'number') return formatNumber(summary.remaining, unit);
-  if (typeof summary.quotaRemaining === 'number') return formatNumber(summary.quotaRemaining, unit);
-  if (typeof summary.balance === 'number') return formatNumber(summary.balance, unit);
-  return '--';
-}
-
-function usageValidityTone(summary: CodexModelProviderUsageSummary | null): 'ok' | 'bad' | 'unknown' {
-  if (!summary || typeof summary.isValid !== 'boolean') return 'unknown';
-  return summary.isValid ? 'ok' : 'bad';
-}
-
-function providerErrorMessage(error: unknown): string {
-  if (error instanceof Error) return error.message;
-  return String(error ?? 'UNKNOWN_ERROR');
-}
-
-function loadManagedApiKeys(): ManagedApiKey[] {
-  try {
-    const raw = window.localStorage.getItem(APIKEY_FUN_KEYS_STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter((item): item is ManagedApiKey => (
-      typeof item?.id === 'string' &&
-      typeof item?.key === 'string' &&
-      typeof item?.name === 'string' &&
-      typeof item?.createdAt === 'number' &&
-      typeof item?.lastUsedAt === 'number'
-    ));
-  } catch {
-    return [];
-  }
-}
-
-function buildManagedKeyName(key: string): string {
-  return maskKey(key);
-}
-
-function formatManagedKeyTime(timestamp: number): string {
-  if (!Number.isFinite(timestamp) || timestamp <= 0) return '--';
+function formatDateTime(value?: string | null): string {
+  if (!value) return '--';
+  const timestamp = Date.parse(value);
+  if (!Number.isFinite(timestamp)) return '--';
   return new Intl.DateTimeFormat(undefined, {
     year: 'numeric',
     month: '2-digit',
@@ -106,487 +50,363 @@ function formatManagedKeyTime(timestamp: number): string {
   }).format(new Date(timestamp));
 }
 
+function redeemTypeLabel(value?: string | null): string {
+  switch (value) {
+    case 'balance':
+    case 'admin_balance':
+      return '余额';
+    case 'concurrency':
+    case 'admin_concurrency':
+      return '并发';
+    case 'subscription':
+      return '订阅';
+    default:
+      return value || '兑换码';
+  }
+}
+
+function profileDisplayName(user: OrbitRelayUser | null): string {
+  if (!user) return '--';
+  return user.username?.trim() || user.email || `#${user.id}`;
+}
+
+function formatRedeemResult(result: OrbitRelayRedeemResponse): string {
+  const typeLabel = redeemTypeLabel(result.type);
+  const valueText = formatNumber(result.value);
+  const suffix =
+    result.type === 'subscription' && result.validity_days
+      ? `，有效期 ${result.validity_days} 天`
+      : '';
+  return `${typeLabel} +${valueText}${suffix}`;
+}
+
 export function ApiKeyFunPage() {
-  const { t } = useTranslation();
-  const [apiKey, setApiKey] = useState('');
-  const [showApiKey, setShowApiKey] = useState(false);
-  const [usage, setUsage] = useState<CodexModelProviderUsageSummary | null>(null);
-  const [usageError, setUsageError] = useState<string | null>(null);
-  const [queryingUsage, setQueryingUsage] = useState(false);
-  const [saveFlash, setSaveFlash] = useState(false);
-  const [managedKeys, setManagedKeys] = useState<ManagedApiKey[]>(() => loadManagedApiKeys());
+  const [session, setSession] = useState<OrbitRelaySession | null>(() => loadOrbitRelaySession());
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [redeemCode, setRedeemCode] = useState('');
+  const [loginError, setLoginError] = useState<string | null>(null);
+  const [redeemError, setRedeemError] = useState<string | null>(null);
+  const [profileError, setProfileError] = useState<string | null>(null);
+  const [lastRedeem, setLastRedeem] = useState<OrbitRelayRedeemResponse | null>(null);
+  const [loggingIn, setLoggingIn] = useState(false);
+  const [redeeming, setRedeeming] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [copied, setCopied] = useState<string | null>(null);
 
-  // 别名编辑状态
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editNameValue, setEditNameValue] = useState('');
+  const user = session?.user ?? null;
+  const isLoggedIn = Boolean(session?.accessToken);
+  const statusTone = user?.status === 'active' ? 'ok' : 'warn';
+  const lastSyncText = useMemo(() => {
+    if (!session?.savedAt) return '--';
+    return new Intl.DateTimeFormat(undefined, {
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    }).format(new Date(session.savedAt));
+  }, [session?.savedAt]);
 
-  // 复制状态
-  const [copiedId, setCopiedId] = useState<string | null>(null);
-
-  const providerBaseUrl = useMemo(
-    () => buildApiKeyFunProviderBaseUrl(APIKEY_FUN_GLOBAL_ENDPOINT),
-    [],
-  );
-  const maskedApiKey = useMemo(() => maskKey(apiKey), [apiKey]);
-  const currentKey = apiKey.trim();
-  const currentSavedKey = useMemo(
-    () => managedKeys.find((item) => item.key === currentKey),
-    [currentKey, managedKeys],
-  );
-
-  useEffect(() => {
-    window.localStorage.setItem(APIKEY_FUN_KEYS_STORAGE_KEY, JSON.stringify(managedKeys));
-  }, [managedKeys]);
-
-  useEffect(() => {
-    if (!saveFlash) return undefined;
-    const timer = window.setTimeout(() => setSaveFlash(false), 1500);
-    return () => window.clearTimeout(timer);
-  }, [saveFlash]);
-
-  const openExternal = useCallback((url: string) => {
-    try {
-      void openUrl(url).catch(() => {
-        window.location.href = url;
-      });
-    } catch {
-      window.location.href = url;
-    }
-  }, []);
-
-  // 自动额度查询
-  useEffect(() => {
-    const key = apiKey.trim();
-    if (!key) {
-      setUsage(null);
-      setUsageError(null);
-      setQueryingUsage(false);
-      return undefined;
-    }
-
-    let cancelled = false;
-    setUsageError(null);
-    setQueryingUsage(true);
-
-    const timer = window.setTimeout(() => {
-      void queryCodexModelProviderUsage({
-        baseUrl: providerBaseUrl,
-        apiKey: key,
-        integrationType: 'sub2api',
-      })
-        .then((nextUsage) => {
-          if (cancelled) return;
-          const nextStatus = usageValidityTone(nextUsage);
-          const nextRemaining = usagePrimaryValue(nextUsage);
-          setUsage(nextUsage);
-          setManagedKeys((items) => items.map((item) => (
-            item.key === key
-              ? {
-                  ...item,
-                  lastUsedAt: Date.now(),
-                  lastStatus: nextStatus,
-                  lastRemaining: nextRemaining,
-                }
-              : item
-          )));
-        })
-        .catch((error) => {
-          if (cancelled) return;
-          setUsage(null);
-          setUsageError(
-            t('apiKeyFun.error.queryFailed', {
-              defaultValue: '额度查询失败：{{error}}',
-              error: providerErrorMessage(error),
-            }),
-          );
-          setManagedKeys((items) => items.map((item) => (
-            item.key === key
-              ? {
-                  ...item,
-                  lastUsedAt: Date.now(),
-                  lastStatus: 'bad',
-                  lastRemaining: '--',
-                }
-              : item
-          )));
-        })
-        .finally(() => {
-          if (!cancelled) setQueryingUsage(false);
-        });
-    }, APIKEY_FUN_AUTO_QUERY_DELAY_MS);
-
-    return () => {
-      cancelled = true;
-      window.clearTimeout(timer);
-    };
-  }, [apiKey, providerBaseUrl, t]);
-
-  // 保存密钥
-  const handleSaveCurrentKey = useCallback(() => {
-    const key = apiKey.trim();
-    if (!key) {
-      setUsageError(t('apiKeyFun.error.missingApiKey', '请输入 API Key。'));
-      return;
-    }
-    const now = Date.now();
-    const nextStatus = usageValidityTone(usage);
-    const nextRemaining = usagePrimaryValue(usage);
-    setManagedKeys((items) => {
-      const existing = items.find((item) => item.key === key);
-      if (existing) {
-        return items.map((item) => (
-          item.key === key
-            ? {
-                ...item,
-                name: buildManagedKeyName(key),
-                lastUsedAt: now,
-                lastStatus: nextStatus,
-                lastRemaining: nextRemaining,
-              }
-            : item
-        ));
-      }
-      return [
-        {
-          id: `${now}-${Math.random().toString(36).slice(2, 8)}`,
-          key,
-          name: buildManagedKeyName(key),
-          createdAt: now,
-          lastUsedAt: now,
-          lastStatus: nextStatus,
-          lastRemaining: nextRemaining,
-        },
-        ...items,
-      ];
-    });
-    setUsageError(null);
-    setSaveFlash(true);
-  }, [apiKey, t, usage]);
-
-  // 切换密钥
-  const handleUseManagedKey = useCallback((item: ManagedApiKey) => {
-    setApiKey(item.key);
-    setUsageError(null);
-    setManagedKeys((items) => items.map((nextItem) => (
-      nextItem.id === item.id ? { ...nextItem, lastUsedAt: Date.now() } : nextItem
-    )));
-  }, []);
-
-  // 删除密钥
-  const handleDeleteManagedKey = useCallback((id: string) => {
-    setManagedKeys((items) => items.filter((item) => item.id !== id));
-  }, []);
-
-  // 行内重命名密钥管理
-  const handleStartRename = useCallback((item: ManagedApiKey, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setEditingId(item.id);
-    setEditNameValue(item.name);
-  }, []);
-
-  const handleSaveRename = useCallback((id: string, e?: React.FormEvent) => {
-    e?.preventDefault();
-    const trimmed = editNameValue.trim();
-    if (!trimmed) return;
-    setManagedKeys((items) => items.map((item) => (
-      item.id === id ? { ...item, name: trimmed } : item
-    )));
-    setEditingId(null);
-  }, [editNameValue]);
-
-  const handleCancelRename = useCallback(() => {
-    setEditingId(null);
-  }, []);
-
-  // 复制剪贴板逻辑
-  const handleCopyToClipboard = useCallback((text: string, id: string, e?: React.MouseEvent) => {
-    e?.stopPropagation();
+  const copyText = useCallback((text: string, id: string) => {
     if (!text) return;
-    navigator.clipboard.writeText(text)
-      .then(() => {
-        setCopiedId(id);
-        setTimeout(() => setCopiedId(null), 2000);
-      })
-      .catch(() => {
-        try {
-          const textarea = document.createElement('textarea');
-          textarea.value = text;
-          textarea.style.position = 'fixed';
-          document.body.appendChild(textarea);
-          textarea.select();
-          document.execCommand('copy');
-          document.body.removeChild(textarea);
-          setCopiedId(id);
-          setTimeout(() => setCopiedId(null), 2000);
-        } catch (err) {
-          console.error('Failed to copy key', err);
-        }
-      });
+    void navigator.clipboard.writeText(text).then(() => {
+      setCopied(id);
+      window.setTimeout(() => setCopied(null), 1500);
+    });
   }, []);
+
+  const refreshProfile = useCallback(
+    async (targetSession = session) => {
+      if (!targetSession) return null;
+      setRefreshing(true);
+      setProfileError(null);
+      try {
+        const profile = await orbitRelayGetProfile(targetSession);
+        const nextSession: OrbitRelaySession = {
+          ...targetSession,
+          user: profile,
+          savedAt: Date.now(),
+        };
+        saveOrbitRelaySession(nextSession);
+        setSession(nextSession);
+        return nextSession;
+      } catch (error) {
+        setProfileError(formatOrbitRelayError(error));
+        return null;
+      } finally {
+        setRefreshing(false);
+      }
+    },
+    [session],
+  );
+
+  useEffect(() => {
+    if (!session) return;
+    void refreshProfile(session);
+  }, []);
+
+  const handleLogin = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
+      setLoggingIn(true);
+      setLoginError(null);
+      setProfileError(null);
+      setLastRedeem(null);
+      try {
+        const nextSession = await orbitRelayLogin(email, password);
+        setSession(nextSession);
+        setPassword('');
+      } catch (error) {
+        setLoginError(formatOrbitRelayError(error));
+      } finally {
+        setLoggingIn(false);
+      }
+    },
+    [email, password],
+  );
+
+  const handleLogout = useCallback(() => {
+    clearOrbitRelaySession();
+    setSession(null);
+    setLastRedeem(null);
+    setRedeemError(null);
+    setProfileError(null);
+  }, []);
+
+  const handleRedeem = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
+      if (!session) return;
+      setRedeeming(true);
+      setRedeemError(null);
+      setLastRedeem(null);
+      try {
+        const result = await orbitRelayRedeem(session, redeemCode);
+        setLastRedeem(result);
+        setRedeemCode('');
+        await refreshProfile(session);
+      } catch (error) {
+        setRedeemError(formatOrbitRelayError(error));
+      } finally {
+        setRedeeming(false);
+      }
+    },
+    [redeemCode, refreshProfile, session],
+  );
 
   return (
-    <div className="apikey-fun-page">
-      <header className="apikey-fun-header-brand">
-        <div className="apikey-fun-brand-main">
-          <img src={apiKeyFunIcon} alt="" className="apikey-fun-brand-logo" />
-          <div className="apikey-fun-brand-text">
-            <div className="apikey-fun-eyebrow-container">
-              <span className="apikey-fun-eyebrow">{t('apiKeyFun.eyebrow', '中转站')}</span>
-            </div>
-            <h1>{t('apiKeyFun.title', 'APIKEY.FUN 中转站')}</h1>
-            <p>
-              {t(
-                'apiKeyFun.description',
-                'Cockpit 官方中转站，为用户提供稳定、开放、高性价比的大模型 API 接入服务。支持 Claude、OpenAI、Gemini 等主流模型，适合在 Codex、Gemini CLI、Claude Code 及其他开发工具中统一配置使用。通过 Cockpit 专属链接注册，可享受最高充值永久 95 折优惠。',
-              )}
-            </p>
+    <div className="orbit-relay-page">
+      <header className="orbit-relay-topbar">
+        <div className="orbit-relay-title-block">
+          <div className="orbit-relay-kicker-row">
+            <span className="orbit-relay-kicker">XM</span>
+            {ORBIT_RELAY_IS_LOCAL_TESTING && (
+              <span className="orbit-relay-env-badge">本地测试</span>
+            )}
           </div>
+          <h1>XM 控制台</h1>
+          <p>登录 XM 账号后，可以在桌面端查看余额、刷新账户状态，并使用兑换码充值。</p>
         </div>
-        <div className="apikey-fun-brand-actions">
+        <div className="orbit-relay-endpoints">
           <button
-            className="btn apikey-fun-register-btn"
-            onClick={() => openExternal(APIKEY_FUN_REGISTER_URL)}
+            className="orbit-relay-endpoint"
+            type="button"
+            onClick={() => copyText(ORBIT_RELAY_PROVIDER_BASE_URL, 'provider')}
+            title="复制 XM OpenAI 兼容地址"
           >
-            <ExternalLink size={15} />
-            <span>{t('apiKeyFun.viewNow', '立即查看')}</span>
+            <KeyRound size={15} />
+            <span>{ORBIT_RELAY_PROVIDER_BASE_URL}</span>
+            {copied === 'provider' ? <CheckCircle2 size={14} /> : <Copy size={14} />}
+          </button>
+          <button
+            className="orbit-relay-endpoint"
+            type="button"
+            onClick={() => copyText(ORBIT_RELAY_API_BASE, 'api')}
+            title="复制 XM 控制台 API 地址"
+          >
+            <ShieldCheck size={15} />
+            <span>{ORBIT_RELAY_API_BASE}</span>
+            {copied === 'api' ? <CheckCircle2 size={14} /> : <Copy size={14} />}
           </button>
         </div>
       </header>
 
-      <div className="apikey-fun-dashboard-grid">
-        <main className="apikey-fun-main-col">
-          <section className="apikey-fun-dashboard-panel apikey-fun-config-panel">
-            <div className="apikey-fun-panel-head">
-              <div>
-                <h2>{t('apiKeyFun.queryTitle', '密钥额度查询')}</h2>
-                <p>{t('apiKeyFun.queryDesc', '输入 APIKEY.FUN 的 API Key 后自动查询额度。')}</p>
+      <div className="orbit-relay-grid">
+        <main className="orbit-relay-main">
+          {!isLoggedIn ? (
+            <section className="orbit-relay-panel">
+              <div className="orbit-relay-panel-head">
+                <div>
+                  <h2>登录 XM 账号</h2>
+                  <p>使用本地测试站的邮箱和密码登录。密码只用于本次登录请求。</p>
+                </div>
               </div>
-              <div className="apikey-fun-key-preview">
-                <KeyRound size={14} />
-                <span>{maskedApiKey || t('apiKeyFun.keyNotSet', '未输入秘钥')}</span>
-              </div>
-            </div>
-
-            <div className="apikey-fun-form-grid apikey-fun-form-grid-single">
-              <label className="apikey-fun-field apikey-fun-field-wide">
-                <span>{t('apiKeyFun.apiKeyLabel', 'API Key')}</span>
-                <div className="apikey-fun-secret-input">
+              <form className="orbit-relay-form" onSubmit={handleLogin}>
+                <label className="orbit-relay-field">
+                  <span>邮箱</span>
                   <input
-                    value={apiKey}
-                    type={showApiKey ? 'text' : 'password'}
-                    placeholder={t('apiKeyFun.apiKeyPlaceholder', '粘贴 APIKEY.FUN 控制台创建的 API Key')}
+                    type="email"
+                    value={email}
+                    autoComplete="email"
+                    placeholder="name@example.com"
                     onChange={(event) => {
-                      setApiKey(event.target.value);
-                      setUsageError(null);
+                      setEmail(event.target.value);
+                      setLoginError(null);
                     }}
                   />
-                  {apiKey && (
-                    <button
-                      type="button"
-                      className="apikey-fun-icon-button copy-btn"
-                      onClick={(e) => handleCopyToClipboard(apiKey, 'input', e)}
-                      title={t('apiKeyFun.copyKey', '复制密钥')}
-                    >
-                      {copiedId === 'input' ? <CheckCircle2 size={16} className="success-icon" /> : <Copy size={16} />}
-                    </button>
-                  )}
-                  {apiKey && (
-                    <button
-                      type="button"
-                      className="apikey-fun-icon-button clear-btn"
-                      onClick={() => {
-                        setApiKey('');
-                        setUsageError(null);
-                        setUsage(null);
+                </label>
+                <label className="orbit-relay-field">
+                  <span>密码</span>
+                  <div className="orbit-relay-secret">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      autoComplete="current-password"
+                      placeholder="输入账号密码"
+                      onChange={(event) => {
+                        setPassword(event.target.value);
+                        setLoginError(null);
                       }}
-                      title={t('apiKeyFun.clearKey', '清空输入')}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((value) => !value)}
+                      title={showPassword ? '隐藏密码' : '显示密码'}
                     >
-                      <X size={16} />
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
+                  </div>
+                </label>
+                {loginError && <div className="orbit-relay-message error">{loginError}</div>}
+                <button className="orbit-relay-primary" type="submit" disabled={loggingIn}>
+                  {loggingIn ? (
+                    <RefreshCw size={16} className="spin" />
+                  ) : (
+                    <ShieldCheck size={16} />
                   )}
-                  <button
-                    type="button"
-                    className="apikey-fun-icon-button"
-                    onClick={() => setShowApiKey((value) => !value)}
-                    title={showApiKey ? t('apiKeyFun.hideKey', '隐藏') : t('apiKeyFun.showKey', '显示')}
-                  >
-                    {showApiKey ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
+                  <span>{loggingIn ? '正在登录' : '登录'}</span>
+                </button>
+              </form>
+            </section>
+          ) : (
+            <>
+              <section className="orbit-relay-account-strip">
+                <div>
+                  <span>当前账号</span>
+                  <strong>{profileDisplayName(user)}</strong>
+                  <small>{user?.email ?? '--'}</small>
                 </div>
-              </label>
-            </div>
+                <div className={`orbit-relay-status ${statusTone}`}>
+                  {user?.status === 'active' ? '可用' : user?.status || '未知'}
+                </div>
+              </section>
 
-            <div className="apikey-fun-action-row apikey-fun-key-actions">
-              <button className="btn apikey-fun-save-btn" disabled={!currentKey} onClick={handleSaveCurrentKey}>
-                {currentSavedKey ? <CheckCircle2 size={16} /> : <BookmarkPlus size={16} />}
-                <span>
-                  {currentSavedKey
-                    ? t('apiKeyFun.keyManager.savedButton', '已保存')
-                    : t('apiKeyFun.keyManager.saveButton', '保存密钥')}
-                </span>
-              </button>
-              {saveFlash && (
-                <span className="apikey-fun-save-flash">
-                  {t('apiKeyFun.keyManager.saveFlash', '刚刚保存')}
-                </span>
-              )}
-            </div>
-
-            {usageError && (
-              <div className="apikey-fun-message error">
-                {usageError}
+              <div className="orbit-relay-metrics">
+                <div className="orbit-relay-metric primary">
+                  <span>账户余额</span>
+                  <strong>{formatNumber(user?.balance)}</strong>
+                </div>
+                <div className="orbit-relay-metric">
+                  <span>并发额度</span>
+                  <strong>{formatNumber(user?.concurrency)}</strong>
+                </div>
+                <div className="orbit-relay-metric">
+                  <span>账号 ID</span>
+                  <strong>{user?.id ?? '--'}</strong>
+                </div>
+                <div className="orbit-relay-metric">
+                  <span>上次同步</span>
+                  <strong>{lastSyncText}</strong>
+                </div>
               </div>
-            )}
-          </section>
 
-          {/* 数值卡片展示 */}
-          <div className="apikey-fun-usage-grid">
-            <div className={`apikey-fun-usage-card primary ${queryingUsage ? 'loading' : ''}`}>
-              <span>{t('apiKeyFun.usage.remaining', '剩余额度')}</span>
-              {queryingUsage ? (
-                <div className="apikey-fun-skeleton-text" />
-              ) : (
-                <strong>{usagePrimaryValue(usage)}</strong>
-              )}
-            </div>
-            <div className={`apikey-fun-usage-card ${queryingUsage ? 'loading' : ''}`}>
-              <span>{t('apiKeyFun.usage.used', '已用额度')}</span>
-              {queryingUsage ? (
-                <div className="apikey-fun-skeleton-text" />
-              ) : (
-                <strong>{formatNumber(usage?.quotaUsed ?? usage?.totalCost, usage?.unit ?? '')}</strong>
-              )}
-            </div>
-            <div className={`apikey-fun-usage-card ${queryingUsage ? 'loading' : ''}`}>
-              <span>{t('apiKeyFun.usage.todayRequests', '今日请求')}</span>
-              {queryingUsage ? (
-                <div className="apikey-fun-skeleton-text" />
-              ) : (
-                <strong>{formatNumber(usage?.todayRequests)}</strong>
-              )}
-            </div>
-            <div className={`apikey-fun-usage-card ${queryingUsage ? 'loading' : ''}`}>
-              <span>{t('apiKeyFun.usage.todayTokens', '今日 Token')}</span>
-              {queryingUsage ? (
-                <div className="apikey-fun-skeleton-text" />
-              ) : (
-                <strong>{formatNumber(usage?.todayTotalTokens)}</strong>
-              )}
-            </div>
-            <div className={`apikey-fun-usage-card ${queryingUsage ? 'loading' : ''}`}>
-              <span>{t('apiKeyFun.usage.totalRequests', '总请求')}</span>
-              {queryingUsage ? (
-                <div className="apikey-fun-skeleton-text" />
-              ) : (
-                <strong>{formatNumber(usage?.totalRequests)}</strong>
-              )}
-            </div>
-            <div className={`apikey-fun-usage-card ${queryingUsage ? 'loading' : ''}`}>
-              <span>{t('apiKeyFun.usage.totalTokens', '总 Token')}</span>
-              {queryingUsage ? (
-                <div className="apikey-fun-skeleton-text" />
-              ) : (
-                <strong>{formatNumber(usage?.totalTotalTokens)}</strong>
-              )}
-            </div>
-          </div>
+              <section className="orbit-relay-panel">
+                <div className="orbit-relay-panel-head">
+                  <div>
+                    <h2>兑换码充值</h2>
+                    <p>输入后台生成的兑换码，成功后会自动刷新余额。</p>
+                  </div>
+                  <TicketCheck size={20} />
+                </div>
+                <form className="orbit-relay-redeem-row" onSubmit={handleRedeem}>
+                  <input
+                    value={redeemCode}
+                    placeholder="输入兑换码"
+                    spellCheck={false}
+                    onChange={(event) => {
+                      setRedeemCode(event.target.value);
+                      setRedeemError(null);
+                    }}
+                  />
+                  <button type="submit" disabled={redeeming || !redeemCode.trim()}>
+                    {redeeming ? (
+                      <RefreshCw size={16} className="spin" />
+                    ) : (
+                      <TicketCheck size={16} />
+                    )}
+                    <span>{redeeming ? '兑换中' : '兑换'}</span>
+                  </button>
+                </form>
+                {redeemError && <div className="orbit-relay-message error">{redeemError}</div>}
+                {lastRedeem && (
+                  <div className="orbit-relay-message success">
+                    <CheckCircle2 size={16} />
+                    <span>兑换成功：{formatRedeemResult(lastRedeem)}</span>
+                  </div>
+                )}
+              </section>
+            </>
+          )}
         </main>
 
-        <aside className="apikey-fun-sidebar-col">
-          <section className="apikey-fun-dashboard-panel apikey-fun-manager-panel">
-            <div className="apikey-fun-panel-head">
+        <aside className="orbit-relay-side">
+          <section className="orbit-relay-panel">
+            <div className="orbit-relay-panel-head compact">
               <div>
-                <h2>{t('apiKeyFun.keyManager.title', '密钥管理')}</h2>
-                <p>{t('apiKeyFun.keyManager.desc', '保存常用 API Key，点击即可切换并自动查询额度。')}</p>
+                <h2>服务状态</h2>
+                <p>当前桌面端直连 XM API。</p>
+              </div>
+              <WalletCards size={20} />
+            </div>
+            <div className="orbit-relay-info-list">
+              <div>
+                <span>OpenAI 兼容地址</span>
+                <strong>{ORBIT_RELAY_PROVIDER_BASE_URL}</strong>
+              </div>
+              <div>
+                <span>控制台 API</span>
+                <strong>{ORBIT_RELAY_API_BASE}</strong>
+              </div>
+              {ORBIT_RELAY_REQUEST_API_BASE !== ORBIT_RELAY_API_BASE && (
+                <div>
+                  <span>本地代理</span>
+                  <strong>{ORBIT_RELAY_REQUEST_API_BASE}</strong>
+                </div>
+              )}
+              <div>
+                <span>加入时间</span>
+                <strong>{formatDateTime(user?.created_at)}</strong>
               </div>
             </div>
-            {managedKeys.length === 0 ? (
-              <div className="apikey-fun-empty-keys">
-                <KeyRound size={16} />
-                <span>{t('apiKeyFun.keyManager.empty', '暂无保存的密钥。')}</span>
-              </div>
-            ) : (
-              <div className="apikey-fun-key-list">
-                {managedKeys.map((item) => {
-                  const isEditing = editingId === item.id;
-                  return (
-                    <div className={`apikey-fun-key-item ${item.key === currentKey ? 'active' : ''} ${isEditing ? 'editing' : ''}`} key={item.id}>
-                      {isEditing ? (
-                        <form className="apikey-fun-rename-form" onSubmit={(e) => handleSaveRename(item.id, e)}>
-                          <input
-                            ref={(el) => el?.focus()}
-                            className="apikey-fun-rename-input"
-                            value={editNameValue}
-                            placeholder={t('apiKeyFun.keyManager.renamePlaceholder', '输入新别名...')}
-                            onChange={(e) => setEditNameValue(e.target.value)}
-                            onBlur={() => handleSaveRename(item.id)}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Escape') handleCancelRename();
-                            }}
-                          />
-                        </form>
-                      ) : (
-                        <button className="apikey-fun-key-select" onClick={() => handleUseManagedKey(item)}>
-                          <span className="apikey-fun-key-name-row">
-                            <span className="name-text">{item.name}</span>
-                            <span
-                              className="edit-icon-btn"
-                              title={t('apiKeyFun.keyManager.editAlias', '修改别名')}
-                              onClick={(e) => handleStartRename(item, e)}
-                            >
-                              <Pencil size={12} />
-                            </span>
-                          </span>
-                          <span className="apikey-fun-key-meta">
-                            <small>
-                              {item.lastRemaining
-                                ? t('apiKeyFun.keyManager.lastRemaining', {
-                                    defaultValue: '上次余额 {{value}}',
-                                    value: item.lastRemaining,
-                                  })
-                                : t('apiKeyFun.keyManager.notQueried', '未查询')}
-                            </small>
-                            <small>
-                              {t('apiKeyFun.keyManager.createdAt', {
-                                defaultValue: '添加于 {{time}}',
-                                time: formatManagedKeyTime(item.createdAt),
-                              })}
-                            </small>
-                          </span>
-                        </button>
-                      )}
-                      
-                      <div className="apikey-fun-key-item-actions">
-                        <button
-                          type="button"
-                          className="apikey-fun-key-copy"
-                          onClick={(e) => handleCopyToClipboard(item.key, item.id, e)}
-                          title={t('apiKeyFun.copyKey', '复制密钥')}
-                        >
-                          {copiedId === item.id ? (
-                            <CheckCircle2 size={14} className="success-icon" />
-                          ) : (
-                            <Copy size={14} />
-                          )}
-                        </button>
-                        <button
-                          type="button"
-                          className="apikey-fun-key-delete"
-                          disabled={isEditing}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteManagedKey(item.id);
-                          }}
-                          title={t('apiKeyFun.keyManager.deleteButton', '删除')}
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+            {profileError && <div className="orbit-relay-message error">{profileError}</div>}
+            <div className="orbit-relay-side-actions">
+              <button
+                className="orbit-relay-secondary"
+                type="button"
+                disabled={!session || refreshing}
+                onClick={() => void refreshProfile()}
+              >
+                <RefreshCw size={16} className={refreshing ? 'spin' : undefined} />
+                <span>{refreshing ? '刷新中' : '刷新资料'}</span>
+              </button>
+              {isLoggedIn && (
+                <button className="orbit-relay-ghost" type="button" onClick={handleLogout}>
+                  <LogOut size={16} />
+                  <span>退出登录</span>
+                </button>
+              )}
+            </div>
           </section>
         </aside>
       </div>

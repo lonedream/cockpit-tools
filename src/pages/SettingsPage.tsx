@@ -279,7 +279,11 @@ const buildDefaultCurrentAccountRefreshCustomModeMap = (): Record<
   }, {} as Record<CurrentAccountRefreshPlatform, boolean>);
 };
 
-export function SettingsPage() {
+interface SettingsPageProps {
+  compact?: boolean;
+}
+
+export function SettingsPage({ compact = false }: SettingsPageProps = {}) {
   const { t } = useTranslation();
   const isMacOS = usePlatformRuntimeSupport('macos-only');
   const isWindows = usePlatformRuntimeSupport('windows-only');
@@ -2070,9 +2074,9 @@ export function SettingsPage() {
   };
 
   return (
-    <main className="main-content">
+    <main className={`main-content settings-page-shell${compact ? ' settings-page-shell--compact' : ''}`}>
       <div className="page-tabs-row settings-page-tabs-row">
-        <div className="page-tabs-label">{t('settings.title')}</div>
+        {!compact && <div className="page-tabs-label">{t('settings.title')}</div>}
         <div className="page-tabs filter-tabs">
           <button 
             className={`filter-tab ${activeTab === 'general' ? 'active' : ''}`}
@@ -2147,7 +2151,7 @@ export function SettingsPage() {
                 </div>
               </div>
 
-              <div className="settings-row">
+              <div className="settings-row xm-settings-hidden">
                 <div className="row-label">
                   <div className="row-title">{t('settings.general.defaultTerminal', '默认终端')}</div>
                   <div className="row-desc">{t('settings.general.defaultTerminalDesc', 'Gemini CLI 打开时使用的终端')}</div>
@@ -2165,7 +2169,7 @@ export function SettingsPage() {
                 </div>
               </div>
 
-              <div className="settings-row">
+              <div className="settings-row xm-settings-hidden">
                 <div className="row-label">
                   <div className="row-title">{t('settings.general.sideNavLayout', '侧边栏布局')}</div>
                   <div className="row-desc">{t('settings.general.sideNavLayoutDesc', '切换原始布局或经典布局')}</div>
@@ -2182,7 +2186,7 @@ export function SettingsPage() {
                 </div>
               </div>
 
-              <div className="settings-row">
+              <div className="settings-row xm-settings-hidden">
                 <div className="row-label">
                   <div className="row-title">{t('settings.general.uiScale')}</div>
                   <div className="row-desc">{t('settings.general.uiScaleDesc')}</div>
@@ -2324,7 +2328,7 @@ export function SettingsPage() {
                 </>
               )}
 
-              <div className="settings-row">
+              <div className="settings-row xm-settings-hidden">
                 <div className="row-label">
                   <div className="row-title">{t('settings.general.floatingCardStartup', '启动时显示悬浮卡片')}</div>
                   <div className="row-desc">{t('settings.general.floatingCardStartupDesc', '应用启动后默认展示悬浮账号卡片')}</div>
@@ -2341,7 +2345,7 @@ export function SettingsPage() {
                 </div>
               </div>
 
-              <div className="settings-row">
+              <div className="settings-row xm-settings-hidden">
                 <div className="row-label">
                   <div className="row-title">{t('settings.general.floatingCardAlwaysOnTop', '悬浮卡片默认置顶')}</div>
                   <div className="row-desc">{t('settings.general.floatingCardAlwaysOnTopDesc', '新打开的悬浮卡片窗口默认保持置顶')}</div>
@@ -2358,7 +2362,7 @@ export function SettingsPage() {
                 </div>
               </div>
 
-              <div className="settings-row">
+              <div className="settings-row xm-settings-hidden">
                 <div className="row-label">
                   <div className="row-title">{t('settings.general.appAutoLaunch')}</div>
                   <div className="row-desc">{t('settings.general.appAutoLaunchDesc')}</div>
@@ -2375,7 +2379,7 @@ export function SettingsPage() {
                 </div>
               </div>
 
-              <div className="settings-row">
+              <div className="settings-row xm-settings-hidden">
                 <div className="row-label">
                   <div className="row-title">{t('settings.general.floatingCardShowNow', '立即显示悬浮卡片')}</div>
                   <div className="row-desc">{t('settings.general.floatingCardShowNowDesc', '关闭后可在这里或托盘菜单中重新打开')}</div>
@@ -2399,7 +2403,7 @@ export function SettingsPage() {
                 </div>
               </div>
 
-              <div className="settings-row">
+              <div className="settings-row xm-settings-hidden">
                 <div className="row-label">
                   <div className="row-title">
                     {t('settings.general.topRightAdVisible', '显示顶部推广')}
@@ -2423,11 +2427,11 @@ export function SettingsPage() {
                 </div>
               </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div className="xm-settings-platforms" style={{ display: 'flex', flexDirection: 'column' }}>
               <div style={{ order: platformSettingsOrder.antigravity }}>
                 <div className="group-title">{t('settings.general.antigravitySettingsTitle', 'Antigravity IDE 设置')}</div>
                 <div className="settings-group">
-              <div className="settings-row">
+              <div className="settings-row xm-settings-hidden">
                 <div className="row-label">
                   <div className="row-title">{t('settings.general.autoRefresh')}</div>
                   <div className="row-desc">{t('settings.general.autoRefreshDesc')}</div>
@@ -2852,7 +2856,7 @@ export function SettingsPage() {
 
               </div>
 
-              <div style={{ order: platformSettingsOrder.codex }}>
+              <div className="xm-settings-codex-platform" style={{ order: platformSettingsOrder.codex }}>
                 <div className="group-title">{t('settings.general.codexSettingsTitle', 'Codex 设置')}</div>
                 <div className="settings-group">
               <div className="settings-row">
@@ -2999,7 +3003,7 @@ export function SettingsPage() {
                 </div>
               </div>
 
-              <div className="settings-row">
+              <div className="settings-row xm-settings-hidden">
                 <div className="row-label">
                   <div className="row-title">
                     {t(
@@ -3028,7 +3032,7 @@ export function SettingsPage() {
                 </div>
               </div>
 
-              <div className="settings-row">
+              <div className="settings-row xm-settings-hidden">
                 <div className="row-label">
                   <div className="row-title">
                     {t('settings.general.codexSpecifiedAppPath', '指定应用启动路径')}
@@ -3086,7 +3090,7 @@ export function SettingsPage() {
                 </div>
               </div>
 
-              <div className="settings-row">
+              <div className="settings-row xm-settings-hidden">
                 <div className="row-label">
                   <div className="row-title">{t('settings.general.opencodeAuthOverwrite')}</div>
                   <div className="row-desc">{t('settings.general.opencodeAuthOverwriteDesc')}</div>
@@ -3109,7 +3113,7 @@ export function SettingsPage() {
                 </div>
               </div>
 
-              <div className="settings-row">
+              <div className="settings-row xm-settings-hidden">
                 <div className="row-label">
                   <div className="row-title">{t('settings.general.openclawAuthOverwrite')}</div>
                   <div className="row-desc">{t('settings.general.openclawAuthOverwriteDesc')}</div>
@@ -3126,7 +3130,7 @@ export function SettingsPage() {
                 </div>
               </div>
 
-              <div className="settings-row">
+              <div className="settings-row xm-settings-hidden">
                 <div className="row-label">
                   <div className="row-title">{t('settings.general.opencodeRestart')}</div>
                   <div className="row-desc">
@@ -3148,7 +3152,7 @@ export function SettingsPage() {
                 </div>
               </div>
 
-              <div className="settings-row">
+              <div className="settings-row xm-settings-hidden">
                 <div className="row-label">
                   <div className="row-title">{t('settings.general.opencodeAppPath')}</div>
                   <div className="row-desc">
@@ -5343,7 +5347,7 @@ export function SettingsPage() {
         {/* === Network Tab === */}
         {activeTab === 'network' && (
           <>
-            <div className="group-title">Orbit API</div>
+            <div className="group-title">XM 本地 API</div>
             <div className="settings-group">
               <div className="settings-row">
                 <div className="row-label">

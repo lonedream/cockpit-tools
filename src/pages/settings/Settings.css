@@ -20,6 +20,16 @@
   padding: 0;
 }
 
+.xm-settings-hidden,
+.xm-settings-platforms > div {
+  display: none !important;
+}
+
+.xm-settings-platforms > .xm-settings-codex-platform {
+  display: block !important;
+  order: 0 !important;
+}
+
 /* Tab Navigation - Left Aligned Pill */
 .settings-tabs-wrapper {
   display: flex;
@@ -29,19 +39,19 @@
 
 .settings-tabs {
   display: flex;
-  background: var(--bg-card);
-  padding: 6px;
-  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.78);
+  padding: 4px;
+  border-radius: 10px;
   gap: 4px;
   width: fit-content;
   border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
   backdrop-filter: blur(10px);
 }
 
 .settings-tab {
   padding: 8px 28px;
-  border-radius: var(--radius-full);
+  border-radius: 8px;
   border: none;
   background: transparent;
   color: var(--text-secondary);
@@ -57,16 +67,16 @@
 }
 
 .settings-tab.active {
-  background: var(--bg-secondary);
-  color: var(--text-primary);
+  background: var(--primary);
+  color: #fff;
   font-weight: 600;
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
 }
 
 /* Settings Group (Card) */
 .settings-group {
-  background: var(--bg-secondary);
-  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 10px;
   border: 1px solid var(--border-light);
   box-shadow: var(--shadow-sm);
   overflow: hidden;
@@ -103,7 +113,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 24px;
+  padding: 16px 20px;
   border-bottom: 1px solid var(--border-light);
   background: var(--bg-secondary);
   transition: background 0.2s;
@@ -140,7 +150,7 @@
 
 .row-title {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 650;
   color: var(--text-primary);
 }
 
@@ -202,6 +212,71 @@
 .settings-select--input-mode::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+[data-theme="dark"] .settings-tabs,
+html[data-theme="dark"] .settings-tabs {
+  border-color: rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.34);
+}
+
+[data-theme="dark"] .settings-tab:hover,
+html[data-theme="dark"] .settings-tab:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .settings-tab.active,
+html[data-theme="dark"] .settings-tab.active {
+  background: #14b8a6;
+  color: #062923;
+}
+
+[data-theme="dark"] .settings-group,
+html[data-theme="dark"] .settings-group {
+  border-color: rgba(148, 163, 184, 0.12);
+  background: rgba(21, 28, 36, 0.9);
+}
+
+[data-theme="dark"] .settings-row,
+html[data-theme="dark"] .settings-row {
+  border-bottom-color: rgba(148, 163, 184, 0.1);
+  background: rgba(15, 23, 42, 0.28);
+}
+
+[data-theme="dark"] .settings-row:hover,
+html[data-theme="dark"] .settings-row:hover,
+[data-theme="dark"] .settings-row:focus-within,
+html[data-theme="dark"] .settings-row:focus-within {
+  background: rgba(45, 212, 191, 0.08);
+}
+
+[data-theme="dark"] .settings-select,
+html[data-theme="dark"] .settings-select {
+  border-color: rgba(148, 163, 184, 0.2);
+  background-color: rgba(15, 23, 42, 0.48);
+  color: #f8fafc;
+  color-scheme: dark;
+}
+
+[data-theme="dark"] .settings-select:hover,
+html[data-theme="dark"] .settings-select:hover,
+[data-theme="dark"] .settings-select:focus,
+html[data-theme="dark"] .settings-select:focus {
+  border-color: rgba(45, 212, 191, 0.42);
+  background-color: rgba(15, 23, 42, 0.72);
+}
+
+[data-theme="dark"] .settings-select option,
+html[data-theme="dark"] .settings-select option {
+  background: #151c24;
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .settings-select option:checked,
+html[data-theme="dark"] .settings-select option:checked {
+  background-color: #0f766e;
+  color: #f8fafc;
 }
 
 /* Switch */

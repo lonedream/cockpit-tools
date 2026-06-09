@@ -180,6 +180,26 @@ fn legacy_hardcoded_instances_root_dir() -> Result<Option<PathBuf>, String> {
     }
 }
 
+fn legacy_xm_hardcoded_instances_root_dir() -> Result<Option<PathBuf>, String> {
+    #[cfg(target_os = "macos")]
+    {
+        let home = dirs::home_dir().ok_or("Failed to get home directory")?;
+        return Ok(Some(home.join(".xm/instances/codex")));
+    }
+
+    #[cfg(target_os = "windows")]
+    {
+        let appdata =
+            std::env::var("APPDATA").map_err(|_| "Failed to get APPDATA".to_string())?;
+        return Ok(Some(PathBuf::from(appdata).join(".xm\\instances\\codex")));
+    }
+
+    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
+    {
+        Ok(None)
+    }
+}
+
 fn migrate_managed_instance_dir(
     instance: &mut InstanceProfile,
     active_root: &Path,
@@ -205,17 +225,22 @@ fn migrate_managed_instance_dir(
 
 fn normalize_managed_instance_dirs(store: &mut InstanceStore) -> Result<bool, String> {
     let active_root = get_default_instances_root_dir()?;
-    let Some(legacy_root) = legacy_hardcoded_instances_root_dir()? else {
-        return Ok(false);
-    };
-    if paths_point_to_same_location(&active_root, &legacy_root) {
-        return Ok(false);
-    }
-
     let mut changed = false;
-    for instance in &mut store.instances {
-        if migrate_managed_instance_dir(instance, &active_root, &legacy_root)? {
-            changed = true;
+
+    for legacy_root in [
+        legacy_xm_hardcoded_instances_root_dir()?,
+        legacy_hardcoded_instances_root_dir()?,
+    ]
+    .into_iter()
+    .flatten()
+    {
+        if paths_point_to_same_location(&active_root, &legacy_root) {
+            continue;
+        }
+        for instance in &mut store.instances {
+            if migrate_managed_instance_dir(instance, &active_root, &legacy_root)? {
+                changed = true;
+            }
         }
     }
     Ok(changed)

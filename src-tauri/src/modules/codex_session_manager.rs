@@ -15,7 +15,7 @@ const DEFAULT_INSTANCE_ID: &str = "__default__";
 const DEFAULT_INSTANCE_NAME: &str = "默认实例";
 const SESSION_INDEX_FILE: &str = "session_index.jsonl";
 const SESSION_DIRS: [&str; 2] = ["sessions", "archived_sessions"];
-const SESSION_TRASH_ROOT_DIR: &str = "cockpit-tools-codex-session-trash";
+const SESSION_TRASH_ROOT_DIR: &str = "xm-codex-session-trash";
 const TOKEN_STATS_READ_CHUNK_BYTES: usize = 64 * 1024;
 
 static TOKEN_STATS_CACHE: LazyLock<Mutex<HashMap<PathBuf, TokenStatsCacheEntry>>> =

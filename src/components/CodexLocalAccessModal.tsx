@@ -19,7 +19,6 @@ import {
   ShieldCheck,
   SlidersHorizontal,
   Trash2,
-  Wrench,
   X,
 } from "lucide-react";
 import { listen } from "@tauri-apps/api/event";
@@ -98,7 +97,6 @@ interface CodexLocalAccessModalProps {
   ) => Promise<unknown> | unknown;
   onUpdateDebugLogs: (debugLogs: boolean) => Promise<unknown> | unknown;
   onRotateApiKey: () => Promise<unknown> | unknown;
-  onKillPort: () => Promise<unknown> | unknown;
   onToggleEnabled: () => Promise<unknown> | unknown;
   onStreamTestMessage: (payload: {
     sessionId: string;
@@ -273,7 +271,6 @@ export function CodexLocalAccessModal({
   onUpdateUpstreamProxyConfig,
   onUpdateDebugLogs,
   onRotateApiKey,
-  onKillPort,
   onToggleEnabled,
   onStreamTestMessage,
   saving,
@@ -1613,15 +1610,6 @@ export function CodexLocalAccessModal({
     );
   };
 
-  const handleKillPort = async () => {
-    await runAction(
-      async () => {
-        await onKillPort();
-      },
-      t("codex.localAccess.killPortSuccessUnknown", "API 服务端口已清理"),
-    );
-  };
-
   const handleRefreshStats = async () => {
     setError("");
     setNotice("");
@@ -2015,24 +2003,9 @@ export function CodexLocalAccessModal({
 
           <div className="modal-body codex-local-access-modal-body">
             {state?.lastError && (
-              <div className="codex-local-access-inline-error codex-local-access-inline-error-with-action">
+              <div className="codex-local-access-inline-error">
                 <CircleAlert size={14} />
                 <span>{state.lastError}</span>
-                {collection && (
-                  <button
-                    type="button"
-                    className="btn btn-secondary btn-sm codex-local-access-inline-action"
-                    onClick={() => void handleKillPort()}
-                    disabled={actionBusy}
-                  >
-                    {portCleanupBusy ? (
-                      <RefreshCw size={14} className="loading-spinner" />
-                    ) : (
-                      <Wrench size={14} />
-                    )}
-                    {t("codex.localAccess.killPortAction", "清理端口")}
-                  </button>
-                )}
               </div>
             )}
 

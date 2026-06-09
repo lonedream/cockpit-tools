@@ -35,6 +35,7 @@ import {
   ArrowDown,
   GripVertical,
   Clock,
+  Layers,
   Calendar,
   Tag,
   Star,
@@ -49,7 +50,6 @@ import {
   FolderPlus,
   ChevronRight,
   LogOut,
-  Wrench,
   Terminal,
   Link2,
 } from "lucide-react";
@@ -115,6 +115,7 @@ import { CodexInstancesContent } from "./CodexInstancesPage";
 import { CodexSessionManager } from "../components/codex/CodexSessionManager";
 import { CodexWakeupContent } from "../components/codex/CodexWakeupContent";
 import { CodexModelProviderManager } from "../components/codex/CodexModelProviderManager";
+import { SettingsPage } from "./SettingsPage";
 import { CodexSpeedSelect } from "../components/codex/CodexSpeedSelect";
 import { QuickSettingsPopover } from "../components/QuickSettingsPopover";
 import { useProviderAccountsPage } from "../hooks/useProviderAccountsPage";
@@ -162,7 +163,37 @@ import {
   normalizeApiKeyFunOfficialUrl,
   resolveApiKeyFunWireApi,
 } from "../utils/apikeyFunLinks";
+import {
+  clearOrbitRelaySession,
+  formatOrbitRelayError,
+  loadOrbitRelaySession,
+  orbitRelayCreateApiKey,
+  orbitRelayListAvailableGroups,
+  orbitRelayListApiKeys,
+  orbitRelayGetProfile,
+  orbitRelayLogin,
+  orbitRelayRedeem,
+  orbitRelayRegister,
+  orbitRelayUpdateApiKey,
+  saveOrbitRelaySession,
+  ORBIT_RELAY_CLIENT_API_KEY_NAME,
+  ORBIT_RELAY_PROVIDER_BASE_URL,
+  type OrbitRelayApiKey,
+  type OrbitRelayGroup,
+  type OrbitRelaySession,
+} from "../services/orbitRelayService";
 import { resolveCodexProviderCapabilityProfile } from "../utils/codexProviderGateway";
+import {
+  XM_CODEX_TABS,
+  XM_DEFAULT_CLIENT_API_KEY_QUOTA,
+  XM_DEFAULT_CLIENT_API_KEY_RATE_LIMIT_1D,
+  XM_DEFAULT_CLIENT_API_KEY_RATE_LIMIT_5H,
+  XM_DEFAULT_CLIENT_API_KEY_RATE_LIMIT_7D,
+  XM_PRODUCT_NAME,
+  XM_SHOP_URL,
+  XM_SHOW_MODEL_PROVIDER_UI,
+} from "../config/xmProduct";
+import { isTauriRuntime } from "../utils/tauriRuntime";
 import {
   formatCodexQuotaPoolPercent,
   summarizeCodexQuotaPool,
@@ -270,6 +301,12 @@ const CODEX_OVERVIEW_LAYOUT_MODE_KEY =
   "agtools.codex.accounts.overview_layout_mode";
 const CODEX_LOCAL_ACCESS_EXPANDED_KEY =
   "agtools.codex.local_access_entry_expanded.v1";
+const ORBIT_RELAY_CLIENT_API_KEY_ID_STORAGE_KEY =
+  "xm.orbit_relay.client_api_key_id.v1";
+const ORBIT_RELAY_TOKEN_GROUP_FILTER_STORAGE_KEY =
+  "xm.orbit_relay.token_group_filter.v1";
+const ORBIT_RELAY_TOKEN_CREATE_GROUP_STORAGE_KEY =
+  "xm.orbit_relay.token_create_group.v1";
 const CODEX_LOCAL_ACCESS_ADDRESS_KIND_KEY =
   "agtools.codex.local_access_address_kind.v1";
 const CODEX_LOCAL_ACCESS_GATEWAY_GUIDE_DISMISSED_KEY =
@@ -666,6 +703,79 @@ function maskCodexApiKey(value: string): string {
   return "••••••••••••••••";
 }
 
+function formatOrbitRelayAmount(value?: number | null): string {
+  if (typeof value !== "number" || !Number.isFinite(value)) return "0.00";
+  return value.toLocaleString("zh-CN", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 4,
+  });
+}
+
+function parseOrbitRelayNonNegativeNumber(value: string): number | undefined {
+  const trimmed = value.trim();
+  if (!trimmed) return undefined;
+  const parsed = Number(trimmed);
+  if (!Number.isFinite(parsed)) return undefined;
+  return Math.max(0, parsed);
+}
+
+function isOrbitRelayCreditExhausted(value?: number | null): boolean {
+  return typeof value === "number" && Number.isFinite(value) && value <= 0;
+}
+
+function isOrbitRelayQuotaErrorMessage(value?: string | null): boolean {
+  const lower = (value || "").toLowerCase();
+  if (!lower) return false;
+  return (
+    lower.includes("insufficient_quota") ||
+    lower.includes("usage_limit_reached") ||
+    lower.includes("quota_exhausted") ||
+    lower.includes("quota exceeded") ||
+    lower.includes("balance") ||
+    lower.includes("余额不足") ||
+    lower.includes("额度不足") ||
+    lower.includes("流量不足")
+  );
+}
+
+function maskOrbitRelayApiKey(value?: string | null): string {
+  const raw = value?.trim() ?? "";
+  if (!raw) return "-";
+  if (raw.length <= 12) return `${raw.slice(0, 4)}****`;
+  return `${raw.slice(0, 8)}****${raw.slice(-4)}`;
+}
+
+function readOrbitRelayStoredPositiveNumber(key: string): number | null {
+  try {
+    const raw = window.localStorage.getItem(key);
+    const parsed = raw ? Number(raw) : NaN;
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeOrbitRelayStoredPositiveNumber(
+  key: string,
+  value: number | null,
+): void {
+  try {
+    if (typeof value === "number" && Number.isFinite(value) && value > 0) {
+      window.localStorage.setItem(key, String(value));
+    } else {
+      window.localStorage.removeItem(key);
+    }
+  } catch {
+    // Local storage is a convenience cache only.
+  }
+}
+
+function buildOrbitRelayDefaultTokenName(existingCount: number): string {
+  return existingCount > 0
+    ? `${ORBIT_RELAY_CLIENT_API_KEY_NAME} ${existingCount + 1}`
+    : ORBIT_RELAY_CLIENT_API_KEY_NAME;
+}
+
 interface SponsorApiProviderTemplate {
   id: string;
   sponsor: Sponsor;
@@ -728,7 +838,18 @@ function getDefaultApiProviderPresetId(
 export function CodexAccountsPage() {
   const sponsorModule = useSponsorStore((state) => state.state.sponsorModule);
   const fetchSponsorState = useSponsorStore((state) => state.fetchState);
-  const [activeTab, setActiveTab] = useState<CodexTab>("overview");
+  const [activeTab, setActiveTab] = useState<CodexTab>("xm-platform");
+  useEffect(() => {
+    if (
+      (activeTab === "providers" && !XM_SHOW_MODEL_PROVIDER_UI) ||
+      !XM_CODEX_TABS.includes(activeTab as (typeof XM_CODEX_TABS)[number])
+    ) {
+      setActiveTab("xm-platform");
+    }
+  }, [activeTab]);
+  const [advancedTab, setAdvancedTab] = useState<
+    "wakeup" | "instances" | "sessions"
+  >("wakeup");
   const [wakeupPresetManagerSignal, setWakeupPresetManagerSignal] = useState(0);
   const untaggedKey = "__untagged__";
   const [filterTypes, setFilterTypes] = useState<string[]>(() =>
@@ -825,7 +946,6 @@ export function CodexAccountsPage() {
   const [localAccessSaving, setLocalAccessSaving] = useState(false);
   const [localAccessStarting, setLocalAccessStarting] = useState(false);
   const [localAccessRefreshing, setLocalAccessRefreshing] = useState(false);
-  const [localAccessPortKilling, setLocalAccessPortKilling] = useState(false);
   const [showLocalAccessHideConfirm, setShowLocalAccessHideConfirm] =
     useState(false);
   const [localAccessHideSubmitting, setLocalAccessHideSubmitting] =
@@ -848,6 +968,67 @@ export function CodexAccountsPage() {
   const [localAccessCopiedField, setLocalAccessCopiedField] = useState<
     "baseUrl" | "apiKey" | null
   >(null);
+  const [orbitRelaySession, setOrbitRelaySession] =
+    useState<OrbitRelaySession | null>(() => loadOrbitRelaySession());
+  const [orbitRelayAuthMode, setOrbitRelayAuthMode] = useState<
+    "login" | "register"
+  >("register");
+  const [orbitRelayEmailInput, setOrbitRelayEmailInput] = useState("");
+  const [orbitRelayPasswordInput, setOrbitRelayPasswordInput] = useState("");
+  const [orbitRelayPasswordConfirmInput, setOrbitRelayPasswordConfirmInput] =
+    useState("");
+  const [orbitRelayVerifyCodeInput, setOrbitRelayVerifyCodeInput] =
+    useState("");
+  const [orbitRelayPromoCodeInput, setOrbitRelayPromoCodeInput] = useState("");
+  const [orbitRelayRedeemInput, setOrbitRelayRedeemInput] = useState("");
+  const [orbitRelayClientApiKey, setOrbitRelayClientApiKey] =
+    useState<OrbitRelayApiKey | null>(null);
+  const [orbitRelayApiKeys, setOrbitRelayApiKeys] = useState<
+    OrbitRelayApiKey[]
+  >([]);
+  const [orbitRelayGroups, setOrbitRelayGroups] = useState<OrbitRelayGroup[]>(
+    [],
+  );
+  const [orbitRelayTokenGroupFilter, setOrbitRelayTokenGroupFilter] =
+    useState<number | null>(() =>
+      readOrbitRelayStoredPositiveNumber(
+        ORBIT_RELAY_TOKEN_GROUP_FILTER_STORAGE_KEY,
+      ),
+    );
+  const [orbitRelayTokenCreateGroupId, setOrbitRelayTokenCreateGroupId] =
+    useState<number | null>(() =>
+      readOrbitRelayStoredPositiveNumber(
+        ORBIT_RELAY_TOKEN_CREATE_GROUP_STORAGE_KEY,
+      ),
+    );
+  const [orbitRelayTokenEditGroupId, setOrbitRelayTokenEditGroupId] =
+    useState<number | null>(null);
+  const [orbitRelayNewTokenName, setOrbitRelayNewTokenName] = useState("");
+  const [orbitRelayTokenListLoading, setOrbitRelayTokenListLoading] =
+    useState(false);
+  const [orbitRelayTokenCreating, setOrbitRelayTokenCreating] = useState(false);
+  const [orbitRelayCodexLoggingIn, setOrbitRelayCodexLoggingIn] =
+    useState(false);
+  const [orbitRelayApiKeyCopied, setOrbitRelayApiKeyCopied] = useState(false);
+  const [orbitRelayTokenSaving, setOrbitRelayTokenSaving] = useState(false);
+  const [orbitRelayTokenForm, setOrbitRelayTokenForm] = useState({
+    name: ORBIT_RELAY_CLIENT_API_KEY_NAME,
+    status: "active" as "active" | "inactive",
+    quota: String(XM_DEFAULT_CLIENT_API_KEY_QUOTA),
+    rateLimit5h: String(XM_DEFAULT_CLIENT_API_KEY_RATE_LIMIT_5H),
+    rateLimit1d: String(XM_DEFAULT_CLIENT_API_KEY_RATE_LIMIT_1D),
+    rateLimit7d: String(XM_DEFAULT_CLIENT_API_KEY_RATE_LIMIT_7D),
+  });
+  const [showOrbitRelayRechargeModal, setShowOrbitRelayRechargeModal] =
+    useState(false);
+  const [orbitRelayRechargeReason, setOrbitRelayRechargeReason] =
+    useState<string | null>(null);
+  const [orbitRelayBusy, setOrbitRelayBusy] = useState(false);
+  const [orbitRelayRedeeming, setOrbitRelayRedeeming] = useState(false);
+  const [orbitRelayMessage, setOrbitRelayMessage] = useState<string | null>(
+    null,
+  );
+  const [orbitRelayError, setOrbitRelayError] = useState<string | null>(null);
   const [localAccessKeyVisible, setLocalAccessKeyVisible] = useState(false);
   const [localAccessAddressKind, setLocalAccessAddressKind] =
     useState<CodexLocalAccessAddressKind>(() =>
@@ -988,9 +1169,9 @@ export function CodexAccountsPage() {
     exportFilePrefix: "codex_accounts",
     store: {
       accounts: store.accounts,
-      loading: store.loading,
-      error: store.error,
-      fetchAccounts: store.fetchAccounts,
+      loading: isTauriRuntime() ? store.loading : false,
+      error: isTauriRuntime() ? store.error : null,
+      fetchAccounts: isTauriRuntime() ? store.fetchAccounts : async () => {},
       switchAccount: store.switchAccount,
       deleteAccounts: store.deleteAccounts,
       refreshToken: (id) => store.refreshQuota(id).then(() => {}),
@@ -1249,6 +1430,10 @@ export function CodexAccountsPage() {
   }, [activeGroupId, filterPersistenceEnabled, filterPersistenceScope]);
 
   const reloadLocalAccessState = useCallback(async () => {
+    if (!isTauriRuntime()) {
+      setLocalAccessState(null);
+      return;
+    }
     try {
       const nextState =
         await codexLocalAccessService.getCodexLocalAccessState();
@@ -1266,6 +1451,10 @@ export function CodexAccountsPage() {
   }, [setMessage, t]);
 
   const reloadLocalAccessEntryVisibility = useCallback(async () => {
+    if (!isTauriRuntime()) {
+      setLocalAccessEntryVisible(true);
+      return;
+    }
     try {
       const config =
         await invoke<CodexOverviewGeneralConfig>("get_general_config");
@@ -1281,6 +1470,10 @@ export function CodexAccountsPage() {
   }, []);
 
   const reloadLocalAccessLaunchCurrent = useCallback(async () => {
+    if (!isTauriRuntime()) {
+      setLocalAccessLaunchCurrent(false);
+      return;
+    }
     try {
       const instances = await codexInstanceService.listInstances();
       const defaultInstance = instances.find((instance) => instance.isDefault);
@@ -1952,6 +2145,10 @@ export function CodexAccountsPage() {
   }, [savingAccountNote, setAccountNoteError]);
 
   const loadApiServiceAppSpeed = useCallback(async () => {
+    if (!isTauriRuntime()) {
+      setApiServiceAppSpeed("standard");
+      return;
+    }
     try {
       const config = await codexService.getCodexApiServiceAppSpeedConfig();
       setApiServiceAppSpeed(config.speed);
@@ -2539,6 +2736,9 @@ export function CodexAccountsPage() {
   }, [showAddModal, addTab, addStatus]);
 
   useEffect(() => {
+    if (!isTauriRuntime()) {
+      return;
+    }
     fetchAccounts();
     fetchCurrentAccount();
   }, [fetchAccounts, fetchCurrentAccount]);
@@ -2600,10 +2800,16 @@ export function CodexAccountsPage() {
   }, [showCustomSortModal]);
 
   useEffect(() => {
+    if (!isTauriRuntime()) {
+      return;
+    }
     void reloadManagedProviders();
   }, [reloadManagedProviders]);
 
   useEffect(() => {
+    if (!isTauriRuntime()) {
+      return;
+    }
     void fetchSponsorState();
   }, [fetchSponsorState]);
 
@@ -2836,6 +3042,9 @@ export function CodexAccountsPage() {
   }, [addStatus, oauthTokenExchangeRetryVisible]);
 
   useEffect(() => {
+    if (!isTauriRuntime()) {
+      return;
+    }
     let unlistenExtension: UnlistenFn | undefined;
     let unlistenTimeout: UnlistenFn | undefined;
     let disposed = false;
@@ -4690,6 +4899,9 @@ export function CodexAccountsPage() {
   }, [accounts]);
 
   useEffect(() => {
+    if (!isTauriRuntime()) {
+      return;
+    }
     const refreshOnQuotaChanged = async () => {
       await refreshApiKeyUsageForAccounts(accounts);
     };
@@ -5644,8 +5856,7 @@ export function CodexAccountsPage() {
   const localAccessBusy =
     localAccessSaving ||
     localAccessStarting ||
-    localAccessRefreshing ||
-    localAccessPortKilling;
+    localAccessRefreshing;
   const selectedLocalAccessAddressKind: CodexLocalAccessAddressKind =
     localAccessAddressKind === "lan" && localAccessState?.lanBaseUrl
       ? "lan"
@@ -5691,6 +5902,500 @@ export function CodexAccountsPage() {
     localAccessState?.baseUrl,
     localAccessState?.lanBaseUrl,
     selectedLocalAccessAddressKind,
+  ]);
+
+  const persistOrbitRelayProfile = useCallback(
+    (session: OrbitRelaySession, user = session.user) => {
+      const nextSession: OrbitRelaySession = {
+        ...session,
+        user,
+        savedAt: Date.now(),
+      };
+      saveOrbitRelaySession(nextSession);
+      setOrbitRelaySession(nextSession);
+      return nextSession;
+    },
+    [],
+  );
+
+  const syncOrbitRelayApiKeyForm = useCallback(
+    (apiKey: OrbitRelayApiKey | null) => {
+      setOrbitRelayClientApiKey(apiKey);
+      writeOrbitRelayStoredPositiveNumber(
+        ORBIT_RELAY_CLIENT_API_KEY_ID_STORAGE_KEY,
+        apiKey?.id ?? null,
+      );
+      setOrbitRelayTokenForm({
+        name: apiKey?.name || ORBIT_RELAY_CLIENT_API_KEY_NAME,
+        status: apiKey?.status === "inactive" ? "inactive" : "active",
+        quota: String(apiKey?.quota ?? XM_DEFAULT_CLIENT_API_KEY_QUOTA),
+        rateLimit5h: String(
+          apiKey?.rate_limit_5h ?? XM_DEFAULT_CLIENT_API_KEY_RATE_LIMIT_5H,
+        ),
+        rateLimit1d: String(
+          apiKey?.rate_limit_1d ?? XM_DEFAULT_CLIENT_API_KEY_RATE_LIMIT_1D,
+        ),
+        rateLimit7d: String(
+          apiKey?.rate_limit_7d ?? XM_DEFAULT_CLIENT_API_KEY_RATE_LIMIT_7D,
+        ),
+      });
+      if (apiKey) {
+        const groupId =
+          typeof apiKey.group_id === "number" && apiKey.group_id > 0
+            ? apiKey.group_id
+            : null;
+        setOrbitRelayTokenEditGroupId(groupId);
+      } else {
+        setOrbitRelayTokenEditGroupId(null);
+      }
+    },
+    [],
+  );
+
+  const showOrbitRelayRecharge = useCallback((reason?: string | null) => {
+    setOrbitRelayRechargeReason(reason || "XM 流量或余额不足，请先充值后继续使用。");
+    setShowOrbitRelayRechargeModal(true);
+  }, []);
+
+  const handleOpenOrbitRelayShop = useCallback(async () => {
+    try {
+      await openUrl(XM_SHOP_URL);
+    } catch (error) {
+      console.error("Failed to open XM shop:", error);
+      setOrbitRelayError(`无法打开小店链接，请复制访问：${XM_SHOP_URL}`);
+    }
+  }, []);
+
+  const handleOrbitRelayRefreshProfile = useCallback(async () => {
+    if (!orbitRelaySession) return null;
+    setOrbitRelayBusy(true);
+    setOrbitRelayError(null);
+    try {
+      const profile = await orbitRelayGetProfile(orbitRelaySession);
+      const nextSession = persistOrbitRelayProfile(orbitRelaySession, profile);
+      setOrbitRelayMessage("XM 账户信息已刷新。");
+      if (isOrbitRelayCreditExhausted(profile.balance)) {
+        showOrbitRelayRecharge("XM 账户余额不足，请先充值后继续使用。");
+      }
+      return nextSession;
+    } catch (error) {
+      const message = formatOrbitRelayError(error);
+      setOrbitRelayError(message);
+      if (isOrbitRelayQuotaErrorMessage(message)) {
+        showOrbitRelayRecharge(message);
+      }
+      return null;
+    } finally {
+      setOrbitRelayBusy(false);
+    }
+  }, [orbitRelaySession, persistOrbitRelayProfile, showOrbitRelayRecharge]);
+
+  const handleOrbitRelayLoginSelectedApiKeyToCodex = useCallback(
+    async (sessionOverride?: OrbitRelaySession) => {
+      const session = sessionOverride ?? orbitRelaySession;
+      if (!session) {
+        setOrbitRelayError("请先登录 XM 账户。");
+        return;
+      }
+      const apiKey = orbitRelayClientApiKey;
+      if (!apiKey?.key?.trim()) {
+        setOrbitRelayError("请先选择或创建一个 XM 令牌。");
+        return;
+      }
+      setOrbitRelayCodexLoggingIn(true);
+      setOrbitRelayError(null);
+      setOrbitRelayMessage(null);
+      try {
+        await codexService.addCodexAccountWithApiKey(
+          apiKey.key,
+          ORBIT_RELAY_PROVIDER_BASE_URL,
+          "custom",
+          "xm",
+          "XM",
+          undefined,
+          true,
+          undefined,
+          undefined,
+          apiKey.name || ORBIT_RELAY_CLIENT_API_KEY_NAME,
+        );
+        await fetchAccounts();
+        await fetchCurrentAccount();
+        setOrbitRelayMessage("已用当前 XM 令牌登录到 Codex。");
+        if (isOrbitRelayCreditExhausted(session.user.balance)) {
+          showOrbitRelayRecharge("XM 账户余额不足，请先充值后继续使用。");
+        }
+      } catch (error) {
+        const message = formatOrbitRelayError(error);
+        setOrbitRelayError(message);
+        if (isOrbitRelayQuotaErrorMessage(message)) {
+          showOrbitRelayRecharge(message);
+        }
+      } finally {
+        setOrbitRelayCodexLoggingIn(false);
+      }
+    },
+    [
+      fetchAccounts,
+      fetchCurrentAccount,
+      orbitRelayClientApiKey,
+      orbitRelaySession,
+      showOrbitRelayRecharge,
+    ],
+  );
+
+  const refreshOrbitRelayClientApiKey = useCallback(
+    async (sessionOverride?: OrbitRelaySession, options?: { silent?: boolean }) => {
+      const session = sessionOverride ?? orbitRelaySession;
+      if (!session) return null;
+      if (!options?.silent) setOrbitRelayTokenListLoading(true);
+      try {
+        const [groups, keys] = await Promise.all([
+          orbitRelayListAvailableGroups(session),
+          orbitRelayListApiKeys(session),
+        ]);
+        setOrbitRelayGroups(groups);
+        setOrbitRelayApiKeys(keys);
+        const savedId = readOrbitRelayStoredPositiveNumber(
+          ORBIT_RELAY_CLIENT_API_KEY_ID_STORAGE_KEY,
+        );
+        const existing =
+          (savedId
+            ? keys.find((item) => item.id === savedId && item.key.trim())
+            : null) ??
+          (orbitRelayClientApiKey
+            ? keys.find(
+                (item) =>
+                  item.id === orbitRelayClientApiKey.id && item.key.trim(),
+              )
+            : null) ??
+          keys.find(
+            (item) =>
+              item.key.trim() &&
+              item.name.trim() === ORBIT_RELAY_CLIENT_API_KEY_NAME,
+          ) ??
+          keys.find((item) => item.key.trim()) ??
+          null;
+        syncOrbitRelayApiKeyForm(existing);
+        if (existing && !orbitRelayNewTokenName.trim()) {
+          setOrbitRelayNewTokenName(buildOrbitRelayDefaultTokenName(keys.length));
+        }
+        return existing;
+      } finally {
+        if (!options?.silent) setOrbitRelayTokenListLoading(false);
+      }
+    },
+    [
+      orbitRelayClientApiKey,
+      orbitRelayNewTokenName,
+      orbitRelaySession,
+      syncOrbitRelayApiKeyForm,
+    ],
+  );
+
+  const handleOrbitRelayLogin = useCallback(async () => {
+    const email = orbitRelayEmailInput.trim();
+    if (!email || !orbitRelayPasswordInput) {
+      setOrbitRelayError("请输入 XM 登录邮箱和密码。");
+      return;
+    }
+    setOrbitRelayBusy(true);
+    setOrbitRelayError(null);
+    setOrbitRelayMessage(null);
+    try {
+      const session = await orbitRelayLogin(email, orbitRelayPasswordInput);
+      setOrbitRelaySession(session);
+      setOrbitRelayPasswordInput("");
+      setOrbitRelayPasswordConfirmInput("");
+      setOrbitRelayMessage("XM 登录成功。请选择或创建令牌后，再手动登录到 Codex。");
+      await refreshOrbitRelayClientApiKey(session, { silent: true });
+    } catch (error) {
+      const message = formatOrbitRelayError(error);
+      setOrbitRelayError(message);
+      if (isOrbitRelayQuotaErrorMessage(message)) {
+        showOrbitRelayRecharge(message);
+      }
+    } finally {
+      setOrbitRelayBusy(false);
+    }
+  }, [
+    orbitRelayEmailInput,
+    orbitRelayPasswordInput,
+    refreshOrbitRelayClientApiKey,
+    showOrbitRelayRecharge,
+  ]);
+
+  const handleOrbitRelayRegister = useCallback(async () => {
+    const email = orbitRelayEmailInput.trim();
+    if (!email || !orbitRelayPasswordInput) {
+      setOrbitRelayError("请输入 XM 注册邮箱和密码。");
+      return;
+    }
+    if (orbitRelayPasswordInput.length < 6) {
+      setOrbitRelayError("XM 密码至少需要 6 位。");
+      return;
+    }
+    if (orbitRelayPasswordInput !== orbitRelayPasswordConfirmInput) {
+      setOrbitRelayError("两次输入的密码不一致。");
+      return;
+    }
+    setOrbitRelayBusy(true);
+    setOrbitRelayError(null);
+    setOrbitRelayMessage(null);
+    try {
+      const session = await orbitRelayRegister({
+        email,
+        password: orbitRelayPasswordInput,
+        verifyCode: orbitRelayVerifyCodeInput,
+        promoCode: orbitRelayPromoCodeInput,
+      });
+      setOrbitRelaySession(session);
+      setOrbitRelayPasswordInput("");
+      setOrbitRelayPasswordConfirmInput("");
+      setOrbitRelayVerifyCodeInput("");
+      setOrbitRelayPromoCodeInput("");
+      const apiKey = await orbitRelayCreateApiKey(
+        session,
+        orbitRelayNewTokenName.trim() || ORBIT_RELAY_CLIENT_API_KEY_NAME,
+        orbitRelayTokenCreateGroupId,
+      );
+      setOrbitRelayApiKeys((current) => [apiKey, ...current]);
+      syncOrbitRelayApiKeyForm(apiKey);
+      setOrbitRelayMessage(
+        "XM 注册成功，已创建默认令牌。点击“登录到 Codex”后才会写入本地 Codex。",
+      );
+    } catch (error) {
+      const message = formatOrbitRelayError(error);
+      setOrbitRelayError(message);
+      if (isOrbitRelayQuotaErrorMessage(message)) {
+        showOrbitRelayRecharge(message);
+      }
+    } finally {
+      setOrbitRelayBusy(false);
+    }
+  }, [
+    orbitRelayEmailInput,
+    orbitRelayNewTokenName,
+    orbitRelayPasswordConfirmInput,
+    orbitRelayPasswordInput,
+    orbitRelayPromoCodeInput,
+    orbitRelayTokenCreateGroupId,
+    orbitRelayVerifyCodeInput,
+    showOrbitRelayRecharge,
+    syncOrbitRelayApiKeyForm,
+  ]);
+
+  const handleOrbitRelayRedeem = useCallback(async () => {
+    if (!orbitRelaySession) {
+      setOrbitRelayError("请先登录 XM 账户。");
+      return;
+    }
+    const code = orbitRelayRedeemInput.trim();
+    if (!code) {
+      setOrbitRelayError("请输入兑换码。");
+      return;
+    }
+    setOrbitRelayRedeeming(true);
+    setOrbitRelayError(null);
+    setOrbitRelayMessage(null);
+    try {
+      await orbitRelayRedeem(orbitRelaySession, code);
+      setOrbitRelayRedeemInput("");
+      const profile = await orbitRelayGetProfile(orbitRelaySession);
+      persistOrbitRelayProfile(orbitRelaySession, profile);
+      setOrbitRelayMessage("兑换成功，余额已刷新。");
+    } catch (error) {
+      const message = formatOrbitRelayError(error);
+      setOrbitRelayError(message);
+      if (isOrbitRelayQuotaErrorMessage(message)) {
+        showOrbitRelayRecharge(message);
+      }
+    } finally {
+      setOrbitRelayRedeeming(false);
+    }
+  }, [
+    orbitRelayRedeemInput,
+    orbitRelaySession,
+    persistOrbitRelayProfile,
+    showOrbitRelayRecharge,
+  ]);
+
+  const handleSelectOrbitRelayApiKey = useCallback(
+    (apiKeyId: number) => {
+      const apiKey =
+        orbitRelayApiKeys.find((item) => item.id === apiKeyId) ?? null;
+      if (!apiKey) return;
+      syncOrbitRelayApiKeyForm(apiKey);
+      setOrbitRelayMessage(`已切换到令牌：${apiKey.name || apiKey.id}`);
+      setOrbitRelayError(null);
+    },
+    [orbitRelayApiKeys, syncOrbitRelayApiKeyForm],
+  );
+
+  const handleOrbitRelayTokenGroupFilterChange = useCallback((value: string) => {
+    const parsed = Number(value);
+    const groupId = Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+    setOrbitRelayTokenGroupFilter(groupId);
+    writeOrbitRelayStoredPositiveNumber(
+      ORBIT_RELAY_TOKEN_GROUP_FILTER_STORAGE_KEY,
+      groupId,
+    );
+  }, []);
+
+  const handleOrbitRelayTokenCreateGroupChange = useCallback((value: string) => {
+    const parsed = Number(value);
+    const groupId = Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+    setOrbitRelayTokenCreateGroupId(groupId);
+    writeOrbitRelayStoredPositiveNumber(
+      ORBIT_RELAY_TOKEN_CREATE_GROUP_STORAGE_KEY,
+      groupId,
+    );
+  }, []);
+
+  const handleOrbitRelayTokenEditGroupChange = useCallback((value: string) => {
+    const parsed = Number(value);
+    setOrbitRelayTokenEditGroupId(
+      Number.isFinite(parsed) && parsed > 0 ? parsed : null,
+    );
+  }, []);
+
+  const handleCreateOrbitRelayApiKey = useCallback(async () => {
+    if (!orbitRelaySession) {
+      setOrbitRelayError("请先登录 XM 账户。");
+      return;
+    }
+    setOrbitRelayTokenCreating(true);
+    setOrbitRelayError(null);
+    setOrbitRelayMessage(null);
+    try {
+      const apiKey = await orbitRelayCreateApiKey(
+        orbitRelaySession,
+        orbitRelayNewTokenName.trim() ||
+          buildOrbitRelayDefaultTokenName(orbitRelayApiKeys.length),
+        orbitRelayTokenCreateGroupId,
+      );
+      setOrbitRelayApiKeys((current) => [apiKey, ...current]);
+      syncOrbitRelayApiKeyForm(apiKey);
+      setOrbitRelayNewTokenName(
+        buildOrbitRelayDefaultTokenName(orbitRelayApiKeys.length + 1),
+      );
+      setOrbitRelayMessage("XM 令牌已创建并选中。点击“登录到 Codex”后才会写入本地 Codex。");
+      if (isOrbitRelayCreditExhausted(orbitRelaySession.user.balance)) {
+        showOrbitRelayRecharge("XM 账户余额不足，请先充值后继续使用。");
+      }
+    } catch (error) {
+      const message = formatOrbitRelayError(error);
+      setOrbitRelayError(message);
+      if (isOrbitRelayQuotaErrorMessage(message)) {
+        showOrbitRelayRecharge(message);
+      }
+    } finally {
+      setOrbitRelayTokenCreating(false);
+    }
+  }, [
+    orbitRelayApiKeys.length,
+    orbitRelayNewTokenName,
+    orbitRelaySession,
+    orbitRelayTokenCreateGroupId,
+    showOrbitRelayRecharge,
+    syncOrbitRelayApiKeyForm,
+  ]);
+
+  const handleSaveOrbitRelayTokenConfig = useCallback(async () => {
+    if (!orbitRelaySession || !orbitRelayClientApiKey) {
+      setOrbitRelayError("请先登录 XM 并创建客户端 API Key。");
+      return;
+    }
+    setOrbitRelayTokenSaving(true);
+    setOrbitRelayError(null);
+    setOrbitRelayMessage(null);
+    try {
+      const updated = await orbitRelayUpdateApiKey(
+        orbitRelaySession,
+        orbitRelayClientApiKey.id,
+        {
+          name: orbitRelayTokenForm.name,
+          status: orbitRelayTokenForm.status,
+          groupId: orbitRelayTokenEditGroupId,
+          quota: parseOrbitRelayNonNegativeNumber(orbitRelayTokenForm.quota),
+          rateLimit5h: parseOrbitRelayNonNegativeNumber(
+            orbitRelayTokenForm.rateLimit5h,
+          ),
+          rateLimit1d: parseOrbitRelayNonNegativeNumber(
+            orbitRelayTokenForm.rateLimit1d,
+          ),
+          rateLimit7d: parseOrbitRelayNonNegativeNumber(
+            orbitRelayTokenForm.rateLimit7d,
+          ),
+        },
+      );
+      syncOrbitRelayApiKeyForm(updated);
+      setOrbitRelayApiKeys((current) =>
+        current.map((item) => (item.id === updated.id ? updated : item)),
+      );
+      setOrbitRelayMessage("XM API Key 配置已更新。");
+    } catch (error) {
+      const message = formatOrbitRelayError(error);
+      setOrbitRelayError(message);
+      if (isOrbitRelayQuotaErrorMessage(message)) {
+        showOrbitRelayRecharge(message);
+      }
+    } finally {
+      setOrbitRelayTokenSaving(false);
+    }
+  }, [
+    orbitRelayClientApiKey,
+    orbitRelaySession,
+    orbitRelayTokenEditGroupId,
+    orbitRelayTokenForm,
+    showOrbitRelayRecharge,
+    syncOrbitRelayApiKeyForm,
+  ]);
+
+  const handleCopyOrbitRelayApiKey = useCallback(async () => {
+    if (!orbitRelayClientApiKey?.key) return;
+    try {
+      await navigator.clipboard.writeText(orbitRelayClientApiKey.key);
+      setOrbitRelayApiKeyCopied(true);
+      window.setTimeout(() => setOrbitRelayApiKeyCopied(false), 1200);
+    } catch (error) {
+      console.error("Failed to copy XM API key:", error);
+      setOrbitRelayError("复制失败，请手动复制。");
+    }
+  }, [orbitRelayClientApiKey?.key]);
+
+  const handleOrbitRelayLogout = useCallback(() => {
+    clearOrbitRelaySession();
+    setOrbitRelaySession(null);
+    setOrbitRelayPasswordInput("");
+    setOrbitRelayPasswordConfirmInput("");
+    setOrbitRelayVerifyCodeInput("");
+    setOrbitRelayPromoCodeInput("");
+    setOrbitRelayRedeemInput("");
+    setOrbitRelayApiKeys([]);
+    setOrbitRelayGroups([]);
+    setOrbitRelayNewTokenName("");
+    syncOrbitRelayApiKeyForm(null);
+    setOrbitRelayMessage("已退出 XM 账户。");
+    setOrbitRelayError(null);
+  }, [syncOrbitRelayApiKeyForm]);
+
+  useEffect(() => {
+    if (!orbitRelaySession) return;
+    if (isOrbitRelayCreditExhausted(orbitRelaySession.user.balance)) {
+      showOrbitRelayRecharge("XM 账户余额不足，请先充值后继续使用。");
+    }
+    void refreshOrbitRelayClientApiKey(undefined, { silent: true }).catch(
+      (error) => {
+        const message = formatOrbitRelayError(error);
+        if (isOrbitRelayQuotaErrorMessage(message)) {
+          showOrbitRelayRecharge(message);
+        }
+      },
+    );
+  }, [
+    orbitRelaySession,
+    refreshOrbitRelayClientApiKey,
+    showOrbitRelayRecharge,
   ]);
 
   const handleCopyLocalAccessValue = useCallback(
@@ -6245,48 +6950,6 @@ export function CodexAccountsPage() {
       setLocalAccessSaving(false);
     }
   }, [setMessage, t]);
-
-  const handleKillLocalAccessPort = useCallback(async () => {
-    if (!localAccessCollection) return;
-    const confirmed = await confirmDialog(
-      t("codex.localAccess.killPortConfirmMessage", {
-        port: localAccessCollection.port,
-        defaultValue:
-          "将强制结束占用本机 {{port}} 端口的其他进程，然后重新启动 API 服务。确认继续吗？",
-      }),
-      {
-        title: t("codex.localAccess.killPortTitle", "清理 API 服务端口"),
-        kind: "warning",
-        okLabel: t("codex.localAccess.killPortAction", "清理端口"),
-        cancelLabel: t("common.cancel", "取消"),
-      },
-    );
-    if (!confirmed) return;
-
-    setLocalAccessPortKilling(true);
-    try {
-      const result = await codexLocalAccessService.killCodexLocalAccessPort();
-      setLocalAccessState(result.state);
-      setMessage({
-        text:
-          result.killedCount > 0
-            ? t("codex.localAccess.killPortSuccess", {
-                count: result.killedCount,
-                defaultValue: "端口已清理（结束 {{count}} 个进程）",
-              })
-            : t(
-                "codex.localAccess.killPortSuccessNone",
-                "端口已检查，未发现外部占用进程",
-              ),
-      });
-      return result.state;
-    } catch (error) {
-      console.error("Failed to kill local access port:", error);
-      throw new Error(String(error).replace(/^Error:\s*/, ""));
-    } finally {
-      setLocalAccessPortKilling(false);
-    }
-  }, [localAccessCollection, setMessage, t]);
 
   const handleUpdateLocalAccessPort = useCallback(
     async (port: number) => {
@@ -8217,20 +8880,6 @@ export function CodexAccountsPage() {
               <div className="quota-error-inline">
                 <CircleAlert size={14} />
                 <span>{localAccessState.lastError}</span>
-                <button
-                  type="button"
-                  className="folder-icon-btn codex-local-access-error-action"
-                  onClick={() => void handleKillLocalAccessPort()}
-                  title={t("codex.localAccess.killPortAction", "清理端口")}
-                  aria-label={t("codex.localAccess.killPortAction", "清理端口")}
-                  disabled={localAccessBusy || !localAccessCollection}
-                >
-                  {localAccessPortKilling ? (
-                    <RefreshCw size={14} className="loading-spinner" />
-                  ) : (
-                    <Wrench size={14} />
-                  )}
-                </button>
               </div>
             )}
 
@@ -8337,12 +8986,1192 @@ export function CodexAccountsPage() {
     );
   };
 
+  const renderXmPlatformWorkspace = () => {
+    const accountLabel = orbitRelaySession
+      ? orbitRelaySession.user.email || orbitRelaySession.user.username
+      : "未登录";
+    const balanceValue = orbitRelaySession?.user.balance ?? null;
+    const hasNoCredit = isOrbitRelayCreditExhausted(balanceValue);
+    const tokenQuota =
+      orbitRelayClientApiKey?.quota && orbitRelayClientApiKey.quota > 0
+        ? formatOrbitRelayAmount(orbitRelayClientApiKey.quota)
+        : "不限";
+    const tokenUsed = formatOrbitRelayAmount(
+      orbitRelayClientApiKey?.quota_used ?? 0,
+    );
+    const resolveOrbitRelayGroupName = (groupId?: number | null) => {
+      if (!groupId) return "默认分组";
+      return (
+        orbitRelayGroups.find((group) => group.id === groupId)?.name ||
+        `分组 ${groupId}`
+      );
+    };
+    const filteredOrbitRelayApiKeys = orbitRelayTokenGroupFilter
+      ? orbitRelayApiKeys.filter(
+          (apiKey) => apiKey.group_id === orbitRelayTokenGroupFilter,
+        )
+      : orbitRelayApiKeys;
+    const selectedTokenGroupLabel = resolveOrbitRelayGroupName(
+      orbitRelayClientApiKey?.group_id,
+    );
+    const tokenCreateGroupValue = orbitRelayTokenCreateGroupId
+      ? String(orbitRelayTokenCreateGroupId)
+      : "";
+    const tokenEditGroupValue = orbitRelayTokenEditGroupId
+      ? String(orbitRelayTokenEditGroupId)
+      : "";
+    const tokenFilterGroupValue = orbitRelayTokenGroupFilter
+      ? String(orbitRelayTokenGroupFilter)
+      : "";
+    const effectiveNewTokenName =
+      orbitRelayNewTokenName.trim() ||
+      buildOrbitRelayDefaultTokenName(orbitRelayApiKeys.length);
+    const authSubmitDisabled =
+      orbitRelayBusy ||
+      !orbitRelayEmailInput.trim() ||
+      !orbitRelayPasswordInput ||
+      (orbitRelayAuthMode === "register" &&
+        (!orbitRelayPasswordConfirmInput ||
+          orbitRelayPasswordInput !== orbitRelayPasswordConfirmInput));
+
+    return (
+      <section
+        className="xm-command-center xm-platform-workspace"
+        aria-label={`${XM_PRODUCT_NAME} 平台`}
+      >
+        <div className="xm-command-hero">
+          <div className="xm-command-title-block">
+            <span className="xm-command-kicker">{XM_PRODUCT_NAME}</span>
+            <h1>XM 平台</h1>
+            <p>注册或登录 XM 后管理多令牌和分组；只有点击“登录到 Codex”才会写入本地 Codex。</p>
+          </div>
+          <div className="xm-command-status-grid">
+            <div className="xm-command-status-card">
+              <span>XM 账户</span>
+              <strong>{accountLabel}</strong>
+              <small>{orbitRelaySession ? "已连接" : "等待登录"}</small>
+            </div>
+            <div
+              className={`xm-command-status-card ${hasNoCredit ? "tone-warning" : "tone-success"}`}
+            >
+              <span>余额</span>
+              <strong>{formatOrbitRelayAmount(balanceValue)}</strong>
+              <small>{hasNoCredit ? "需要充值" : "可用"}</small>
+            </div>
+            <div
+              className={`xm-command-status-card ${orbitRelayClientApiKey ? "tone-success" : "tone-muted"}`}
+            >
+              <span>XM API Key</span>
+              <strong>{orbitRelayApiKeys.length}</strong>
+              <small>{orbitRelayClientApiKey ? selectedTokenGroupLabel : "等待创建"}</small>
+            </div>
+          </div>
+        </div>
+
+        <div className="xm-command-grid xm-platform-grid">
+          <section className="xm-command-panel xm-command-panel-account">
+            <div className="xm-command-panel-head">
+              <div>
+                <h2>{orbitRelaySession ? "XM 账户" : "注册 / 登录"}</h2>
+                <p>XM 账号将用于余额、充值、兑换码和 API Key 管理。</p>
+              </div>
+              <button
+                className="btn btn-secondary"
+                type="button"
+                onClick={() => void handleOpenOrbitRelayShop()}
+              >
+                <ExternalLink size={14} />
+                小店充值
+              </button>
+            </div>
+
+            {orbitRelaySession ? (
+              <>
+                <div className="xm-command-account-strip">
+                  <div>
+                    <strong>{accountLabel}</strong>
+                    <span>
+                      余额 {formatOrbitRelayAmount(orbitRelaySession.user.balance)}
+                    </span>
+                  </div>
+                  <div className="xm-command-actions compact">
+                    <button
+                      className="btn btn-secondary"
+                      type="button"
+                      onClick={() => void handleOrbitRelayRefreshProfile()}
+                      disabled={orbitRelayBusy}
+                    >
+                      <RefreshCw size={14} />
+                      刷新
+                    </button>
+                    <button
+                      className="btn btn-primary"
+                      type="button"
+                      onClick={() =>
+                        void handleOrbitRelayLoginSelectedApiKeyToCodex()
+                      }
+                      disabled={
+                        orbitRelayCodexLoggingIn || !orbitRelayClientApiKey
+                      }
+                    >
+                      {orbitRelayCodexLoggingIn ? (
+                        <RefreshCw size={14} className="loading-spinner" />
+                      ) : (
+                        <KeyRound size={14} />
+                      )}
+                      登录到 Codex
+                    </button>
+                    <button
+                      className="btn btn-secondary"
+                      type="button"
+                      onClick={handleOrbitRelayLogout}
+                      disabled={orbitRelayBusy || orbitRelayRedeeming}
+                    >
+                      <LogOut size={14} />
+                      退出
+                    </button>
+                  </div>
+                </div>
+
+                <div className="xm-command-redeem-row">
+                  <input
+                    type="text"
+                    value={orbitRelayRedeemInput}
+                    onChange={(event) =>
+                      setOrbitRelayRedeemInput(event.target.value)
+                    }
+                    placeholder="兑换码"
+                    autoComplete="off"
+                  />
+                  <button
+                    className="btn btn-primary"
+                    type="button"
+                    onClick={() => void handleOrbitRelayRedeem()}
+                    disabled={
+                      orbitRelayRedeeming || !orbitRelayRedeemInput.trim()
+                    }
+                  >
+                    {orbitRelayRedeeming ? (
+                      <RefreshCw size={14} className="loading-spinner" />
+                    ) : (
+                      <Check size={14} />
+                    )}
+                    兑换
+                  </button>
+                  <button
+                    className="btn btn-secondary"
+                    type="button"
+                    onClick={() => void handleOpenOrbitRelayShop()}
+                  >
+                    <ExternalLink size={14} />
+                    去充值
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="xm-auth-panel">
+                <div className="xm-auth-mode-switch" role="tablist">
+                  <button
+                    type="button"
+                    className={orbitRelayAuthMode === "register" ? "active" : ""}
+                    onClick={() => setOrbitRelayAuthMode("register")}
+                  >
+                    注册
+                  </button>
+                  <button
+                    type="button"
+                    className={orbitRelayAuthMode === "login" ? "active" : ""}
+                    onClick={() => setOrbitRelayAuthMode("login")}
+                  >
+                    登录
+                  </button>
+                </div>
+                <div className="xm-command-login-grid xm-auth-form">
+                  <input
+                    type="email"
+                    value={orbitRelayEmailInput}
+                    onChange={(event) =>
+                      setOrbitRelayEmailInput(event.target.value)
+                    }
+                    placeholder="XM 邮箱"
+                    autoComplete="username"
+                  />
+                  <input
+                    type="password"
+                    value={orbitRelayPasswordInput}
+                    onChange={(event) =>
+                      setOrbitRelayPasswordInput(event.target.value)
+                    }
+                    placeholder="密码"
+                    autoComplete={
+                      orbitRelayAuthMode === "register"
+                        ? "new-password"
+                        : "current-password"
+                    }
+                  />
+                  {orbitRelayAuthMode === "register" && (
+                    <>
+                      <input
+                        type="password"
+                        value={orbitRelayPasswordConfirmInput}
+                        onChange={(event) =>
+                          setOrbitRelayPasswordConfirmInput(event.target.value)
+                        }
+                        placeholder="确认密码"
+                        autoComplete="new-password"
+                      />
+                      <input
+                        type="text"
+                        value={orbitRelayVerifyCodeInput}
+                        onChange={(event) =>
+                          setOrbitRelayVerifyCodeInput(event.target.value)
+                        }
+                        placeholder="邮箱验证码（如需要）"
+                        autoComplete="one-time-code"
+                      />
+                      <input
+                        type="text"
+                        value={orbitRelayPromoCodeInput}
+                        onChange={(event) =>
+                          setOrbitRelayPromoCodeInput(event.target.value)
+                        }
+                        placeholder="邀请码 / 推广码"
+                        autoComplete="off"
+                      />
+                    </>
+                  )}
+                  <button
+                    className="btn btn-primary"
+                    type="button"
+                    onClick={() =>
+                      orbitRelayAuthMode === "register"
+                        ? void handleOrbitRelayRegister()
+                        : void handleOrbitRelayLogin()
+                    }
+                    disabled={authSubmitDisabled}
+                  >
+                    {orbitRelayBusy ? (
+                      <RefreshCw size={14} className="loading-spinner" />
+                    ) : (
+                      <KeyRound size={14} />
+                    )}
+                    {orbitRelayAuthMode === "register"
+                      ? "注册 XM"
+                      : "登录 XM"}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {orbitRelayMessage && (
+              <div className="orbit-relay-inline-status success">
+                <Check size={14} />
+                <span>{orbitRelayMessage}</span>
+              </div>
+            )}
+            {orbitRelayError && (
+              <div className="orbit-relay-inline-status error">
+                <CircleAlert size={14} />
+                <span>{orbitRelayError}</span>
+              </div>
+            )}
+          </section>
+
+          <section className="xm-command-panel xm-token-panel">
+            <div className="xm-command-panel-head">
+              <div>
+                <h2>XM 令牌</h2>
+                <p>创建、切换和分组令牌；选中令牌后再手动登录到 Codex。</p>
+              </div>
+              <button
+                className="btn btn-secondary"
+                type="button"
+                onClick={() => void refreshOrbitRelayClientApiKey()}
+                disabled={!orbitRelaySession || orbitRelayTokenListLoading}
+              >
+                <RefreshCw
+                  size={14}
+                  className={orbitRelayTokenListLoading ? "loading-spinner" : ""}
+                />
+                刷新令牌
+              </button>
+            </div>
+
+            <div className="xm-token-toolbar">
+              <label>
+                <span>分组筛选</span>
+                <select
+                  value={tokenFilterGroupValue}
+                  onChange={(event) =>
+                    handleOrbitRelayTokenGroupFilterChange(event.target.value)
+                  }
+                  disabled={!orbitRelaySession}
+                >
+                  <option value="">全部分组</option>
+                  {orbitRelayGroups.map((group) => (
+                    <option key={`filter-${group.id}`} value={group.id}>
+                      {group.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                <span>新令牌分组</span>
+                <select
+                  value={tokenCreateGroupValue}
+                  onChange={(event) =>
+                    handleOrbitRelayTokenCreateGroupChange(event.target.value)
+                  }
+                  disabled={!orbitRelaySession}
+                >
+                  <option value="">默认分组</option>
+                  {orbitRelayGroups.map((group) => (
+                    <option key={`create-${group.id}`} value={group.id}>
+                      {group.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <div className="xm-token-create-row">
+              <input
+                type="text"
+                value={orbitRelayNewTokenName}
+                onChange={(event) =>
+                  setOrbitRelayNewTokenName(event.target.value)
+                }
+                placeholder={effectiveNewTokenName}
+                disabled={!orbitRelaySession}
+              />
+              <button
+                className="btn btn-primary"
+                type="button"
+                onClick={() => void handleCreateOrbitRelayApiKey()}
+                disabled={!orbitRelaySession || orbitRelayTokenCreating}
+              >
+                {orbitRelayTokenCreating ? (
+                  <RefreshCw size={14} className="loading-spinner" />
+                ) : (
+                  <Plus size={14} />
+                )}
+                创建令牌
+              </button>
+            </div>
+
+            <div className="xm-token-list" aria-label="XM 令牌列表">
+              {filteredOrbitRelayApiKeys.length > 0 ? (
+                filteredOrbitRelayApiKeys.map((apiKey) => (
+                  <button
+                    key={apiKey.id}
+                    type="button"
+                    className={`xm-token-list-item ${
+                      orbitRelayClientApiKey?.id === apiKey.id ? "active" : ""
+                    }`}
+                    onClick={() => handleSelectOrbitRelayApiKey(apiKey.id)}
+                  >
+                    <span>
+                      <strong>{apiKey.name || `令牌 ${apiKey.id}`}</strong>
+                      <small>{resolveOrbitRelayGroupName(apiKey.group_id)}</small>
+                    </span>
+                    <em>{apiKey.status || "-"}</em>
+                  </button>
+                ))
+              ) : (
+                <div className="xm-token-empty">
+                  <KeyRound size={18} />
+                  <span>
+                    {orbitRelaySession
+                      ? "当前筛选下还没有令牌。"
+                      : "登录 XM 后即可创建和切换令牌。"}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            <div className="xm-command-copy-list">
+              <div className="xm-command-copy-row xm-token-row">
+                <span>Token</span>
+                <code title={orbitRelayClientApiKey?.key || "-"}>
+                  {maskOrbitRelayApiKey(orbitRelayClientApiKey?.key)}
+                </code>
+                <button
+                  className="folder-icon-btn"
+                  type="button"
+                  onClick={() => void handleCopyOrbitRelayApiKey()}
+                  disabled={!orbitRelayClientApiKey?.key}
+                  title="复制"
+                >
+                  {orbitRelayApiKeyCopied ? <Check size={14} /> : <Copy size={14} />}
+                </button>
+              </div>
+              <div className="xm-token-stats">
+                <div>
+                  <span>额度</span>
+                  <strong>{tokenQuota}</strong>
+                </div>
+                <div>
+                  <span>已用</span>
+                  <strong>{tokenUsed}</strong>
+                </div>
+                <div>
+                  <span>分组</span>
+                  <strong>{orbitRelayClientApiKey ? selectedTokenGroupLabel : "-"}</strong>
+                </div>
+              </div>
+            </div>
+
+            {orbitRelayClientApiKey ? (
+              <div className="xm-token-config">
+                <label>
+                  <span>名称</span>
+                  <input
+                    type="text"
+                    value={orbitRelayTokenForm.name}
+                    onChange={(event) =>
+                      setOrbitRelayTokenForm((current) => ({
+                        ...current,
+                        name: event.target.value,
+                      }))
+                    }
+                  />
+                </label>
+                <label>
+                  <span>状态</span>
+                  <select
+                    value={orbitRelayTokenForm.status}
+                    onChange={(event) =>
+                      setOrbitRelayTokenForm((current) => ({
+                        ...current,
+                        status:
+                          event.target.value === "inactive"
+                            ? "inactive"
+                            : "active",
+                      }))
+                    }
+                  >
+                    <option value="active">启用</option>
+                    <option value="inactive">停用</option>
+                  </select>
+                </label>
+                <label>
+                  <span>分组</span>
+                  <select
+                    value={tokenEditGroupValue}
+                    onChange={(event) =>
+                      handleOrbitRelayTokenEditGroupChange(event.target.value)
+                    }
+                  >
+                    <option value="">默认分组</option>
+                    {orbitRelayGroups.map((group) => (
+                      <option key={`edit-${group.id}`} value={group.id}>
+                        {group.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  <span>额度</span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.0001"
+                    value={orbitRelayTokenForm.quota}
+                    onChange={(event) =>
+                      setOrbitRelayTokenForm((current) => ({
+                        ...current,
+                        quota: event.target.value,
+                      }))
+                    }
+                  />
+                </label>
+                <label>
+                  <span>5h 限流</span>
+                  <input
+                    type="number"
+                    min="0"
+                    value={orbitRelayTokenForm.rateLimit5h}
+                    onChange={(event) =>
+                      setOrbitRelayTokenForm((current) => ({
+                        ...current,
+                        rateLimit5h: event.target.value,
+                      }))
+                    }
+                  />
+                </label>
+                <label>
+                  <span>1d 限流</span>
+                  <input
+                    type="number"
+                    min="0"
+                    value={orbitRelayTokenForm.rateLimit1d}
+                    onChange={(event) =>
+                      setOrbitRelayTokenForm((current) => ({
+                        ...current,
+                        rateLimit1d: event.target.value,
+                      }))
+                    }
+                  />
+                </label>
+                <label>
+                  <span>7d 限流</span>
+                  <input
+                    type="number"
+                    min="0"
+                    value={orbitRelayTokenForm.rateLimit7d}
+                    onChange={(event) =>
+                      setOrbitRelayTokenForm((current) => ({
+                        ...current,
+                        rateLimit7d: event.target.value,
+                      }))
+                    }
+                  />
+                </label>
+              </div>
+            ) : (
+              <div className="xm-token-empty">
+                <KeyRound size={18} />
+                <span>
+                  {orbitRelaySession
+                    ? "尚未创建或选择 XM 令牌。"
+                    : "登录 XM 后即可创建 XM 令牌。"}
+                </span>
+              </div>
+            )}
+
+            <div className="xm-command-actions">
+              <button
+                className="btn btn-primary"
+                type="button"
+                onClick={() => void handleOrbitRelayLoginSelectedApiKeyToCodex()}
+                disabled={
+                  !orbitRelaySession ||
+                  !orbitRelayClientApiKey ||
+                  orbitRelayCodexLoggingIn
+                }
+              >
+                {orbitRelayCodexLoggingIn ? (
+                  <RefreshCw size={14} className="loading-spinner" />
+                ) : (
+                  <KeyRound size={14} />
+                )}
+                登录到 Codex
+              </button>
+              <button
+                className="btn btn-secondary"
+                type="button"
+                onClick={() => void handleSaveOrbitRelayTokenConfig()}
+                disabled={!orbitRelayClientApiKey || orbitRelayTokenSaving}
+              >
+                {orbitRelayTokenSaving ? (
+                  <RefreshCw size={14} className="loading-spinner" />
+                ) : (
+                  <Check size={14} />
+                )}
+                保存令牌配置
+              </button>
+            </div>
+          </section>
+        </div>
+      </section>
+    );
+  };
+
+  const renderCodexToolsCommandCenter = () => {
+    const baseUrl = resolveLocalAccessBaseUrl();
+    const portLabel = localAccessCollection?.port
+      ? String(localAccessCollection.port)
+      : "-";
+    const serviceStatus = !localAccessCollection
+      ? "未配置"
+      : localAccessState?.running
+        ? "运行中"
+        : localAccessCollection.enabled
+          ? "待启动"
+          : "已停用";
+    const serviceTone = !localAccessCollection
+      ? "muted"
+      : localAccessState?.running
+        ? "success"
+        : localAccessCollection.enabled
+          ? "warning"
+          : "muted";
+    const maskedApiKey = localAccessCollection?.apiKey
+      ? `${localAccessCollection.apiKey.slice(0, 8)}********`
+      : "-";
+
+    return (
+      <section
+        className="xm-command-center xm-codex-tools-workspace"
+        aria-label="Codex 工具"
+      >
+        <div className="xm-command-grid">
+          <section className="xm-command-panel xm-command-panel-service">
+            <div className="xm-command-panel-head">
+              <div>
+                <h2>本地 API</h2>
+                <p>当前端口 {portLabel}，端口冲突会自动切换。</p>
+              </div>
+              <span className={`xm-command-provider-pill tone-${serviceTone}`}>
+                {serviceStatus}
+              </span>
+            </div>
+            <div className="xm-command-copy-list">
+              <div className="xm-command-copy-row">
+                <span>Base URL</span>
+                <code title={baseUrl}>{baseUrl || "-"}</code>
+                <button
+                  className="folder-icon-btn"
+                  onClick={() => void handleCopyLocalAccessValue("baseUrl", baseUrl)}
+                  disabled={!baseUrl}
+                  title="复制"
+                >
+                  {localAccessCopiedField === "baseUrl" ? (
+                    <Check size={14} />
+                  ) : (
+                    <Copy size={14} />
+                  )}
+                </button>
+              </div>
+              <div className="xm-command-copy-row">
+                <span>API Key</span>
+                <code title={localAccessCollection?.apiKey || "-"}>{maskedApiKey}</code>
+                <button
+                  className="folder-icon-btn"
+                  onClick={() =>
+                    void handleCopyLocalAccessValue(
+                      "apiKey",
+                      localAccessCollection?.apiKey || "",
+                    )
+                  }
+                  disabled={!localAccessCollection}
+                  title="复制"
+                >
+                  {localAccessCopiedField === "apiKey" ? (
+                    <Check size={14} />
+                  ) : (
+                    <Copy size={14} />
+                  )}
+                </button>
+              </div>
+            </div>
+            <div className="xm-command-actions">
+              <button
+                className="btn btn-primary"
+                onClick={() => void handleQuickActivateLocalAccess()}
+                disabled={localAccessBusy || !localAccessCollection}
+              >
+                {localAccessStarting ? (
+                  <RefreshCw size={14} className="loading-spinner" />
+                ) : (
+                  <Play size={14} />
+                )}
+                启动服务
+              </button>
+              <button
+                className="btn btn-secondary"
+                onClick={openLocalAccessPanel}
+                disabled={localAccessBusy}
+              >
+                <Database size={14} />
+                服务配置
+              </button>
+              <button
+                className="btn btn-secondary"
+                onClick={openLocalAccessMemberPicker}
+                disabled={localAccessBusy}
+              >
+                <FolderPlus size={14} />
+                账号池
+              </button>
+            </div>
+          </section>
+
+          <section className="xm-command-panel">
+            <div className="xm-command-panel-head">
+              <div>
+                <h2>账号切换</h2>
+                <p>下方列表管理 Codex 账号、分组、导入导出和快速切换。</p>
+              </div>
+              <span className="xm-command-provider-pill">
+                {accounts.length} 个账号
+              </span>
+            </div>
+            <div className="xm-command-status-grid compact">
+              <div className="xm-command-status-card">
+                <span>当前账号</span>
+                <strong>
+                  {currentAccount
+                    ? maskAccountText(currentAccount.email || currentAccount.id)
+                    : "-"}
+                </strong>
+                <small>{localAccessLaunchCurrent ? "本地 API 服务" : "Codex"}</small>
+              </div>
+              <div className="xm-command-status-card">
+                <span>账号池</span>
+                <strong>{localAccessState?.memberCount ?? 0}</strong>
+                <small>{localAccessScopeLabel}</small>
+              </div>
+              <div
+                className={`xm-command-status-card ${localAccessAccountPoolHealthHasIssue ? "tone-warning" : "tone-success"}`}
+              >
+                <span>可用账号</span>
+                <strong>
+                  {localAccessAccountPoolHealthSummary.available}/
+                  {localAccessAccountPoolHealthSummary.total}
+                </strong>
+                <small>异常 {localAccessAccountPoolHealthSummary.abnormal}</small>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+    );
+  };
+
+  const renderAdvancedWorkspace = () => (
+    <section className="xm-advanced-workspace">
+      <div className="xm-advanced-tabs" role="tablist" aria-label="高级功能">
+        <button
+          type="button"
+          className={advancedTab === "wakeup" ? "active" : ""}
+          onClick={() => setAdvancedTab("wakeup")}
+        >
+          <Clock size={14} />
+          唤醒任务
+        </button>
+        <button
+          type="button"
+          className={advancedTab === "instances" ? "active" : ""}
+          onClick={() => setAdvancedTab("instances")}
+        >
+          <Layers size={14} />
+          多开实例
+        </button>
+        <button
+          type="button"
+          className={advancedTab === "sessions" ? "active" : ""}
+          onClick={() => setAdvancedTab("sessions")}
+        >
+          <FolderOpen size={14} />
+          会话管理
+        </button>
+      </div>
+      {advancedTab === "wakeup" && (
+        <CodexWakeupContent
+          accounts={accounts}
+          openPresetManagerSignal={wakeupPresetManagerSignal}
+          onRefreshAccounts={async () => {
+            await fetchAccounts();
+            await fetchCurrentAccount();
+          }}
+        />
+      )}
+      {advancedTab === "instances" && (
+        <CodexInstancesContent accountsForSelect={sortedAccountsForInstances} />
+      )}
+      {advancedTab === "sessions" && <CodexSessionManager />}
+    </section>
+  );
+
+  const renderXmSettingsWorkspace = () => (
+    <section className="xm-settings-workspace" aria-label="XM 客户端设置">
+      <SettingsPage compact />
+    </section>
+  );
+
+  const renderOrbitRelayRechargeModal = () => {
+    if (!showOrbitRelayRechargeModal) return null;
+    return (
+      <div className="modal-overlay xm-recharge-overlay">
+        <div
+          className="modal-content xm-recharge-modal"
+          onClick={(event) => event.stopPropagation()}
+        >
+          <div className="modal-header">
+            <div>
+              <h2>XM 流量不足</h2>
+              <p>{orbitRelayRechargeReason || "请先充值后继续使用 XM 流量。"}</p>
+            </div>
+            <button
+              className="modal-close"
+              onClick={() => setShowOrbitRelayRechargeModal(false)}
+            >
+              <X size={18} />
+            </button>
+          </div>
+          <div className="xm-recharge-body">
+            <div className="xm-command-copy-row">
+              <span>小店</span>
+              <code title={XM_SHOP_URL}>{XM_SHOP_URL}</code>
+              <button
+                className="folder-icon-btn"
+                type="button"
+                onClick={() => void navigator.clipboard.writeText(XM_SHOP_URL)}
+                title="复制"
+              >
+                <Copy size={14} />
+              </button>
+            </div>
+          </div>
+          <div className="modal-footer">
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowOrbitRelayRechargeModal(false)}
+            >
+              稍后处理
+            </button>
+            <button
+              className="btn btn-primary"
+              onClick={() => void handleOpenOrbitRelayShop()}
+            >
+              <ExternalLink size={14} />
+              打开小店
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderXmCommandCenter = () => {
+    if (activeTab === "xm-platform") {
+      return renderXmPlatformWorkspace();
+    }
+    if (activeTab === "codex-tools") {
+      return renderCodexToolsCommandCenter();
+    }
+    void renderLocalAccessInlineCard;
+    const baseUrl = resolveLocalAccessBaseUrl();
+    const portLabel = localAccessCollection?.port
+      ? String(localAccessCollection.port)
+      : "-";
+    const serviceStatus = !localAccessCollection
+      ? "未配置"
+      : localAccessState?.running
+        ? "运行中"
+        : localAccessCollection.enabled
+          ? "待启动"
+          : "已停用";
+    const serviceTone = !localAccessCollection
+      ? "muted"
+      : localAccessState?.running
+        ? "success"
+        : localAccessCollection.enabled
+          ? "warning"
+          : "muted";
+    const maskedApiKey = localAccessCollection?.apiKey
+      ? `${localAccessCollection.apiKey.slice(0, 8)}********`
+      : "-";
+
+    return (
+      <section
+        className="xm-command-center"
+        aria-label={`${XM_PRODUCT_NAME} 工作台`}
+      >
+        <div className="xm-command-hero">
+          <div className="xm-command-title-block">
+            <span className="xm-command-kicker">{XM_PRODUCT_NAME}</span>
+            <h1>Codex 工作台</h1>
+            <p>统一管理 Codex 账号、本地 API 服务和 XM 模型接入。</p>
+          </div>
+          <div className="xm-command-status-grid">
+            <div className="xm-command-status-card">
+              <span>XM 账户</span>
+              <strong>
+                {orbitRelaySession
+                  ? orbitRelaySession.user.email || orbitRelaySession.user.username
+                  : "未登录"}
+              </strong>
+              <small>
+                余额 {formatOrbitRelayAmount(orbitRelaySession?.user.balance)}
+              </small>
+            </div>
+            <div className={`xm-command-status-card tone-${serviceTone}`}>
+              <span>本地 API</span>
+              <strong>{serviceStatus}</strong>
+              <small>端口 {portLabel}</small>
+            </div>
+            <div className="xm-command-status-card">
+              <span>Codex 账号</span>
+              <strong>{accounts.length}</strong>
+              <small>
+                当前{" "}
+                {currentAccount
+                  ? maskAccountText(currentAccount.email || currentAccount.id)
+                  : "-"}
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div className="xm-command-grid">
+          <section className="xm-command-panel xm-command-panel-service">
+            <div className="xm-command-panel-head">
+              <div>
+                <h2>本地 API 快捷配置</h2>
+                <p>
+                  端口冲突时自动切换到可用端口，不会关闭用户已有进程。
+                </p>
+              </div>
+              <button
+                className="btn btn-primary"
+                onClick={() => void handleQuickActivateLocalAccess()}
+                disabled={localAccessBusy || !localAccessCollection}
+              >
+                {localAccessStarting ? (
+                  <RefreshCw size={14} className="loading-spinner" />
+                ) : (
+                  <Play size={14} />
+                )}
+                启动服务
+              </button>
+            </div>
+            <div className="xm-command-copy-list">
+              <div className="xm-command-copy-row">
+                <span>Base URL</span>
+                <code title={baseUrl}>{baseUrl || "-"}</code>
+                <button
+                  className="folder-icon-btn"
+                  onClick={() => void handleCopyLocalAccessValue("baseUrl", baseUrl)}
+                  disabled={!baseUrl}
+                  title="复制"
+                >
+                  {localAccessCopiedField === "baseUrl" ? (
+                    <Check size={14} />
+                  ) : (
+                    <Copy size={14} />
+                  )}
+                </button>
+              </div>
+              <div className="xm-command-copy-row">
+                <span>API Key</span>
+                <code title={localAccessCollection?.apiKey || "-"}>{maskedApiKey}</code>
+                <button
+                  className="folder-icon-btn"
+                  onClick={() =>
+                    void handleCopyLocalAccessValue(
+                      "apiKey",
+                      localAccessCollection?.apiKey || "",
+                    )
+                  }
+                  disabled={!localAccessCollection}
+                  title="复制"
+                >
+                  {localAccessCopiedField === "apiKey" ? (
+                    <Check size={14} />
+                  ) : (
+                    <Copy size={14} />
+                  )}
+                </button>
+              </div>
+              <div className="xm-command-copy-row">
+                <span>Provider</span>
+                <code title={ORBIT_RELAY_PROVIDER_BASE_URL}>
+                  {ORBIT_RELAY_PROVIDER_BASE_URL}
+                </code>
+                <button
+                  className="folder-icon-btn"
+                  onClick={() =>
+                    void handleCopyLocalAccessValue(
+                      "baseUrl",
+                      ORBIT_RELAY_PROVIDER_BASE_URL,
+                    )
+                  }
+                  title="复制"
+                >
+                  <Copy size={14} />
+                </button>
+              </div>
+            </div>
+            <div className="xm-command-actions">
+              <button
+                className="btn btn-secondary"
+                onClick={openLocalAccessPanel}
+                disabled={localAccessBusy}
+              >
+                <Database size={14} />
+                服务配置
+              </button>
+              <button
+                className="btn btn-secondary"
+                onClick={openLocalAccessMemberPicker}
+                disabled={localAccessBusy}
+              >
+                <FolderPlus size={14} />
+                账号池
+              </button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => void handleQuickRefreshLocalAccessQuota()}
+                disabled={localAccessBusy || !localAccessCollection}
+              >
+                <RotateCw
+                  size={14}
+                  className={localAccessRefreshing ? "loading-spinner" : ""}
+                />
+                刷新额度
+              </button>
+            </div>
+          </section>
+
+          <section className="xm-command-panel xm-command-panel-account">
+            <div className="xm-command-panel-head">
+              <div>
+                <h2>XM 模型账户</h2>
+                <p>
+                  使用第一页选中的 XM 令牌登录到 Codex；创建令牌不会自动写入本地 Codex。
+                </p>
+              </div>
+              <span className="xm-command-provider-pill">XM Provider</span>
+            </div>
+
+            {orbitRelaySession ? (
+              <>
+                <div className="xm-command-account-strip">
+                  <div>
+                    <strong>
+                      {orbitRelaySession.user.email ||
+                        orbitRelaySession.user.username}
+                    </strong>
+                    <span>
+                      余额 {formatOrbitRelayAmount(orbitRelaySession.user.balance)}
+                    </span>
+                  </div>
+                  <div className="xm-command-actions compact">
+                    <button
+                      className="btn btn-secondary"
+                      type="button"
+                      onClick={() =>
+                        void handleOrbitRelayLoginSelectedApiKeyToCodex()
+                      }
+                      disabled={
+                        orbitRelayCodexLoggingIn || !orbitRelayClientApiKey
+                      }
+                    >
+                      {orbitRelayCodexLoggingIn ? (
+                        <RefreshCw size={14} className="loading-spinner" />
+                      ) : (
+                        <KeyRound size={14} />
+                      )}
+                      登录到 Codex
+                    </button>
+                    <button
+                      className="btn btn-secondary"
+                      type="button"
+                      onClick={() => void handleOrbitRelayRefreshProfile()}
+                      disabled={orbitRelayBusy}
+                    >
+                      <RefreshCw size={14} />
+                      刷新
+                    </button>
+                  </div>
+                </div>
+                <div className="xm-command-redeem-row">
+                  <input
+                    type="text"
+                    value={orbitRelayRedeemInput}
+                    onChange={(event) =>
+                      setOrbitRelayRedeemInput(event.target.value)
+                    }
+                    placeholder="输入兑换码"
+                    autoComplete="off"
+                  />
+                  <button
+                    className="btn btn-primary"
+                    type="button"
+                    onClick={() => void handleOrbitRelayRedeem()}
+                    disabled={
+                      orbitRelayRedeeming || !orbitRelayRedeemInput.trim()
+                    }
+                  >
+                    {orbitRelayRedeeming ? (
+                      <RefreshCw size={14} className="loading-spinner" />
+                    ) : (
+                      <Check size={14} />
+                    )}
+                    兑换余额
+                  </button>
+                  <button
+                    className="btn btn-secondary"
+                    type="button"
+                    onClick={handleOrbitRelayLogout}
+                    disabled={orbitRelayBusy || orbitRelayRedeeming}
+                  >
+                    <LogOut size={14} />
+                    退出
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="xm-command-login-grid">
+                <input
+                  type="email"
+                  value={orbitRelayEmailInput}
+                  onChange={(event) =>
+                    setOrbitRelayEmailInput(event.target.value)
+                  }
+                  placeholder="XM 登录邮箱"
+                  autoComplete="username"
+                />
+                <input
+                  type="password"
+                  value={orbitRelayPasswordInput}
+                  onChange={(event) =>
+                    setOrbitRelayPasswordInput(event.target.value)
+                  }
+                  placeholder="XM 登录密码"
+                  autoComplete="current-password"
+                  onKeyDown={(event) => {
+                    if (
+                      event.key === "Enter" &&
+                      orbitRelayEmailInput.trim() &&
+                      orbitRelayPasswordInput
+                    ) {
+                      void handleOrbitRelayLogin();
+                    }
+                  }}
+                />
+                <button
+                  className="btn btn-primary"
+                  type="button"
+                  onClick={() => void handleOrbitRelayLogin()}
+                  disabled={
+                    orbitRelayBusy ||
+                    !orbitRelayEmailInput.trim() ||
+                    !orbitRelayPasswordInput
+                  }
+                >
+                  {orbitRelayBusy ? (
+                    <RefreshCw size={14} className="loading-spinner" />
+                  ) : (
+                    <KeyRound size={14} />
+                  )}
+                  登录 XM
+                </button>
+              </div>
+            )}
+
+            {orbitRelayMessage && (
+              <div className="orbit-relay-inline-status success">
+                <Check size={14} />
+                <span>{orbitRelayMessage}</span>
+              </div>
+            )}
+            {orbitRelayError && (
+              <div className="orbit-relay-inline-status error">
+                <CircleAlert size={14} />
+                <span>{orbitRelayError}</span>
+              </div>
+            )}
+          </section>
+        </div>
+      </section>
+    );
+  };
+
   const renderInlineFolderCards = () => {
     const cards: ReactElement[] = [];
-    const localAccessCard = renderLocalAccessInlineCard();
-    if (localAccessCard) {
-      cards.push(localAccessCard);
-    }
 
     if (!activeGroupId && !groupByTag) {
       cards.push(
@@ -9125,7 +10954,7 @@ export function CodexAccountsPage() {
     });
   };
   const handleViewExternalImportAccounts = () => {
-    setActiveTab("overview");
+    setActiveTab("codex-tools");
     closeExternalImportProgressModal();
   };
 
@@ -9441,7 +11270,7 @@ export function CodexAccountsPage() {
           <div className="modal-header cockpit-api-panel-header">
             <div>
               <h2>
-                {t("codex.cockpitApi.panelTitle", "Orbit API 服务面板")}
+                {t("codex.cockpitApi.panelTitle", "XM API 服务面板")}
               </h2>
               <span className="cockpit-api-panel-subtitle">
                 {maskAccountText(panelDisplayName)}
@@ -9693,7 +11522,7 @@ export function CodexAccountsPage() {
       <CodexOverviewTabsHeader
         active={activeTab}
         onTabChange={setActiveTab}
-        tabs={["overview", "providers", "wakeup", "instances", "sessions"]}
+        tabs={[...XM_CODEX_TABS]}
       />
 
       {batchImportOpen && (
@@ -10136,8 +11965,11 @@ export function CodexAccountsPage() {
 
       {renderCockpitApiServicePanel()}
       {renderApiKeyUsageDetailModal()}
+      {renderOrbitRelayRechargeModal()}
 
-      {activeTab === "overview" && (
+      {activeTab === "xm-platform" && renderXmCommandCenter()}
+
+      {activeTab === "codex-tools" && (
         <>
           {message && (
             <div
@@ -10193,6 +12025,8 @@ export function CodexAccountsPage() {
               )}
             </div>
           )}
+
+          {!activeGroup && renderCodexToolsCommandCenter()}
 
           <div className="toolbar">
             <div className="toolbar-left">
@@ -11315,7 +13149,7 @@ export function CodexAccountsPage() {
                       <p className="section-desc">
                         {t(
                           "codex.token.desc",
-                          "粘贴 auth.json、账号 JSON、Sub2API JSON、accessToken 或 refresh_token。",
+                          "粘贴 auth.json、账号 JSON、兼容中转 JSON、accessToken 或 refresh_token。",
                         )}
                       </p>
                       <details className="token-format-collapse">
@@ -11329,7 +13163,7 @@ export function CodexAccountsPage() {
                           <p className="token-format-required">
                             {t(
                               "codex.token.formatRequired",
-                              "支持 session JSON、完整 tokens（id_token + access_token）、Sub2API 导出 JSON、仅 accessToken 或仅 refresh_token。仅 refresh_token 会先联网换取完整凭据。",
+                              "支持 session JSON、完整 tokens（id_token + access_token）、兼容中转导出 JSON、仅 accessToken 或仅 refresh_token。仅 refresh_token 会先联网换取完整凭据。",
                             )}
                           </p>
                           <div className="token-format-group">
@@ -11370,7 +13204,7 @@ export function CodexAccountsPage() {
                         onChange={(e) => setTokenInput(e.target.value)}
                         placeholder={t(
                           "codex.token.placeholder",
-                          '示例：直接粘贴 session JSON、accessToken、Sub2API 导出 JSON，或 {"accessToken":"eyJ..."}',
+                          '示例：直接粘贴 session JSON、accessToken、兼容中转导出 JSON，或 {"accessToken":"eyJ..."}',
                         )}
                       />
                       <button
@@ -11589,16 +13423,18 @@ export function CodexAccountsPage() {
                     )}
 
                     <div className="api-key-edit-actions">
-                      <button
-                        className="btn btn-secondary"
-                        onClick={() => {
-                          setActiveTab("providers");
-                          closeQuickSwitchModal();
-                        }}
-                        disabled={quickSwitchSubmitting}
-                      >
-                        {t("codex.quickSwitch.gotoProviders", "管理供应商")}
-                      </button>
+                      {XM_SHOW_MODEL_PROVIDER_UI && (
+                        <button
+                          className="btn btn-secondary"
+                          onClick={() => {
+                            setActiveTab("advanced");
+                            closeQuickSwitchModal();
+                          }}
+                          disabled={quickSwitchSubmitting}
+                        >
+                          {t("codex.quickSwitch.gotoProviders", "管理供应商")}
+                        </button>
+                      )}
                       <button
                         className="btn btn-primary"
                         onClick={() => void handleSubmitQuickSwitch()}
@@ -13108,7 +14944,6 @@ export function CodexAccountsPage() {
               handleUpdateLocalAccessUpstreamProxyConfig
             }
             onRotateApiKey={handleRotateLocalAccessApiKey}
-            onKillPort={handleKillLocalAccessPort}
             onToggleEnabled={handleToggleLocalAccessEnabled}
             onStreamTestMessage={({ sessionId, modelId, messages }) =>
               codexLocalAccessService.streamCodexLocalAccessChatTest(
@@ -13120,7 +14955,7 @@ export function CodexAccountsPage() {
             saving={localAccessSaving}
             testing={false}
             starting={localAccessStarting}
-            portCleanupBusy={localAccessPortKilling}
+            portCleanupBusy={false}
           />
 
           {/* Codex 分组管理弹窗 */}
@@ -13144,30 +14979,18 @@ export function CodexAccountsPage() {
         </>
       )}
 
-      {activeTab === "instances" && (
-        <CodexInstancesContent accountsForSelect={sortedAccountsForInstances} />
-      )}
+      {activeTab === "settings" && renderXmSettingsWorkspace()}
 
-      {activeTab === "sessions" && <CodexSessionManager />}
+      {activeTab === "advanced" && renderAdvancedWorkspace()}
 
-      {activeTab === "providers" && (
+      {XM_SHOW_MODEL_PROVIDER_UI && activeTab === "providers" && (
         <CodexModelProviderManager
           accounts={accounts}
           onProvidersChanged={setManagedProviders}
           onManageModelPresets={() => {
-            setActiveTab("wakeup");
+            setActiveTab("advanced");
+            setAdvancedTab("wakeup");
             setWakeupPresetManagerSignal((value) => value + 1);
-          }}
-        />
-      )}
-
-      {activeTab === "wakeup" && (
-        <CodexWakeupContent
-          accounts={accounts}
-          openPresetManagerSignal={wakeupPresetManagerSignal}
-          onRefreshAccounts={async () => {
-            await fetchAccounts();
-            await fetchCurrentAccount();
           }}
         />
       )}

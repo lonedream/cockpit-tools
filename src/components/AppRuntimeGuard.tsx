@@ -50,7 +50,7 @@ function isLikelyChunkLoadFailure(value: string): boolean {
 }
 
 function createFallbackMessage(rawMessage: string): string {
-  const action = i18n.t('common.appName', 'Orbit Desk');
+  const action = i18n.t('common.appName', 'xm');
   return i18n.t('messages.actionFailed', {
     action,
     error: rawMessage || 'error',

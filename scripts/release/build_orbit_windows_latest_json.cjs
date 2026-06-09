@@ -111,12 +111,12 @@ function main() {
   };
 
   fs.writeFileSync(output, `${JSON.stringify(latest, null, 2)}\n`);
-  console.log(`Orbit Windows latest.json generated at ${output}`);
+  console.log(`xm Windows latest.json generated at ${output}`);
 }
 
 try {
   main();
 } catch (error) {
-  console.error(`[build_orbit_windows_latest_json] ${error.message}`);
+  console.error(`[build_xm_windows_latest_json] ${error.message}`);
   process.exit(1);
 }

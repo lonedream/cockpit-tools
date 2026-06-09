@@ -827,7 +827,7 @@ fn escape_html(raw: &str) -> String {
 }
 
 fn callback_success_html() -> &'static str {
-    r#"<!doctype html><html><head><meta charset="utf-8"><title>Trae Login</title></head><body><h2>Trae 登录回调已完成</h2><p>可以返回 Orbit Desk。</p></body></html>"#
+    r#"<!doctype html><html><head><meta charset="utf-8"><title>Trae Login</title></head><body><h2>Trae 登录回调已完成</h2><p>可以返回 XM。</p></body></html>"#
 }
 
 fn callback_pending_html() -> &'static str {

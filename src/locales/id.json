@@ -218,7 +218,7 @@
       "loginSuccess": "Login berhasil",
       "switchAccount": "Ganti Akun"
     },
-    "appName": "Orbit Desk",
+    "appName": "XM",
     "collapse": "Ciutkan",
     "confirmDelete": "Konfirmasi Hapus",
     "confirmDeleteTag": "Konfirmasi Hapus Tag",
@@ -250,7 +250,7 @@
       "backToCurrent": "Kembali",
       "switchToThisAccount": "Ganti",
       "openDetails": "Buka detail",
-      "openCockpitTools": "Buka Orbit Desk"
+      "openCockpitTools": "Buka XM"
     },
     "empty": {
       "title": "Belum ada akun",
@@ -311,12 +311,12 @@
   },
   "sponsors": {
     "pageTitle": "Sponsor",
-    "pageDesc": "Terima kasih kepada sponsor berikut yang mendukung Orbit Desk.",
+    "pageDesc": "Terima kasih kepada sponsor berikut yang mendukung XM.",
     "loading": "Memuat sponsor...",
     "emptyTitle": "Belum ada sponsor",
     "emptyDesc": "Modul sponsor jarak jauh saat ini dinonaktifkan.",
     "listAriaLabel": "Daftar sponsor",
-    "defaultDescription": "Terima kasih telah mendukung Orbit Desk.",
+    "defaultDescription": "Terima kasih telah mendukung XM.",
     "openSponsor": "Buka"
   },
   "platformLayout": {
@@ -604,7 +604,7 @@
   },
   "settings": {
     "title": "Pengaturan",
-    "subtitle": "Sesuaikan pengalaman Orbit Desk Anda.",
+    "subtitle": "Sesuaikan pengalaman XM Anda.",
     "tabs": {
       "general": "Umum",
       "network": "Jaringan",
@@ -661,7 +661,7 @@
       "floatingCardStartupDesc": "Tampilkan kartu akun mengambang secara otomatis setelah aplikasi diluncurkan",
       "floatingCardAlwaysOnTop": "Kartu mengambang selalu di atas secara bawaan",
       "floatingCardAlwaysOnTopDesc": "Jendela kartu mengambang baru tetap di atas saat dibuka",
-      "appAutoLaunch": "Jalankan Orbit Desk saat login",
+      "appAutoLaunch": "Jalankan XM saat login",
       "appAutoLaunchDesc": "Jalankan aplikasi secara otomatis setelah masuk ke sistem",
       "startupWakeupDisabled": "Nonaktif",
       "startupWakeupImmediate": "Bangunkan segera",
@@ -861,7 +861,7 @@
       "proxyUrlRequired": "URL Proxy tidak boleh kosong saat proxy global diaktifkan."
     },
     "about": {
-      "appName": "Orbit Desk",
+      "appName": "XM",
       "slogan": "Solusi Akun Profesional",
       "author": "Pengembang",
       "wechat": "WeChat",
@@ -1756,7 +1756,7 @@
     },
     "exportFormat": {
       "label": "Format ekspor",
-      "cockpitTools": "Orbit Desk",
+      "cockpitTools": "XM",
       "sub2api": "Format sub2api",
       "cpa": "Format cpa",
       "downloadAll": "Unduh semua",
@@ -2637,7 +2637,7 @@
       "builtinProviders": "Penyedia Bawaan",
       "sponsorHint": "URL layanan relay eksklusif sudah diisi. Setelah API Key dimasukkan, kartu akan otomatis membaca saldo dan penggunaan.",
       "integration": {
-        "sub2api": "Kompatibel Sub2API",
+        "sub2api": "Relay kompatibel",
         "newApi": "Kompatibel New API"
       },
       "usage": {
@@ -4360,7 +4360,7 @@
   },
   "relay": {
     "pageTitle": "Relay eksklusif",
-    "pageDesc": "Layanan API mitra untuk pengguna Orbit Desk yang dapat digunakan dengan akun API Key Codex.",
+    "pageDesc": "Layanan API mitra untuk pengguna XM yang dapat digunakan dengan akun API Key Codex.",
     "loading": "Memuat relay...",
     "emptyTitle": "Relay nonaktif",
     "emptyDesc": "Konfigurasi jarak jauh belum mengaktifkan relay eksklusif.",
@@ -4389,16 +4389,16 @@
   },
   "apiKeyFun": {
     "eyebrow": "Perantara",
-    "title": "Relay APIKEY.FUN",
+    "title": "Relay XM",
     "description": "Relay resmi Orbit menyediakan akses API model besar yang stabil, terbuka, dan hemat biaya. Layanan ini mendukung model utama seperti Claude, OpenAI, dan Gemini, serta cocok untuk konfigurasi terpadu di Codex, Gemini CLI, Claude Code, dan alat pengembang lainnya. Dengan mendaftar melalui tautan eksklusif Orbit, Anda bisa mendapatkan diskon isi ulang permanen hingga 5%.",
     "register": "Tautan eksklusif",
     "docs": "Dokumen resmi",
     "viewNow": "Lihat sekarang",
     "queryTitle": "Kuota kunci",
-    "queryDesc": "Masukkan API Key APIKEY.FUN untuk memeriksa kuota otomatis.",
+    "queryDesc": "Masukkan API Key XM untuk memeriksa kuota otomatis.",
     "keyNotSet": "Belum ada kunci",
     "apiKeyLabel": "Kunci API",
-    "apiKeyPlaceholder": "Tempel API Key yang dibuat di konsol APIKEY.FUN",
+    "apiKeyPlaceholder": "Tempel API Key yang dibuat di konsol XM",
     "hideKey": "Sembunyikan",
     "showKey": "Tampilkan",
     "endpointLabel": "Titik akses",
@@ -4409,7 +4409,7 @@
     "saving": "Menulis",
     "saveSuccess": "Ditulis ke Codex Provider: {{name}}",
     "toolsTitle": "Tulis config klien",
-    "toolsDesc": "Menulis file konfigurasi klien lokal sesuai dokumen APIKEY.FUN dan tata letak CC Switch.",
+    "toolsDesc": "Menulis file konfigurasi klien lokal sesuai dokumen XM dan tata letak CC Switch.",
     "endpoint": {
       "global": "Jalur global",
       "globalDesc": "API Base resmi bawaan untuk sebagian besar jaringan.",
@@ -4475,12 +4475,12 @@
       "lastRemaining": "Saldo terakhir {{value}}",
       "notQueried": "Belum dicek",
       "deleteButton": "Hapus",
-      "editAlias": "Edit alias",
-      "renamePlaceholder": "Enter alias...",
+      "editAlias": "Ubah alias",
+      "renamePlaceholder": "Masukkan alias...",
       "createdAt": "Ditambahkan {{time}}",
       "saveFlash": "Baru disimpan"
     },
-    "copyKey": "Copy Key",
-    "clearKey": "Clear input"
+    "copyKey": "Salin kunci",
+    "clearKey": "Hapus input"
   }
 }

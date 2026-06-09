@@ -1,6 +1,17 @@
 import { ReactNode, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Bot, Clock3, FolderOpen, Github, Layers, Server } from 'lucide-react';
+import {
+  Bot,
+  Clock3,
+  FolderOpen,
+  Github,
+  Layers,
+  Settings,
+  Server,
+  SlidersHorizontal,
+  Sparkles,
+  Wrench,
+} from 'lucide-react';
 import { CodexIcon } from '../icons/CodexIcon';
 import { WindsurfIcon } from '../icons/WindsurfIcon';
 import { KiroIcon } from '../icons/KiroIcon';
@@ -20,8 +31,19 @@ import {
 } from '../../stores/usePlatformLayoutStore';
 import { getPlatformLabel } from '../../utils/platformMeta';
 import { PlatformGroupSwitcher } from './PlatformGroupSwitcher';
+import { XM_CODEX_TABS, XM_PRODUCT_NAME, XM_SHOW_PLATFORM_SWITCHER } from '../../config/xmProduct';
+import xmLogo from '../../assets/icons/xm.svg';
 
-export type PlatformOverviewTab = 'overview' | 'wakeup' | 'instances' | 'sessions' | 'providers';
+export type PlatformOverviewTab =
+  | 'overview'
+  | 'wakeup'
+  | 'instances'
+  | 'sessions'
+  | 'providers'
+  | 'xm-platform'
+  | 'codex-tools'
+  | 'settings'
+  | 'advanced';
 export type PlatformOverviewHeaderId =
   | 'codex'
   | 'zed'
@@ -142,21 +164,14 @@ export function PlatformOverviewTabsHeader({
     [switchablePlatforms, currentGroup, t],
   );
   const extraSwitchOptions = useMemo(
-    () =>
-      platform === 'codex'
-        ? [
-            {
-              id: 'codex-api-service',
-              label: t('codex.apiService.navTitle', 'Codex API 服务'),
-              page: 'codex-api-service' as const,
-              icon: <CodexIcon size={18} />,
-            },
-          ]
-        : [],
-    [platform, t],
+    () => [],
+    [],
   );
   const tabOrder: PlatformOverviewTab[] =
     tabs && tabs.length > 0 ? tabs : ['overview', 'instances'];
+  const isXmShell = tabOrder.some((tab) =>
+    (XM_CODEX_TABS as readonly string[]).includes(tab),
+  );
   const tabLabels: Record<PlatformOverviewTab, TabSpec> = {
     overview: {
       key: 'overview',
@@ -186,31 +201,65 @@ export function PlatformOverviewTabsHeader({
       label: t('codex.modelProviders.tab', '模型供应商'),
       icon: <Server className="tab-icon" />,
     },
+    'xm-platform': {
+      key: 'xm-platform',
+      label: 'XM 平台',
+      icon: <Sparkles className="tab-icon" />,
+    },
+    'codex-tools': {
+      key: 'codex-tools',
+      label: 'Codex 工具',
+      icon: <Wrench className="tab-icon" />,
+    },
+    settings: {
+      key: 'settings',
+      label: '设置',
+      icon: <Settings className="tab-icon" />,
+    },
+    advanced: {
+      key: 'advanced',
+      label: '高级',
+      icon: <SlidersHorizontal className="tab-icon" />,
+    },
   };
   const tabSpecs: TabSpec[] = tabOrder.map((tab) => tabLabels[tab]);
 
   return (
     <>
       <div className="page-top-strip">
-        <div className="page-top-strip-left">
-          <span className="page-top-strip-label">
-            {t('settings.general.account', '账号')}
-          </span>
-          <ManualHelpIconButton className="platform-header-help" />
+        <div className={`page-top-strip-left${isXmShell ? ' xm-brand-header' : ''}`}>
+          {isXmShell ? (
+            <>
+              <img className="xm-brand-header-logo" src={xmLogo} alt="" />
+              <div className="xm-brand-header-copy">
+                <span className="page-top-strip-label">{XM_PRODUCT_NAME}</span>
+                <small>模型流量与 Codex 工具客户端</small>
+              </div>
+            </>
+          ) : (
+            <span className="page-top-strip-label">
+              {t('settings.general.account', '账号')}
+            </span>
+          )}
+          {!isXmShell && <ManualHelpIconButton className="platform-header-help" />}
         </div>
         <TopCenterPromoBanner />
         <div className="page-top-strip-right-placeholder" aria-hidden="true" />
       </div>
-      <div className="page-tabs-row page-tabs-center page-tabs-row-with-leading">
-        <div className="page-tabs-leading">
-          <PlatformGroupSwitcher
-            currentPlatformId={currentPlatformId}
-            currentLabel={currentDisplayName}
-            options={switchOptions}
-            currentGroupId={currentGroup?.id ?? null}
-            extraOptions={extraSwitchOptions}
-          />
-        </div>
+      <div
+        className={`page-tabs-row page-tabs-center${XM_SHOW_PLATFORM_SWITCHER ? ' page-tabs-row-with-leading' : ''}`}
+      >
+        {XM_SHOW_PLATFORM_SWITCHER && (
+          <div className="page-tabs-leading">
+            <PlatformGroupSwitcher
+              currentPlatformId={currentPlatformId}
+              currentLabel={currentDisplayName}
+              options={switchOptions}
+              currentGroupId={currentGroup?.id ?? null}
+              extraOptions={extraSwitchOptions}
+            />
+          </div>
+        )}
         <div className="page-tabs filter-tabs">
           {tabSpecs.map((tab) => (
             <button

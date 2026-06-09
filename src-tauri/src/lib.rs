@@ -93,7 +93,7 @@ pub fn run() {
             }
         }))
         .setup(|app| {
-            info!("Orbit Desk 启动...");
+            info!("XM 启动...");
             let current_exe = std::env::current_exe()
                 .map(|path| path.display().to_string())
                 .unwrap_or_else(|err| format!("unknown: {}", err));
@@ -442,6 +442,17 @@ pub fn run() {
             commands::announcement::announcement_get_top_right_ad,
             commands::announcement::announcement_get_sponsor_module,
             commands::announcement::announcement_force_refresh_sponsor_module,
+            // XM Relay Commands
+            commands::orbit_relay::orbit_relay_get_public_settings,
+            commands::orbit_relay::orbit_relay_login,
+            commands::orbit_relay::orbit_relay_register,
+            commands::orbit_relay::orbit_relay_refresh,
+            commands::orbit_relay::orbit_relay_get_profile,
+            commands::orbit_relay::orbit_relay_redeem,
+            commands::orbit_relay::orbit_relay_list_api_keys,
+            commands::orbit_relay::orbit_relay_list_available_groups,
+            commands::orbit_relay::orbit_relay_create_api_key,
+            commands::orbit_relay::orbit_relay_update_api_key,
             // Group Commands
             commands::group::get_group_settings,
             commands::group::save_group_settings,

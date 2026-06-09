@@ -218,7 +218,7 @@
       "desc": "Tato oblast je pevně umístěná vpravo nahoře na všech stránkách pro kampaně nebo brandové reklamy.",
       "action": "Zobrazit podrobnosti"
     },
-    "appName": "Orbit Desk",
+    "appName": "XM",
     "collapse": "Sbalit",
     "confirmDelete": "Potvrdit smazání",
     "confirmDeleteTag": "Potvrdit smazání štítku",
@@ -265,12 +265,12 @@
   },
   "sponsors": {
     "pageTitle": "Sponzoři",
-    "pageDesc": "Děkujeme těmto sponzorům za podporu Orbit Desk.",
+    "pageDesc": "Děkujeme těmto sponzorům za podporu XM.",
     "loading": "Načítání sponzorů...",
     "emptyTitle": "Zatím žádní sponzoři",
     "emptyDesc": "Vzdálený modul sponzorů je aktuálně vypnutý.",
     "listAriaLabel": "Seznam sponzorů",
-    "defaultDescription": "Děkujeme za podporu Orbit Desk.",
+    "defaultDescription": "Děkujeme za podporu XM.",
     "openSponsor": "Otevřít"
   },
   "platformLayout": {
@@ -558,7 +558,7 @@
   },
   "settings": {
     "title": "Nastavení aplikace",
-    "subtitle": "Přizpůsobte si prostředí Orbit Desk.",
+    "subtitle": "Přizpůsobte si prostředí XM.",
     "tabs": {
       "general": "Obecné",
       "network": "Síť",
@@ -713,7 +713,7 @@
       "sideNavLayoutClassic": "Klasické rozložení",
       "antigravityDualSwitchNoRestart": "Duální přepnutí bez restartu",
       "antigravityDualSwitchNoRestartDesc": "Při přepnutí účtu se v jednom kroku zapíší lokální data účtu a provede plynulé přepnutí rozšíření bez restartu Antigravity IDE.",
-      "appAutoLaunch": "Spustit Orbit Desk po přihlášení",
+      "appAutoLaunch": "Spustit XM po přihlášení",
       "appAutoLaunchDesc": "Po přihlášení do systému spustit aplikaci automaticky",
       "startupWakeupDisabled": "Vypnuto",
       "startupWakeupImmediate": "Probudit okamžitě",
@@ -815,7 +815,7 @@
       "proxyUrlRequired": "Když je globální proxy zapnutá, URL proxy nesmí být prázdná."
     },
     "about": {
-      "appName": "Orbit Desk",
+      "appName": "XM",
       "slogan": "Profesionální řešení pro správu účtů",
       "author": "Autor",
       "wechat": "WeChat",
@@ -1707,7 +1707,7 @@
     },
     "exportFormat": {
       "label": "Formát exportu",
-      "cockpitTools": "Orbit Desk",
+      "cockpitTools": "XM",
       "sub2api": "sub2api formát",
       "cpa": "cpa formát",
       "downloadAll": "Stáhnout vše",
@@ -2591,7 +2591,7 @@
       "builtinProviders": "Vestavění poskytovatelé",
       "sponsorHint": "Adresa exkluzivní relay služby byla vyplněna. Po zadání API Key bude karta automaticky načítat zůstatek a využití.",
       "integration": {
-        "sub2api": "Kompatibilní se Sub2API",
+        "sub2api": "Kompatibilní se Compatible Relay",
         "newApi": "Kompatibilní s New API"
       },
       "usage": {
@@ -4237,7 +4237,7 @@
       "backToCurrent": "Zpět",
       "switchToThisAccount": "Přepnout",
       "openDetails": "Otevřít detail",
-      "openCockpitTools": "Otevřít Orbit Desk"
+      "openCockpitTools": "Otevřít XM"
     },
     "empty": {
       "title": "Žádné účty",
@@ -4360,7 +4360,7 @@
   },
   "relay": {
     "pageTitle": "Exkluzivní relay",
-    "pageDesc": "Partnerská API služba pro uživatele Orbit Desk použitelná s účty Codex API Key.",
+    "pageDesc": "Partnerská API služba pro uživatele XM použitelná s účty Codex API Key.",
     "loading": "Načítání relay...",
     "emptyTitle": "Relay vypnutý",
     "emptyDesc": "Vzdálená konfigurace exkluzivní relay nepovolila.",
@@ -4389,16 +4389,16 @@
   },
   "apiKeyFun": {
     "eyebrow": "Přepojení",
-    "title": "Relay APIKEY.FUN",
+    "title": "Relay XM",
     "description": "Oficiální relay Orbit poskytuje stabilní, otevřený a cenově výhodný API přístup k velkým modelům. Podporuje hlavní modely jako Claude, OpenAI a Gemini a hodí se pro jednotnou konfiguraci v Codex, Gemini CLI, Claude Code a dalších vývojářských nástrojích. Registrací přes exkluzivní odkaz Orbit můžete získat trvalou slevu až 5% na dobíjení.",
     "register": "Exkluzivní odkaz",
     "docs": "Oficiální dokumentace",
     "viewNow": "Zobrazit",
     "queryTitle": "Kvóta klíče",
-    "queryDesc": "Zadejte API Key APIKEY.FUN pro automatickou kontrolu kvóty.",
+    "queryDesc": "Zadejte API Key XM pro automatickou kontrolu kvóty.",
     "keyNotSet": "Klíč nezadán",
     "apiKeyLabel": "Klíč API",
-    "apiKeyPlaceholder": "Vložte API Key vytvořený v konzoli APIKEY.FUN",
+    "apiKeyPlaceholder": "Vložte API Key vytvořený v konzoli XM",
     "hideKey": "Skrýt",
     "showKey": "Zobrazit",
     "endpointLabel": "Přístupový bod",
@@ -4409,7 +4409,7 @@
     "saving": "Zápis",
     "saveSuccess": "Zapsáno do Codex Provider: {{name}}",
     "toolsTitle": "Zapsat config klienta",
-    "toolsDesc": "Přímo zapisuje lokální konfigurační soubory podle dokumentace APIKEY.FUN a rozložení CC Switch.",
+    "toolsDesc": "Přímo zapisuje lokální konfigurační soubory podle dokumentace XM a rozložení CC Switch.",
     "endpoint": {
       "global": "Globální linka",
       "globalDesc": "Oficiální výchozí API Base pro většinu sítí.",
@@ -4475,12 +4475,12 @@
       "lastRemaining": "Poslední zůstatek {{value}}",
       "notQueried": "Nekontrolováno",
       "deleteButton": "Odstranit",
-      "editAlias": "Edit alias",
-      "renamePlaceholder": "Enter alias...",
+      "editAlias": "Upravit alias",
+      "renamePlaceholder": "Zadejte alias...",
       "createdAt": "Přidáno {{time}}",
       "saveFlash": "Uloženo"
     },
-    "copyKey": "Copy Key",
-    "clearKey": "Clear input"
+    "copyKey": "Kopírovat klíč",
+    "clearKey": "Vymazat vstup"
   }
 }

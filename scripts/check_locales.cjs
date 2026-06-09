@@ -165,6 +165,7 @@ function isAllowedEnglishReuse(key, value) {
     // 品牌名 / 产品名允许跨语言保持英文原文
     'Cockpit Tools',
     'Cockpit Api',
+    'XM',
     'Antigravity',
     'Antigravity IDE',
     'Codex',

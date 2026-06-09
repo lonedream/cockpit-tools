@@ -85,7 +85,7 @@ if (!hasFlag('--skip-cargo-test')) {
   steps.push({
     name: 'Rust cargo test (lib)',
     command: 'cargo',
-    args: ['test', '--lib'],
+    args: ['test', '--lib', '--', '--test-threads=1'],
     cwd: path.join(process.cwd(), 'src-tauri'),
   });
 }
@@ -95,7 +95,7 @@ if (steps.length === 0) {
   process.exit(0);
 }
 
-console.log('Cockpit Tools release preflight started.');
+console.log('xm release preflight started.');
 console.log(
   'Enabled steps:',
   steps.map((item) => item.name).join(' | ')

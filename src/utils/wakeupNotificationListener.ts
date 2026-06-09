@@ -1,5 +1,6 @@
 import { invoke } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
+import { isTauriRuntime } from './tauriRuntime';
 
 interface NotificationAction {
   actionId: string;
@@ -19,6 +20,10 @@ export function mapNotificationToTask(notificationId: number, taskId: string): v
 }
 
 export function initWakeupNotificationListener(): void {
+  if (!isTauriRuntime()) {
+    return;
+  }
+
   // 监听通知动作事件
   listen<NotificationAction>('notification://action', async (event) => {
     const { actionId, notificationId } = event.payload;

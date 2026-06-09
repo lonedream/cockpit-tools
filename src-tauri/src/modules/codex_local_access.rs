@@ -16,9 +16,7 @@ use crate::models::codex_local_access::{
     CodexLocalAccessUsageStats,
 };
 use crate::modules::atomic_write::write_string_atomic;
-use crate::modules::{
-    account, codex_account, codex_oauth, codex_protocol, codex_wakeup, logger, process,
-};
+use crate::modules::{account, codex_account, codex_oauth, codex_protocol, codex_wakeup, logger};
 use base64::{engine::general_purpose, Engine as _};
 use futures_util::{SinkExt, StreamExt};
 use rand::{distributions::Alphanumeric, Rng};
@@ -68,12 +66,12 @@ const CODEX_PROVIDER_GATEWAY_STATE_FILE: &str = "state.json";
 const CODEX_LOCAL_ACCESS_SIDECAR_CONFIG_FILE: &str = "config.json";
 const CODEX_LOCAL_ACCESS_SIDECAR_MANIFEST_FILE: &str = "manifest.json";
 const CODEX_LOCAL_ACCESS_SIDECAR_AUTHS_DIR: &str = "auths";
-const CODEX_LOCAL_ACCESS_SIDECAR_BIN_NAME: &str = "cockpit-cliproxy";
+const CODEX_LOCAL_ACCESS_SIDECAR_BIN_NAME: &str = "xm-cliproxy";
 const CODEX_LOCAL_ACCESS_LOCALHOST_BIND_HOST: &str = "127.0.0.1";
 const CODEX_LOCAL_ACCESS_LAN_BIND_HOST: &str = "0.0.0.0";
 const CODEX_LOCAL_ACCESS_DEFAULT_CLIENT_URL_HOST: &str = "localhost";
-const CODEX_LOCAL_ACCESS_API_PORT_ENV: &str = "COCKPIT_TOOLS_API_PORT";
-const CODEX_LOCAL_ACCESS_DEV_DEFAULT_PORT: u16 = 1456;
+const CODEX_LOCAL_ACCESS_API_PORT_ENV: &str = "XM_API_PORT";
+const CODEX_LOCAL_ACCESS_DEV_DEFAULT_PORT: u16 = 1457;
 const CODEX_LOCAL_ACCESS_TAKEOVER_BACKUP_VERSION: u32 = 1;
 const CODEX_LOCAL_ACCESS_RUNTIME_PROVIDER_ID: &str = "codex_local_access";
 const CODEX_PROFILE_AUTH_FILE: &str = "auth.json";
@@ -5819,7 +5817,9 @@ fn provider_gateway_lifecycle_lock() -> &'static TokioMutex<()> {
 }
 
 fn sidecar_binary_file_names() -> Vec<String> {
-    let target = env!("COCKPIT_RUST_TARGET");
+    let target = option_env!("XM_RUST_TARGET")
+        .or(option_env!("COCKPIT_RUST_TARGET"))
+        .unwrap_or(std::env::consts::ARCH);
     if cfg!(target_os = "windows") {
         vec![
             format!("{CODEX_LOCAL_ACCESS_SIDECAR_BIN_NAME}.exe"),
@@ -7752,8 +7752,79 @@ fn configured_initial_local_access_port() -> Option<u16> {
 
 fn allocate_initial_local_port(bind_host: &str) -> Result<u16, String> {
     configured_initial_local_access_port()
-        .map(Ok)
+        .map(|port| allocate_available_local_port(bind_host, port, None))
         .unwrap_or_else(|| allocate_random_local_port(bind_host))
+}
+
+fn allocate_available_local_port(
+    bind_host: &str,
+    preferred_port: u16,
+    current_port: Option<u16>,
+) -> Result<u16, String> {
+    if preferred_port == 0 {
+        return allocate_random_local_port(bind_host);
+    }
+    if current_port == Some(preferred_port) {
+        return Ok(preferred_port);
+    }
+
+    match is_local_access_port_bindable(bind_host, preferred_port) {
+        Ok(true) => return Ok(preferred_port),
+        Ok(false) => {}
+        Err(error) => {
+            return Err(format!("端口 {} 检测失败: {}", preferred_port, error));
+        }
+    }
+
+    for offset in 1..=128u16 {
+        let Some(candidate) = preferred_port.checked_add(offset) else {
+            break;
+        };
+        if candidate == 0 || current_port == Some(candidate) {
+            continue;
+        }
+        match is_local_access_port_bindable(bind_host, candidate) {
+            Ok(true) => {
+                logger::log_codex_api_warn(&format!(
+                    "[CodexLocalAccess] API 服务端口 {} 已被占用，自动切换到 {}",
+                    preferred_port, candidate
+                ));
+                return Ok(candidate);
+            }
+            Ok(false) => {}
+            Err(error) => {
+                logger::log_codex_api_warn(&format!(
+                    "[CodexLocalAccess] API 服务端口 {} 检测失败，继续尝试下一个端口: {}",
+                    candidate, error
+                ));
+            }
+        }
+    }
+
+    let random_port = allocate_random_local_port(bind_host)?;
+    logger::log_codex_api_warn(&format!(
+        "[CodexLocalAccess] API 服务端口 {} 附近无可用端口，自动切换到 {}",
+        preferred_port, random_port
+    ));
+    Ok(random_port)
+}
+
+fn ensure_collection_port_available_for_start(
+    collection: &mut CodexLocalAccessCollection,
+    current_port: Option<u16>,
+) -> Result<bool, String> {
+    let bind_host = bind_host_for_collection(collection).to_string();
+    let requested_port = collection.port;
+    let selected_port =
+        allocate_available_local_port(&bind_host, requested_port, current_port)?;
+    if selected_port == requested_port {
+        return Ok(false);
+    }
+
+    collection.port = selected_port;
+    collection.updated_at = now_ms();
+    save_collection_to_disk(collection)?;
+    Ok(true)
 }
 
 fn load_collection_from_disk() -> Result<Option<CodexLocalAccessCollection>, String> {
@@ -8450,7 +8521,7 @@ async fn bind_gateway_listener(bind_host: &str, port: u16) -> Result<TcpListener
 fn format_gateway_bind_error(bind_host: &str, port: u16, error: &std::io::Error) -> String {
     if error.kind() == std::io::ErrorKind::AddrInUse {
         return format!(
-            "启动本地接入服务失败: {}:{} 已被占用，请先清理端口或改用其他端口（{}）",
+            "启动本地接入服务失败: {}:{} 已被占用，系统将自动尝试其他可用端口（{}）",
             bind_host, port, error
         );
     }
@@ -9014,7 +9085,7 @@ async fn ensure_gateway_matches_runtime_locked() -> Result<(), String> {
         let _ = task.await;
     }
 
-    let Some(collection) = collection else {
+    let Some(mut collection) = collection else {
         stop_gateway_locked().await;
         return Ok(());
     };
@@ -9022,6 +9093,12 @@ async fn ensure_gateway_matches_runtime_locked() -> Result<(), String> {
     if !collection.enabled {
         stop_gateway_locked().await;
         return Ok(());
+    }
+
+    let current_port_for_start = if running { actual_port } else { None };
+    if ensure_collection_port_available_for_start(&mut collection, current_port_for_start)? {
+        let mut runtime = gateway_runtime().lock().await;
+        sync_runtime_collection(&mut runtime, collection.clone());
     }
 
     let bind_host = bind_host_for_collection(&collection);
@@ -9082,35 +9159,6 @@ async fn ensure_gateway_matches_runtime_locked() -> Result<(), String> {
     let stopped_endpoint = stop_gateway_locked().await;
     if let Some(endpoint) = stopped_endpoint {
         wait_for_gateway_port_release(&endpoint.bind_host, endpoint.port).await?;
-    }
-
-    if probe_sidecar_ready_once(&collection, Duration::from_millis(250))
-        .await
-        .is_ok()
-    {
-        match process::kill_port_processes(collection.port) {
-            Ok(count) if count > 0 => {
-                log_gateway_mode_info(
-                    CodexLocalAccessGatewayMode::Sidecar,
-                    format!(
-                        "已停止旧 API 服务 sidecar 以加载新配置: port={}, killed={}",
-                        collection.port, count
-                    ),
-                );
-            }
-            Ok(_) => {}
-            Err(error) => {
-                let message = format!("停止旧 API 服务 sidecar 失败: {}", error);
-                let mut runtime = gateway_runtime().lock().await;
-                runtime.running = false;
-                runtime.actual_port = None;
-                runtime.actual_bind_host = None;
-                runtime.sidecar_config_fingerprint = None;
-                runtime.last_error = Some(message.clone());
-                return Err(message);
-            }
-        }
-        wait_for_gateway_port_release(bind_host, collection.port).await?;
     }
 
     let binary = match sidecar_binary_path() {
@@ -10519,7 +10567,6 @@ async fn spawn_provider_gateway_sidecar(
         .stderr(Stdio::piped());
     #[cfg(target_os = "windows")]
     {
-        use std::os::windows::process::CommandExt;
         command.creation_flags(0x08000000);
     }
 
@@ -10716,21 +10763,6 @@ pub async fn ensure_provider_gateway_for_dir(
     let sidecar_dir = provider_gateway_sidecar_dir(profile_dir, account_id)?;
     let launch_config =
         prepare_sidecar_launch_config_in_dir(&collection, sidecar_dir, HashMap::new()).await?;
-    if probe_sidecar_ready_once(&collection, Duration::from_millis(250))
-        .await
-        .is_ok()
-    {
-        let killed = process::kill_port_processes(collection.port)?;
-        if killed > 0 {
-            logger::log_codex_api_info(&format!(
-                "[CodexLocalAccess][provider-gateway] 已停止旧 sidecar: port={}, killed={}",
-                collection.port, killed
-            ));
-        }
-        wait_for_gateway_port_release(bind_host_for_collection(&collection), collection.port)
-            .await?;
-    }
-
     let (child, task, bind_host) =
         spawn_provider_gateway_sidecar(&collection, &launch_config).await?;
     let mut runtimes = provider_gateway_runtime_store().lock().await;
@@ -12477,17 +12509,37 @@ pub async fn kill_local_access_port_processes() -> Result<CodexLocalAccessPortCl
     }
     .ok_or_else(|| "API 服务集合尚未创建".to_string())?;
 
-    stop_gateway().await;
-
-    let killed_count = process::kill_port_processes(collection.port)? as u32;
-
-    if collection.enabled {
-        ensure_gateway_matches_runtime().await?;
+    let stopped_endpoint = stop_gateway().await;
+    if let Some(endpoint) = stopped_endpoint {
+        if let Err(error) = wait_for_gateway_port_release(&endpoint.bind_host, endpoint.port).await {
+            logger::log_codex_api_warn(&format!(
+                "[CodexLocalAccess] 等待自身 API 服务释放端口失败，继续自动选择可用端口: {}",
+                error
+            ));
+        }
     }
+
+    let selected_port = allocate_available_local_port(
+        bind_host_for_collection(&collection),
+        collection.port,
+        None,
+    )?;
+    if selected_port != collection.port {
+        let mut next_collection = collection.clone();
+        next_collection.port = selected_port;
+        next_collection.updated_at = now_ms();
+        save_collection_to_disk(&next_collection)?;
+        {
+            let mut runtime = gateway_runtime().lock().await;
+            sync_runtime_collection(&mut runtime, next_collection);
+        }
+    }
+
+    ensure_gateway_matches_runtime().await?;
 
     let state = snapshot_state().await?;
     Ok(CodexLocalAccessPortCleanupResult {
-        killed_count,
+        killed_count: 0,
         state,
     })
 }
@@ -12504,16 +12556,16 @@ pub async fn update_local_access_port(port: u16) -> Result<CodexLocalAccessState
         return Err("本地接入集合尚未创建".to_string());
     };
 
-    ensure_local_port_available(
+    let selected_port = allocate_available_local_port(
         bind_host_for_collection(&collection),
         port,
         Some(collection.port),
     )?;
-    if collection.port == port {
+    if collection.port == selected_port {
         return snapshot_state().await;
     }
 
-    collection.port = port;
+    collection.port = selected_port;
     collection.updated_at = now_ms();
     save_collection_to_disk(&collection)?;
 

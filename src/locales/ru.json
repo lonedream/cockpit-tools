@@ -218,7 +218,7 @@
       "desc": "Эта область фиксируется в правом верхнем углу на всех страницах и подходит для кампаний или брендовой рекламы.",
       "action": "Подробнее"
     },
-    "appName": "Orbit Desk",
+    "appName": "XM",
     "collapse": "Свернуть",
     "confirmDelete": "Подтвердить удаление",
     "confirmDeleteTag": "Подтвердить удаление тега",
@@ -265,12 +265,12 @@
   },
   "sponsors": {
     "pageTitle": "Спонсоры",
-    "pageDesc": "Спасибо этим спонсорам за поддержку Orbit Desk.",
+    "pageDesc": "Спасибо этим спонсорам за поддержку XM.",
     "loading": "Загрузка спонсоров...",
     "emptyTitle": "Спонсоров пока нет",
     "emptyDesc": "Удалённый модуль спонсоров сейчас отключён.",
     "listAriaLabel": "Список спонсоров",
-    "defaultDescription": "Спасибо за поддержку Orbit Desk.",
+    "defaultDescription": "Спасибо за поддержку XM.",
     "openSponsor": "Открыть"
   },
   "platformLayout": {
@@ -558,7 +558,7 @@
   },
   "settings": {
     "title": "Настройки приложения",
-    "subtitle": "Настройте работу Orbit Desk под себя.",
+    "subtitle": "Настройте работу XM под себя.",
     "tabs": {
       "general": "Общие",
       "network": "Сеть",
@@ -716,7 +716,7 @@
       "sideNavLayoutClassic": "Классический макет",
       "antigravityDualSwitchNoRestart": "Двойное переключение без перезапуска",
       "antigravityDualSwitchNoRestartDesc": "При переключении аккаунта локальная запись данных и плавное переключение через расширение выполняются в одном потоке без перезапуска Antigravity IDE.",
-      "appAutoLaunch": "Запускать Orbit Desk при входе в систему",
+      "appAutoLaunch": "Запускать XM при входе в систему",
       "appAutoLaunchDesc": "Автоматически запускать приложение после входа в систему",
       "startupWakeupDisabled": "Отключено",
       "startupWakeupImmediate": "Разбудить сразу",
@@ -815,7 +815,7 @@
       "proxyUrlRequired": "URL прокси не может быть пустым, когда глобальный прокси включён."
     },
     "about": {
-      "appName": "Orbit Desk",
+      "appName": "XM",
       "slogan": "Профессиональное решение для управления аккаунтами",
       "author": "Автор",
       "wechat": "Вичат",
@@ -1707,7 +1707,7 @@
     },
     "exportFormat": {
       "label": "Формат экспорта",
-      "cockpitTools": "Orbit Desk",
+      "cockpitTools": "XM",
       "sub2api": "Формат sub2api",
       "cpa": "Формат cpa",
       "downloadAll": "Скачать все",
@@ -2591,7 +2591,7 @@
       "builtinProviders": "Встроенные провайдеры",
       "sponsorHint": "URL эксклюзивного релей-сервиса заполнен автоматически. После ввода API Key карточка автоматически запросит баланс и расход.",
       "integration": {
-        "sub2api": "Совместимо с Sub2API",
+        "sub2api": "Совместимо с Compatible Relay",
         "newApi": "Совместимо с New API"
       },
       "usage": {
@@ -4237,7 +4237,7 @@
       "backToCurrent": "Назад",
       "switchToThisAccount": "Сменить",
       "openDetails": "Открыть подробности",
-      "openCockpitTools": "Открыть Orbit Desk"
+      "openCockpitTools": "Открыть XM"
     },
     "empty": {
       "title": "Нет аккаунтов",
@@ -4360,7 +4360,7 @@
   },
   "relay": {
     "pageTitle": "Эксклюзивный релей",
-    "pageDesc": "Партнёрский API-сервис для пользователей Orbit Desk, доступный для аккаунтов Codex API Key.",
+    "pageDesc": "Партнёрский API-сервис для пользователей XM, доступный для аккаунтов Codex API Key.",
     "loading": "Загрузка релея...",
     "emptyTitle": "Релей отключён",
     "emptyDesc": "Удалённая конфигурация не включила эксклюзивный релей.",
@@ -4389,16 +4389,16 @@
   },
   "apiKeyFun": {
     "eyebrow": "Шлюз",
-    "title": "Relay APIKEY.FUN",
+    "title": "Relay XM",
     "description": "Официальный relay Orbit предоставляет стабильный, открытый и выгодный API-доступ к большим моделям. Поддерживаются Claude, OpenAI, Gemini и другие основные модели; сервис подходит для единой настройки в Codex, Gemini CLI, Claude Code и других инструментах разработки. При регистрации по эксклюзивной ссылке Orbit можно получить постоянную скидку до 5% на пополнения.",
     "register": "Эксклюзивная ссылка",
     "docs": "Официальная документация",
     "viewNow": "Смотреть",
     "queryTitle": "Лимит ключа",
-    "queryDesc": "Введите API Key APIKEY.FUN, чтобы автоматически проверить лимит.",
+    "queryDesc": "Введите API Key XM, чтобы автоматически проверить лимит.",
     "keyNotSet": "Ключ не введён",
     "apiKeyLabel": "API-ключ",
-    "apiKeyPlaceholder": "Вставьте API Key из консоли APIKEY.FUN",
+    "apiKeyPlaceholder": "Вставьте API Key из консоли XM",
     "hideKey": "Скрыть",
     "showKey": "Показать",
     "endpointLabel": "Точка доступа",
@@ -4409,7 +4409,7 @@
     "saving": "Запись",
     "saveSuccess": "Записано в Codex Provider: {{name}}",
     "toolsTitle": "Записать конфиг клиента",
-    "toolsDesc": "Напрямую записывает локальные файлы конфигурации по документации APIKEY.FUN и структуре CC Switch.",
+    "toolsDesc": "Напрямую записывает локальные файлы конфигурации по документации XM и структуре CC Switch.",
     "endpoint": {
       "global": "Глобальная сеть",
       "globalDesc": "Официальный API Base по умолчанию для большинства сетей.",
@@ -4475,12 +4475,12 @@
       "lastRemaining": "Прошлый баланс {{value}}",
       "notQueried": "Не проверялся",
       "deleteButton": "Удалить",
-      "editAlias": "Edit alias",
-      "renamePlaceholder": "Enter alias...",
+      "editAlias": "Изменить псевдоним",
+      "renamePlaceholder": "Введите псевдоним...",
       "createdAt": "Добавлено {{time}}",
       "saveFlash": "Сохранено"
     },
-    "copyKey": "Copy Key",
-    "clearKey": "Clear input"
+    "copyKey": "Копировать ключ",
+    "clearKey": "Очистить ввод"
   }
 }

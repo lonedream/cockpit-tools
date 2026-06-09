@@ -218,7 +218,7 @@
       "desc": "Khu vực này được cố định ở góc trên bên phải trên mọi trang, phù hợp cho chiến dịch hoặc quảng cáo thương hiệu.",
       "action": "Xem chi tiết"
     },
-    "appName": "Orbit Desk",
+    "appName": "XM",
     "collapse": "Thu gọn",
     "confirmDelete": "Xác nhận xóa",
     "confirmDeleteTag": "Xác nhận xóa thẻ",
@@ -265,12 +265,12 @@
   },
   "sponsors": {
     "pageTitle": "Nhà tài trợ",
-    "pageDesc": "Cảm ơn các nhà tài trợ đã hỗ trợ Orbit Desk.",
+    "pageDesc": "Cảm ơn các nhà tài trợ đã hỗ trợ XM.",
     "loading": "Đang tải nhà tài trợ...",
     "emptyTitle": "Chưa có nhà tài trợ",
     "emptyDesc": "Mô-đun nhà tài trợ từ xa hiện đang tắt.",
     "listAriaLabel": "Danh sách nhà tài trợ",
-    "defaultDescription": "Cảm ơn bạn đã hỗ trợ Orbit Desk.",
+    "defaultDescription": "Cảm ơn bạn đã hỗ trợ XM.",
     "openSponsor": "Mở"
   },
   "platformLayout": {
@@ -558,7 +558,7 @@
   },
   "settings": {
     "title": "Cài đặt ứng dụng",
-    "subtitle": "Cá nhân hóa trải nghiệm Orbit Desk của bạn.",
+    "subtitle": "Cá nhân hóa trải nghiệm XM của bạn.",
     "tabs": {
       "general": "Chung",
       "network": "Dịch vụ mạng",
@@ -716,7 +716,7 @@
       "sideNavLayoutClassic": "Bố cục cổ điển",
       "antigravityDualSwitchNoRestart": "Chuyển đôi không cần khởi động lại",
       "antigravityDualSwitchNoRestartDesc": "Khi chuyển tài khoản, việc ghi dữ liệu cục bộ và chuyển đổi liền mạch qua tiện ích mở rộng được thực hiện trong một luồng, không cần khởi động lại Antigravity IDE.",
-      "appAutoLaunch": "Khởi chạy Orbit Desk khi đăng nhập",
+      "appAutoLaunch": "Khởi chạy XM khi đăng nhập",
       "appAutoLaunchDesc": "Tự động khởi chạy ứng dụng sau khi đăng nhập hệ thống",
       "startupWakeupDisabled": "Tắt",
       "startupWakeupImmediate": "Đánh thức ngay",
@@ -815,7 +815,7 @@
       "proxyUrlRequired": "Không được để trống URL proxy khi bật proxy toàn cục."
     },
     "about": {
-      "appName": "Orbit Desk",
+      "appName": "XM",
       "slogan": "Giải pháp quản lý tài khoản chuyên nghiệp",
       "author": "Tác giả chính",
       "wechat": "Tài khoản WeChat chính thức",
@@ -1707,7 +1707,7 @@
     },
     "exportFormat": {
       "label": "Định dạng xuất",
-      "cockpitTools": "Orbit Desk",
+      "cockpitTools": "XM",
       "sub2api": "Định dạng sub2api",
       "cpa": "Định dạng cpa",
       "downloadAll": "Tải xuống tất cả",
@@ -2591,7 +2591,7 @@
       "builtinProviders": "Nhà cung cấp có sẵn",
       "sponsorHint": "URL dịch vụ trạm chuyển riêng đã được điền. Sau khi nhập API Key, thẻ sẽ tự động truy vấn số dư và mức dùng.",
       "integration": {
-        "sub2api": "Tương thích Sub2API",
+        "sub2api": "Tương thích Compatible Relay",
         "newApi": "Tương thích New API"
       },
       "usage": {
@@ -4237,7 +4237,7 @@
       "backToCurrent": "Quay lại",
       "switchToThisAccount": "Chuyển",
       "openDetails": "Mở chi tiết",
-      "openCockpitTools": "Mở Orbit Desk"
+      "openCockpitTools": "Mở XM"
     },
     "empty": {
       "title": "Không có tài khoản",
@@ -4360,7 +4360,7 @@
   },
   "relay": {
     "pageTitle": "Trạm chuyển riêng",
-    "pageDesc": "Dịch vụ API đối tác dành cho người dùng Orbit Desk, dùng được với tài khoản Codex API Key.",
+    "pageDesc": "Dịch vụ API đối tác dành cho người dùng XM, dùng được với tài khoản Codex API Key.",
     "loading": "Đang tải trạm chuyển...",
     "emptyTitle": "Trạm chuyển chưa bật",
     "emptyDesc": "Cấu hình từ xa chưa bật trạm chuyển riêng.",
@@ -4389,16 +4389,16 @@
   },
   "apiKeyFun": {
     "eyebrow": "Trung chuyển",
-    "title": "Relay APIKEY.FUN",
+    "title": "Relay XM",
     "description": "Relay chính thức của Orbit cung cấp quyền truy cập API mô hình lớn ổn định, mở và có hiệu quả chi phí cao. Nền tảng hỗ trợ các mô hình phổ biến như Claude, OpenAI và Gemini, phù hợp để cấu hình thống nhất trong Codex, Gemini CLI, Claude Code và các công cụ phát triển khác. Đăng ký qua liên kết độc quyền của Orbit để nhận ưu đãi nạp tiền vĩnh viễn lên tới 5%.",
     "register": "Liên kết độc quyền",
     "docs": "Tài liệu chính thức",
     "viewNow": "Xem ngay",
     "queryTitle": "Hạn mức khóa",
-    "queryDesc": "Nhập API Key APIKEY.FUN để tự động kiểm tra hạn mức.",
+    "queryDesc": "Nhập API Key XM để tự động kiểm tra hạn mức.",
     "keyNotSet": "Chưa nhập khóa",
     "apiKeyLabel": "Khóa API",
-    "apiKeyPlaceholder": "Dán API Key được tạo trong console APIKEY.FUN",
+    "apiKeyPlaceholder": "Dán API Key được tạo trong console XM",
     "hideKey": "Ẩn",
     "showKey": "Hiện",
     "endpointLabel": "Điểm kết nối",
@@ -4409,7 +4409,7 @@
     "saving": "Đang ghi",
     "saveSuccess": "Đã ghi vào Codex Provider: {{name}}",
     "toolsTitle": "Ghi cấu hình client",
-    "toolsDesc": "Ghi trực tiếp các tệp cấu hình cục bộ theo tài liệu APIKEY.FUN và bố cục tệp của CC Switch.",
+    "toolsDesc": "Ghi trực tiếp các tệp cấu hình cục bộ theo tài liệu XM và bố cục tệp của CC Switch.",
     "endpoint": {
       "global": "Tuyến toàn cầu",
       "globalDesc": "API Base mặc định chính thức, phù hợp hầu hết môi trường mạng.",
@@ -4475,12 +4475,12 @@
       "lastRemaining": "Số dư trước {{value}}",
       "notQueried": "Chưa kiểm tra",
       "deleteButton": "Xóa",
-      "editAlias": "Edit alias",
-      "renamePlaceholder": "Enter alias...",
+      "editAlias": "Sửa bí danh",
+      "renamePlaceholder": "Nhập bí danh...",
       "createdAt": "Đã thêm {{time}}",
       "saveFlash": "Vừa lưu"
     },
-    "copyKey": "Copy Key",
-    "clearKey": "Clear input"
+    "copyKey": "Sao chép khóa",
+    "clearKey": "Xóa nội dung"
   }
 }

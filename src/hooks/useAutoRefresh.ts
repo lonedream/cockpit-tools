@@ -33,6 +33,7 @@ import {
   type AutoRefreshSchedulerHandle,
   type AutoRefreshSchedulerTask,
 } from '../utils/autoRefreshScheduler';
+import { isTauriRuntime } from '../utils/tauriRuntime';
 
 interface GeneralConfig {
   language: string;
@@ -151,6 +152,7 @@ function getCurrentAccountEmails(): Record<CurrentAccountRefreshPlatform, string
 }
 
 export function useAutoRefresh() {
+  const tauriRuntime = isTauriRuntime();
   const refreshAllQuotas = useAccountStore((state) => state.refreshAllQuotas);
   const fetchAccounts = useAccountStore((state) => state.fetchAccounts);
   const fetchCurrentAccount = useAccountStore((state) => state.fetchCurrentAccount);
@@ -708,6 +710,9 @@ export function useAutoRefresh() {
   ]);
 
   useEffect(() => {
+    if (!tauriRuntime) {
+      return;
+    }
     destroyedRef.current = false;
     let startupTimer = window.setTimeout(() => {
       startupTimer = 0;
@@ -737,5 +742,5 @@ export function useAutoRefresh() {
       stopScheduler();
       window.removeEventListener('config-updated', handleConfigUpdate);
     };
-  }, [setupAutoRefresh, stopScheduler]);
+  }, [setupAutoRefresh, stopScheduler, tauriRuntime]);
 }

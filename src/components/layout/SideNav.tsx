@@ -1,9 +1,10 @@
-import { Settings, Rocket, GaugeCircle, LayoutGrid, SlidersHorizontal, FileText, ChevronDown, PanelLeftClose, PanelLeftOpen, ShieldCheck } from 'lucide-react';
+import { Settings, Rocket, GaugeCircle, LayoutGrid, SlidersHorizontal, FileText, ChevronDown, PanelLeftClose, PanelLeftOpen, ShieldCheck, Terminal } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useState, useRef, useCallback, useEffect, useLayoutEffect, useMemo, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
-import apiKeyFunIcon from '../../assets/icons/apikey-fun.png';
+import xmIcon from '../../assets/icons/xm.svg';
 import { Page } from '../../types/navigation';
+import { getXmDisplayName } from '../../config/xmProduct';
 import { isMenuVisiblePlatform, PlatformId, PLATFORM_PAGE_MAP } from '../../types/platform';
 import {
   API_RELAY_LAYOUT_ENTRY_ID,
@@ -35,7 +36,6 @@ interface SideNavProps {
   updateProgress: number;
   onUpdateActionClick: () => void;
   updateRemindersEnabled: boolean;
-  sponsorEntryVisible: boolean;
   onOpenLogViewer: () => void;
 }
 
@@ -73,8 +73,7 @@ const PAGE_PLATFORM_MAP: Partial<Record<Page, PlatformId>> = {
   workbuddy: 'workbuddy',
 };
 
-const APP_DISPLAY_NAME =
-  import.meta.env.VITE_COCKPIT_TOOLS_PROFILE === 'dev' ? 'Orbit Desk Dev' : 'Orbit Desk';
+const APP_DISPLAY_NAME = getXmDisplayName();
 
 const CLASSIC_NAV_MIN_SCALE = 0.5;
 const CLASSIC_NAV_SCALE_EPSILON = 0.004;
@@ -83,13 +82,14 @@ const SHOW_DASHBOARD_ENTRY = false;
 const SHOW_AUXILIARY_NAVIGATION = false;
 const SHOW_UPDATE_NAV_ENTRY = false;
 const SHOW_API_RELAY_NAV_ENTRY = false;
+const USE_XM_SLIM_NAV = true;
 
 function renderEntryIcon(entry: SideNavEntry, size: number) {
   if (entry.kind === 'api-relay') {
     return (
       <img
         className="nav-item-icon"
-        src={apiKeyFunIcon}
+        src={xmIcon}
         alt=""
         width={size}
         height={size}
@@ -127,7 +127,6 @@ export function SideNav({
   updateProgress,
   onUpdateActionClick,
   updateRemindersEnabled,
-  sponsorEntryVisible,
   onOpenLogViewer,
 }: SideNavProps) {
   const { t } = useTranslation();
@@ -188,7 +187,7 @@ export function SideNav({
   const hiddenSet = useMemo(() => new Set(hiddenEntryIds), [hiddenEntryIds]);
   const sidebarSet = useMemo(() => new Set(sidebarEntryIds), [sidebarEntryIds]);
   const apiRelayEntryVisible =
-    SHOW_API_RELAY_NAV_ENTRY && sponsorEntryVisible && apiRelaySidebarVisible;
+    SHOW_API_RELAY_NAV_ENTRY && apiRelaySidebarVisible;
 
   const orderedEntries = useMemo<SideNavEntry[]>(() => {
     const platformEntries: SideNavEntry[] = orderedEntryIds
@@ -253,7 +252,7 @@ export function SideNav({
     result.splice(insertIndex, 0, {
       id: API_RELAY_LAYOUT_ENTRY_ID,
       kind: 'api-relay',
-      label: t('nav.apiRelay', '中转站'),
+      label: t('nav.apiRelay', 'XM'),
       hidden: false,
       targetPlatformId: null,
       platformIds: [],
@@ -709,6 +708,63 @@ export function SideNav({
     : updateActionState === 'downloading' || updateActionState === 'installing'
       ? 'progress'
       : 'update';
+
+  const renderXmLogo = (size = 32) => (
+    <img
+      className="xm-logo-mark-img"
+      src={xmIcon}
+      alt=""
+      width={size}
+      height={size}
+    />
+  );
+
+  if (USE_XM_SLIM_NAV) {
+    return (
+      <nav ref={sideNavRef} className="side-nav xm-side-nav" aria-label="XM">
+        <button
+          type="button"
+          className="xm-side-nav-brand"
+          onClick={handleLogoClick}
+          title={APP_DISPLAY_NAME}
+        >
+          <span className="xm-side-nav-logo">{renderXmLogo(34)}</span>
+          <span className="xm-side-nav-title">{APP_DISPLAY_NAME}</span>
+        </button>
+
+        <div className="xm-side-nav-main">
+          <button
+            className={`xm-side-nav-item ${page === 'codex' ? 'active' : ''}`}
+            onClick={() => setPage('codex')}
+            title="Codex"
+          >
+            <Terminal size={19} />
+            <span>Codex</span>
+          </button>
+        </div>
+
+        <div className="xm-side-nav-footer">
+          {hasBreakoutSession && (
+            <button
+              className="xm-side-nav-icon"
+              onClick={onEasterEggTriggerClick}
+              title={t('breakout.resumeGameNav', '继续')}
+            >
+              <Rocket size={18} />
+            </button>
+          )}
+          <button
+            className={`xm-side-nav-item compact ${page === 'settings' ? 'active' : ''}`}
+            onClick={() => setPage('settings')}
+            title={t('nav.settings', '设置')}
+          >
+            <Settings size={18} />
+            <span>{t('nav.settings', '设置')}</span>
+          </button>
+        </div>
+      </nav>
+    );
+  }
 
   const morePopoverContent = showMore ? (
     <div

@@ -890,6 +890,168 @@ html[data-theme="dark"] .side-nav-classic-handle:hover {
   background: var(--bg-hover);
 }
 
+/* XM slim navigation shell */
+.side-nav.xm-side-nav {
+  inset-inline-start: 18px;
+  top: 18px;
+  bottom: 18px;
+  transform: none;
+  width: 82px;
+  min-height: 0;
+  height: auto;
+  padding: 14px 10px;
+  gap: 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.1);
+  backdrop-filter: blur(18px);
+  animation: none;
+}
+
+.xm-logo-mark-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+
+.xm-side-nav-brand,
+.xm-side-nav-item,
+.xm-side-nav-icon {
+  -webkit-app-region: no-drag;
+}
+
+.xm-side-nav-brand {
+  width: 100%;
+  min-height: 72px;
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(15, 118, 110, 0.1), rgba(37, 99, 235, 0.08));
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  cursor: pointer;
+}
+
+.xm-side-nav-logo {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.xm-side-nav-title {
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.xm-side-nav-main,
+.xm-side-nav-footer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.xm-side-nav-main {
+  flex: 1;
+  justify-content: center;
+}
+
+.xm-side-nav-footer {
+  flex: 0 0 auto;
+}
+
+.xm-side-nav-item,
+.xm-side-nav-icon {
+  width: 100%;
+  min-height: 58px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-secondary);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    color 0.16s ease,
+    border-color 0.16s ease,
+    transform 0.16s ease;
+}
+
+.xm-side-nav-item span {
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.xm-side-nav-item.compact {
+  min-height: 54px;
+}
+
+.xm-side-nav-icon {
+  min-height: 44px;
+}
+
+.xm-side-nav-item:hover,
+.xm-side-nav-icon:hover {
+  background: rgba(15, 118, 110, 0.08);
+  color: var(--text-primary);
+}
+
+.xm-side-nav-item.active {
+  background: var(--primary);
+  border-color: rgba(15, 118, 110, 0.2);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(15, 118, 110, 0.22);
+}
+
+.app-container .main-wrapper {
+  margin-inline-start: 118px;
+}
+
+.app-container.app-container-xm-no-side-nav .main-wrapper {
+  margin-inline-start: 0;
+  width: 100%;
+  padding: 58px 32px 34px;
+  align-items: center;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+
+.app-container.app-container-xm-no-side-nav .main-wrapper > .main-content,
+.app-container.app-container-xm-no-side-nav .main-wrapper > .codex-accounts-page {
+  width: min(100%, 1180px);
+}
+
+[data-theme="dark"] .side-nav.xm-side-nav,
+html[data-theme="dark"] .side-nav.xm-side-nav {
+  background: rgba(21, 28, 36, 0.9);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.38);
+}
+
+[data-theme="dark"] .xm-side-nav-brand,
+html[data-theme="dark"] .xm-side-nav-brand {
+  background: linear-gradient(180deg, rgba(45, 212, 191, 0.12), rgba(96, 165, 250, 0.08));
+}
+
+[data-theme="dark"] .xm-side-nav-item.active,
+html[data-theme="dark"] .xm-side-nav-item.active {
+  color: #06201c;
+}
+
 /* Tooltip (简单实现) */
 .nav-item .tooltip {
   position: absolute;
@@ -919,6 +1081,23 @@ html[data-theme="dark"] .side-nav-classic-handle:hover {
 }
 
 @media (max-width: 640px) {
+  .side-nav.xm-side-nav {
+    inset-inline-start: 10px;
+    top: 10px;
+    bottom: 10px;
+    width: 72px;
+    padding: 10px 8px;
+  }
+
+  .app-container .main-wrapper {
+    margin-inline-start: 90px;
+  }
+
+  .app-container.app-container-xm-no-side-nav .main-wrapper {
+    margin-inline-start: 0;
+    padding: 54px 16px 24px;
+  }
+
   .side-nav-update-entry {
     bottom: calc(100% + 8px);
   }

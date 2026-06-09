@@ -531,7 +531,6 @@ export function CodexApiServicePage() {
   );
   const [testChatInput, setTestChatInput] = useState("");
   const [testDialogError, setTestDialogError] = useState("");
-  const [portKilling, setPortKilling] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [copiedField, setCopiedField] = useState<CopyField | null>(null);
@@ -1221,23 +1220,6 @@ export function CodexApiServicePage() {
       },
       t("codex.localAccess.upstreamProxySaveSuccess", "API 代理地址已更新"),
     );
-  };
-
-  const handleKillPort = async () => {
-    setPortKilling(true);
-    setError("");
-    setNotice("");
-    try {
-      const result = await codexLocalAccessService.killCodexLocalAccessPort();
-      setState(result.state);
-      setNotice(
-        t("codex.localAccess.killPortSuccessUnknown", "API 服务端口已清理"),
-      );
-    } catch (err) {
-      setError(String(err).replace(/^Error:\s*/, ""));
-    } finally {
-      setPortKilling(false);
-    }
   };
 
   const handleUpdateAccessScope = async (value: string) => {
@@ -2524,15 +2506,6 @@ export function CodexApiServicePage() {
               <div className="codex-api-service-message error">
                 <CircleAlert size={15} />
                 <span>{state.lastError}</span>
-                <button
-                  type="button"
-                  className="btn btn-secondary btn-sm"
-                  onClick={() => void handleKillPort()}
-                  disabled={portKilling || busy}
-                >
-                  <Wrench size={13} />
-                  {t("codex.localAccess.killPortAction", "清理端口")}
-                </button>
               </div>
             )}
             {notice && (
@@ -4962,7 +4935,6 @@ export function CodexApiServicePage() {
         onRotateApiKey={() =>
           codexLocalAccessService.rotateCodexLocalAccessApiKey().then(setState)
         }
-        onKillPort={handleKillPort}
         onToggleEnabled={handleToggleEnabled}
         onStreamTestMessage={({ sessionId, modelId, messages }) =>
           codexLocalAccessService.streamCodexLocalAccessChatTest(
@@ -4974,7 +4946,7 @@ export function CodexApiServicePage() {
         saving={busy}
         testing={testDialogRunning}
         starting={false}
-        portCleanupBusy={portKilling}
+        portCleanupBusy={false}
       />
     </div>
   );

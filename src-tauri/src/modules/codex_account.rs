@@ -1168,7 +1168,7 @@ fn get_accounts_storage_path() -> PathBuf {
     let data_dir = account::get_data_dir().unwrap_or_else(|_| {
         dirs::home_dir()
             .expect("无法获取用户目录")
-            .join(".antigravity_cockpit")
+            .join(".xm")
     });
     fs::create_dir_all(&data_dir).ok();
     migrate_codex_data_if_needed(&data_dir);
@@ -1180,7 +1180,7 @@ fn get_accounts_dir() -> PathBuf {
     let data_dir = account::get_data_dir().unwrap_or_else(|_| {
         dirs::home_dir()
             .expect("无法获取用户目录")
-            .join(".antigravity_cockpit")
+            .join(".xm")
     });
     let accounts_dir = data_dir.join("codex_accounts");
     fs::create_dir_all(&accounts_dir).ok();
@@ -2093,7 +2093,7 @@ fn load_account_with_summary(
         if migrate_apikey_fun_wire_api(&mut account) {
             if let Err(error) = save_account(&account) {
                 logger::log_warn(&format!(
-                    "[Codex Account][Migration] APIKEY.FUN 协议迁移写回失败: account_id={}, error={}",
+                    "[Codex Account][Migration] xm 协议迁移写回失败: account_id={}, error={}",
                     account.id, error
                 ));
             }
@@ -4558,7 +4558,7 @@ async fn import_sub2api_export_from_value(
     let accounts = value
         .get("accounts")
         .and_then(|item| item.as_array())
-        .ok_or("Sub2API JSON 缺少 accounts 数组")?;
+        .ok_or("兼容中转 JSON 缺少 accounts 数组")?;
     let mut imported = Vec::new();
 
     for (index, item) in accounts.iter().enumerate() {
@@ -4567,7 +4567,7 @@ async fn import_sub2api_export_from_value(
         }
         let candidate = extract_codex_import_candidate_from_value(item).ok_or_else(|| {
             format!(
-                "Sub2API 第 {} 个 OpenAI OAuth 账号缺少有效 access_token",
+                "兼容中转第 {} 个 OpenAI OAuth 账号缺少有效 access_token",
                 index + 1
             )
         })?;
@@ -4575,7 +4575,7 @@ async fn import_sub2api_export_from_value(
     }
 
     if imported.is_empty() {
-        return Err("Sub2API JSON 中未找到可导入的 OpenAI OAuth access_token".to_string());
+        return Err("兼容中转 JSON 中未找到可导入的 OpenAI OAuth access_token".to_string());
     }
 
     Ok(Some(imported))
@@ -5274,7 +5274,7 @@ fn codex_batch_import_values_from_content(content: &str) -> Result<Vec<serde_jso
                 let accounts = value
                     .get("accounts")
                     .and_then(|item| item.as_array())
-                    .ok_or("Sub2API JSON 缺少 accounts 数组")?;
+                    .ok_or("兼容中转 JSON 缺少 accounts 数组")?;
                 return Ok(accounts
                     .iter()
                     .filter(|item| is_sub2api_codex_oauth_account(item))
@@ -6041,10 +6041,10 @@ mod tests {
 
             let previous_home = std::env::var("HOME").ok();
             let previous_codex_home = std::env::var("CODEX_HOME").ok();
-            let previous_data_dir = std::env::var("COCKPIT_TOOLS_DATA_DIR").ok();
+            let previous_data_dir = std::env::var("XM_DATA_DIR").ok();
             std::env::set_var("HOME", &home_dir);
             std::env::set_var("CODEX_HOME", &codex_home);
-            std::env::set_var("COCKPIT_TOOLS_DATA_DIR", &home_dir);
+            std::env::set_var("XM_DATA_DIR", &home_dir);
 
             Self {
                 home_dir,
@@ -6070,8 +6070,8 @@ mod tests {
                 None => std::env::remove_var("CODEX_HOME"),
             }
             match self.previous_data_dir.as_ref() {
-                Some(value) => std::env::set_var("COCKPIT_TOOLS_DATA_DIR", value),
-                None => std::env::remove_var("COCKPIT_TOOLS_DATA_DIR"),
+                Some(value) => std::env::set_var("XM_DATA_DIR", value),
+                None => std::env::remove_var("XM_DATA_DIR"),
             }
             let _ = fs::remove_dir_all(&self.home_dir);
         }
@@ -6462,7 +6462,7 @@ mod tests {
             }
         }));
         let value = serde_json::json!({
-            "name": "Sub2API account",
+            "name": "Compatible relay account",
             "notes": "imported from sub2api",
             "platform": "openai",
             "type": "oauth",
@@ -6472,7 +6472,7 @@ mod tests {
         });
 
         let candidate = extract_codex_import_candidate_from_value(&value)
-            .expect("Sub2API account should expose access_token");
+            .expect("Compatible relay account should expose access_token");
 
         match candidate {
             CodexJsonImportCandidate::AccessToken {
@@ -6957,6 +6957,9 @@ mod tests {
         let config_path = base_dir.join("config.toml");
         let content = fs::read_to_string(&config_path).expect("read config");
         assert!(content.contains("openai_base_url = \"https://api.example.com\""));
+        #[cfg(target_os = "windows")]
+        assert!(content.contains("model_provider = \"openai\""));
+        #[cfg(not(target_os = "windows"))]
         assert!(!content.contains("model_provider = "));
         assert!(!content.contains("codex_local_access"));
         assert_eq!(
@@ -7040,6 +7043,9 @@ requires_openai_auth = false
         write_api_provider_to_config_toml(&base_dir, &provider_config).expect("write config");
 
         let content = fs::read_to_string(&config_path).expect("read config");
+        #[cfg(target_os = "windows")]
+        assert!(content.contains("model_provider = \"openai\""));
+        #[cfg(not(target_os = "windows"))]
         assert!(!content.contains("model_provider = "));
         assert!(!content.contains("[model_providers.codex_local_access]"));
         assert!(!content.contains("experimental_bearer_token = \"sk-history\""));

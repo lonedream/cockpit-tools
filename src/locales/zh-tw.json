@@ -218,7 +218,7 @@
       "desc": "此區域會固定顯示於所有頁面的右上角，適合投放活動資訊或品牌廣告。",
       "action": "查看詳情"
     },
-    "appName": "Orbit Desk",
+    "appName": "XM",
     "collapse": "收合",
     "confirmDelete": "確認刪除",
     "confirmDeleteTag": "確認刪除標籤",
@@ -261,16 +261,16 @@
     "switchClassicLayoutDontAskAgain": "不再顯示此提示",
     "switchClassicLayoutConfirm": "立即切換",
     "2faManager": "2FA 管理",
-    "apiRelay": "中轉站"
+    "apiRelay": "XM"
   },
   "sponsors": {
     "pageTitle": "贊助商",
-    "pageDesc": "感謝以下贊助商支持 Orbit Desk。",
+    "pageDesc": "感謝以下贊助商支持 XM。",
     "loading": "正在載入贊助商...",
     "emptyTitle": "暫無贊助商",
     "emptyDesc": "目前遠端未開啟贊助商模組。",
     "listAriaLabel": "贊助商列表",
-    "defaultDescription": "感謝支持 Orbit Desk。",
+    "defaultDescription": "感謝支持 XM。",
     "openSponsor": "查看"
   },
   "platformLayout": {
@@ -281,7 +281,7 @@
     "sidebarToggle": "側邊欄顯示",
     "dashboardToggle": "儀表板顯示",
     "trayToggle": "選單列顯示",
-    "apiRelayTrayDisabled": "中轉站暫不支援選單列顯示",
+    "apiRelayTrayDisabled": "XM 暫不支援選單列顯示",
     "hiddenBadge": "已隱藏",
     "openFromMore": "管理平台佈局",
     "dragHandleLabel": "拖曳排序",
@@ -558,7 +558,7 @@
   },
   "settings": {
     "title": "應用程式設定",
-    "subtitle": "個性化您的 Orbit Desk 體驗。",
+    "subtitle": "個性化您的 XM 體驗。",
     "tabs": {
       "general": "通用",
       "network": "網路服務",
@@ -713,7 +713,7 @@
       "sideNavLayoutClassic": "經典佈局",
       "antigravityDualSwitchNoRestart": "無感雙通道切號（不重啟）",
       "antigravityDualSwitchNoRestartDesc": "切號時同時執行本地落盤與擴充套件無感切號，不再自動重啟 Antigravity IDE。",
-      "appAutoLaunch": "開機時啟動 Orbit Desk",
+      "appAutoLaunch": "開機時啟動 XM",
       "appAutoLaunchDesc": "系統登入後自動啟動應用程式",
       "startupWakeupDisabled": "關閉",
       "startupWakeupImmediate": "立即喚醒",
@@ -815,7 +815,7 @@
       "proxyUrlRequired": "啟用全域代理時，代理位址不可為空。"
     },
     "about": {
-      "appName": "Orbit Desk",
+      "appName": "XM",
       "slogan": "專業帳號管理解決方案",
       "author": "主作者",
       "wechat": "微信公眾號",
@@ -1707,8 +1707,8 @@
     },
     "exportFormat": {
       "label": "匯出格式",
-      "cockpitTools": "Orbit Desk",
-      "sub2api": "sub2api 格式",
+      "cockpitTools": "XM",
+      "sub2api": "相容中轉格式",
       "cpa": "cpa 格式",
       "downloadAll": "一鍵下載全部",
       "cpaCardTitle": "帳號 {{index}}",
@@ -2591,7 +2591,7 @@
       "builtinProviders": "內建供應商",
       "sponsorHint": "已依專屬中轉站設定自動填入相容服務位址。輸入 API Key 後，卡片會自動查詢餘額與用量。",
       "integration": {
-        "sub2api": "Sub2API 相容",
+        "sub2api": "相容中轉",
         "newApi": "New API 相容"
       },
       "usage": {
@@ -4237,7 +4237,7 @@
       "backToCurrent": "返回",
       "switchToThisAccount": "切換",
       "openDetails": "打開詳情頁",
-      "openCockpitTools": "打開 Orbit Desk"
+      "openCockpitTools": "打開 XM"
     },
     "empty": {
       "title": "暫無帳號",
@@ -4360,7 +4360,7 @@
   },
   "relay": {
     "pageTitle": "專屬中轉站",
-    "pageDesc": "為 Orbit Desk 使用者提供的合作 API 服務，可用於 Codex API Key 帳號。",
+    "pageDesc": "為 XM 使用者提供的合作 API 服務，可用於 Codex API Key 帳號。",
     "loading": "正在載入中轉站...",
     "emptyTitle": "中轉站未開啟",
     "emptyDesc": "目前遠端設定未開啟專屬中轉站。",
@@ -4388,17 +4388,17 @@
     "modelsEmpty": "遠端尚未設定固定模型清單，儲存後可由 Codex 依服務能力使用。"
   },
   "apiKeyFun": {
-    "eyebrow": "中轉站",
-    "title": "APIKEY.FUN 中轉站",
-    "description": "Orbit 官方中轉站，為使用者提供穩定、開放、高性價比的大模型 API 接入服務。支援 Claude、OpenAI、Gemini 等主流模型，適合在 Codex、Gemini CLI、Claude Code 及其他開發工具中統一配置使用。透過 Orbit 專屬連結註冊，可享最高儲值永久 95 折優惠。",
+    "eyebrow": "XM",
+    "title": "XM",
+    "description": "XM 為使用者提供大模型 API 接入服務，適合在 Codex 和其他開發工具中統一配置使用。",
     "register": "專屬註冊連結",
     "docs": "官方文件",
     "viewNow": "立即查看",
     "queryTitle": "金鑰額度查詢",
-    "queryDesc": "輸入 APIKEY.FUN 的 API Key 後會自動查詢額度。",
+    "queryDesc": "輸入 XM API Key 後會自動查詢額度。",
     "keyNotSet": "尚未輸入金鑰",
     "apiKeyLabel": "API 金鑰",
-    "apiKeyPlaceholder": "貼上在 APIKEY.FUN 控制台建立的 API Key",
+    "apiKeyPlaceholder": "貼上在 XM 控制台建立的 API Key",
     "hideKey": "隱藏",
     "showKey": "顯示",
     "endpointLabel": "接入端點",
@@ -4409,7 +4409,7 @@
     "saving": "寫入中",
     "saveSuccess": "已寫入 Codex Provider：{{name}}",
     "toolsTitle": "一鍵寫入客戶端",
-    "toolsDesc": "依照 APIKEY.FUN 文件與 CC Switch 的落盤方式，直接寫入本機客戶端設定檔。",
+    "toolsDesc": "依照 XM 相容接口資訊，直接寫入本機客戶端設定檔。",
     "endpoint": {
       "global": "全球線路",
       "globalDesc": "官方預設 API Base，適合多數網路環境。",

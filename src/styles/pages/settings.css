@@ -6,6 +6,14 @@
   width: 100%;
 }
 
+.settings-page-shell--compact .settings-page-tabs-row {
+  margin-top: 0;
+}
+
+.settings-page-shell--compact .settings-container {
+  width: 100%;
+}
+
 .settings-section {
   background: var(--bg-secondary);
   border-radius: var(--radius-lg);

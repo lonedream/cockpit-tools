@@ -218,7 +218,7 @@
       "desc": "تُثبَّت هذه المنطقة في أعلى يمين جميع الصفحات لعرض الحملات أو إعلانات العلامة التجارية.",
       "action": "عرض التفاصيل"
     },
-    "appName": "Orbit Desk",
+    "appName": "XM",
     "collapse": "طي",
     "confirmDelete": "تأكيد الحذف",
     "confirmDeleteTag": "تأكيد حذف الوسم",
@@ -249,7 +249,7 @@
       "backToCurrent": "رجوع",
       "switchToThisAccount": "تبديل",
       "openDetails": "فتح التفاصيل",
-      "openCockpitTools": "فتح Orbit Desk"
+      "openCockpitTools": "فتح XM"
     },
     "empty": {
       "title": "لا توجد حسابات",
@@ -311,12 +311,12 @@
   },
   "sponsors": {
     "pageTitle": "الرعاة",
-    "pageDesc": "شكرًا للرعاة التاليين على دعم Orbit Desk.",
+    "pageDesc": "شكرًا للرعاة التاليين على دعم XM.",
     "loading": "جارٍ تحميل الرعاة...",
     "emptyTitle": "لا يوجد رعاة حاليًا",
     "emptyDesc": "وحدة الرعاة البعيدة معطّلة حاليًا.",
     "listAriaLabel": "قائمة الرعاة",
-    "defaultDescription": "شكرًا لدعم Orbit Desk.",
+    "defaultDescription": "شكرًا لدعم XM.",
     "openSponsor": "فتح"
   },
   "platformLayout": {
@@ -604,7 +604,7 @@
   },
   "settings": {
     "title": "إعدادات التطبيق",
-    "subtitle": "قم بتخصيص تجربة Orbit Desk الخاصة بك.",
+    "subtitle": "قم بتخصيص تجربة XM الخاصة بك.",
     "tabs": {
       "general": "عام",
       "network": "خدمات الشبكة",
@@ -759,7 +759,7 @@
       "sideNavLayoutClassic": "التخطيط الكلاسيكي",
       "antigravityDualSwitchNoRestart": "تبديل ثنائي بدون إعادة تشغيل",
       "antigravityDualSwitchNoRestartDesc": "عند تبديل الحساب، يتم تنفيذ كتابة بيانات الحساب محليًا والتبديل السلس عبر الإضافة في تدفق واحد، دون إعادة تشغيل Antigravity IDE.",
-      "appAutoLaunch": "تشغيل Orbit Desk عند تسجيل الدخول",
+      "appAutoLaunch": "تشغيل XM عند تسجيل الدخول",
       "appAutoLaunchDesc": "تشغيل التطبيق تلقائيًا بعد تسجيل الدخول إلى النظام",
       "startupWakeupDisabled": "معطل",
       "startupWakeupImmediate": "تنبيه فوري",
@@ -861,7 +861,7 @@
       "proxyUrlRequired": "لا يمكن أن يكون عنوان الوكيل فارغًا عند تفعيل الوكيل العام."
     },
     "about": {
-      "appName": "Orbit Desk",
+      "appName": "XM",
       "slogan": "حل احترافي لإدارة الحسابات",
       "author": "المؤلف الرئيسي",
       "wechat": "حساب WeChat الرسمي",
@@ -1753,7 +1753,7 @@
     },
     "exportFormat": {
       "label": "تنسيق التصدير",
-      "cockpitTools": "Orbit Desk",
+      "cockpitTools": "XM",
       "sub2api": "تنسيق sub2api",
       "cpa": "تنسيق cpa",
       "downloadAll": "تنزيل الكل",
@@ -2637,7 +2637,7 @@
       "builtinProviders": "المزوّدون المدمجون",
       "sponsorHint": "تم ملء عنوان خدمة الترحيل الحصرية تلقائياً. بعد إدخال API Key ستستعلم البطاقة عن الرصيد والاستخدام تلقائياً.",
       "integration": {
-        "sub2api": "متوافق مع Sub2API",
+        "sub2api": "متوافق مع Compatible Relay",
         "newApi": "متوافق مع New API"
       },
       "usage": {
@@ -4360,7 +4360,7 @@
   },
   "relay": {
     "pageTitle": "ترحيل حصري",
-    "pageDesc": "خدمة API شريكة لمستخدمي Orbit Desk ويمكن استخدامها مع حسابات Codex API Key.",
+    "pageDesc": "خدمة API شريكة لمستخدمي XM ويمكن استخدامها مع حسابات Codex API Key.",
     "loading": "جارٍ تحميل الترحيل...",
     "emptyTitle": "الترحيل غير مفعّل",
     "emptyDesc": "لم تفعّل الإعدادات البعيدة خدمة الترحيل الحصرية.",
@@ -4389,16 +4389,16 @@
   },
   "apiKeyFun": {
     "eyebrow": "وسيط",
-    "title": "ترحيل APIKEY.FUN",
+    "title": "ترحيل XM",
     "description": "وسيط Orbit الرسمي يوفر وصولًا مستقرًا ومفتوحًا وعالي الكفاءة من حيث التكلفة إلى واجهات API للنماذج الكبيرة. يدعم نماذج رئيسية مثل Claude وOpenAI وGemini، وهو مناسب للتكوين الموحد في Codex وGemini CLI وClaude Code وأدوات التطوير الأخرى. عند التسجيل عبر رابط Orbit الحصري، يمكنك الحصول على خصم دائم يصل إلى 5% على عمليات الشحن.",
     "register": "رابط تسجيل حصري",
     "docs": "الوثائق الرسمية",
     "viewNow": "اعرض الآن",
     "queryTitle": "حصة المفتاح",
-    "queryDesc": "أدخل API Key من APIKEY.FUN لفحص الحصة تلقائيًا.",
+    "queryDesc": "أدخل API Key من XM لفحص الحصة تلقائيًا.",
     "keyNotSet": "لم يتم إدخال مفتاح",
     "apiKeyLabel": "مفتاح API",
-    "apiKeyPlaceholder": "الصق API Key الذي أنشأته في لوحة APIKEY.FUN",
+    "apiKeyPlaceholder": "الصق API Key الذي أنشأته في لوحة XM",
     "hideKey": "إخفاء",
     "showKey": "إظهار",
     "endpointLabel": "نقطة الوصول",
@@ -4409,7 +4409,7 @@
     "saving": "جارٍ الكتابة",
     "saveSuccess": "تمت الكتابة إلى Codex Provider: {{name}}",
     "toolsTitle": "كتابة إعدادات العميل",
-    "toolsDesc": "يكتب ملفات إعدادات العميل المحلية مباشرة وفق وثائق APIKEY.FUN وبنية ملفات CC Switch.",
+    "toolsDesc": "يكتب ملفات إعدادات العميل المحلية مباشرة وفق وثائق XM وبنية ملفات CC Switch.",
     "endpoint": {
       "global": "مسار عالمي",
       "globalDesc": "API Base الرسمي الافتراضي لمعظم بيئات الشبكة.",
@@ -4475,12 +4475,12 @@
       "lastRemaining": "الرصيد السابق {{value}}",
       "notQueried": "لم يُفحص",
       "deleteButton": "حذف",
-      "editAlias": "Edit alias",
-      "renamePlaceholder": "Enter alias...",
+      "editAlias": "تعديل الاسم المستعار",
+      "renamePlaceholder": "أدخل الاسم المستعار...",
       "createdAt": "أُضيف في {{time}}",
       "saveFlash": "حُفظ الآن"
     },
-    "copyKey": "Copy Key",
-    "clearKey": "Clear input"
+    "copyKey": "نسخ المفتاح",
+    "clearKey": "مسح الإدخال"
   }
 }

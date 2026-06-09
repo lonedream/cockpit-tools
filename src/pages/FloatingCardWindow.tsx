@@ -88,9 +88,9 @@ import {
   CURRENT_ACCOUNT_CHANGED_EVENT,
   type AccountSyncEventPayload,
 } from '../utils/accountSyncEvents';
+import { isTauriRuntime } from '../utils/tauriRuntime';
 import './FloatingCardWindow.css';
 
-const windowInstance = getCurrentWindow();
 const FLOATING_CARD_WINDOW_LABEL = 'floating-card';
 const INSTANCE_FLOATING_CARD_WINDOW_LABEL_PREFIX = 'instance-floating-card-';
 const FLOATING_CARD_PLATFORM_STORAGE_KEY = 'agtools.floating_card.platform';
@@ -193,6 +193,19 @@ function findInstanceById(instances: InstanceProfile[], instanceId: string): Ins
 
 export function FloatingCardWindow() {
   const { t } = useTranslation();
+  const windowInstance = useMemo(() => {
+    if (!isTauriRuntime()) {
+      return null;
+    }
+    try {
+      return getCurrentWindow();
+    } catch {
+      return null;
+    }
+  }, []);
+  if (!windowInstance) {
+    return null;
+  }
   const currentWindowLabel = windowInstance.label;
   const isPrimaryFloatingCardWindow = currentWindowLabel === FLOATING_CARD_WINDOW_LABEL;
   const isInstanceFloatingCardWindow = currentWindowLabel.startsWith(

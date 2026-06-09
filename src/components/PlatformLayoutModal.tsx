@@ -20,9 +20,8 @@ import {
   Upload,
   X,
 } from 'lucide-react';
-import apiKeyFunIcon from '../assets/icons/apikey-fun.png';
+import xmIcon from '../assets/icons/xm.svg';
 import { isMenuVisiblePlatform, MENU_VISIBLE_PLATFORM_IDS, PlatformId } from '../types/platform';
-import { useSponsorStore } from '../stores/useSponsorStore';
 import {
   API_RELAY_LAYOUT_ENTRY_ID,
   ApiRelayLayoutEntryId,
@@ -379,7 +378,7 @@ export function PlatformLayoutModal({
     removePlatformGroup,
     resetPlatformLayout,
   } = usePlatformLayoutStore();
-  const apiRelayEntryEnabled = useSponsorStore((state) => Boolean(state.state.sponsorModule));
+  const apiRelayEntryEnabled = false;
 
   const [draggingId, setDraggingId] = useState<LayoutEntryId | null>(null);
   const [dropTargetId, setDropTargetId] = useState<LayoutEntryId | null>(null);
@@ -473,7 +472,7 @@ export function PlatformLayoutModal({
       result.splice(insertIndex, 0, {
         id: API_RELAY_LAYOUT_ENTRY_ID,
         type: 'api-relay',
-        label: t('nav.apiRelay', '中转站'),
+        label: t('nav.apiRelay', 'xm'),
         hidden: !apiRelayDashboardVisible,
         group: null,
         defaultPlatformId: null,
@@ -1267,7 +1266,7 @@ export function PlatformLayoutModal({
                       <div className="platform-layout-icon">
                         {isApiRelayEntry ? (
                           <img
-                            src={apiKeyFunIcon}
+                            src={xmIcon}
                             alt=""
                             className="platform-layout-group-icon"
                             style={{ width: 18, height: 18 }}
@@ -1327,7 +1326,7 @@ export function PlatformLayoutModal({
                         className={`platform-layout-toggle ${isApiRelayEntry ? 'is-disabled' : ''}`}
                         title={
                           isApiRelayEntry
-                            ? t('platformLayout.apiRelayTrayDisabled', '中转站暂不支持菜单栏显示')
+                            ? t('platformLayout.apiRelayTrayDisabled', 'xm 暂不支持菜单栏显示')
                             : undefined
                         }
                       >

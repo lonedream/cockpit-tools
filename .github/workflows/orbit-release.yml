@@ -1,4 +1,4 @@
-name: Orbit Desk Release
+name: xm Release
 
 on:
   push:
@@ -93,7 +93,7 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         run: |
-          $privateKeyPath = Join-Path $env:RUNNER_TEMP "orbit-desk-updater.key"
+          $privateKeyPath = Join-Path $env:RUNNER_TEMP "xm-updater.key"
           Set-Content -Path $privateKeyPath -Value $env:TAURI_SIGNING_PRIVATE_KEY -NoNewline -Encoding ASCII
           Get-ChildItem release-assets -File | Where-Object { $_.Extension -in ".exe", ".msi" } | ForEach-Object {
             npx tauri signer sign --private-key-path $privateKeyPath --password "$env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD" $_.FullName
@@ -106,9 +106,9 @@ jobs:
         run: |
           $version = "${{ steps.app_version.outputs.VERSION }}"
           $body = @()
-          $body += "Orbit Desk v$version"
+          $body += "xm v$version"
           $body += ""
-          $body += "Windows installers and updater metadata."
+          $body += "Windows installers and updater metadata for xm."
           $body -join "`n" | Set-Content -Encoding UTF8 release-notes.md
 
       - name: Build latest.json
@@ -140,7 +140,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.app_version.outputs.VERSION }}
-          name: Orbit Desk v${{ steps.app_version.outputs.VERSION }}
+          name: xm v${{ steps.app_version.outputs.VERSION }}
           body_path: release-notes.md
           draft: false
           prerelease: false

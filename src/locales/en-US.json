@@ -218,7 +218,7 @@
       "loginSuccess": "Login successful",
       "switchAccount": "Switch Account"
     },
-    "appName": "Orbit Desk",
+    "appName": "XM",
     "collapse": "Collapse",
     "confirmDelete": "Confirm Delete",
     "confirmDeleteTag": "Confirm Tag Deletion",
@@ -250,7 +250,7 @@
       "backToCurrent": "Back",
       "switchToThisAccount": "Switch",
       "openDetails": "Open details",
-      "openCockpitTools": "Open Orbit Desk"
+      "openCockpitTools": "Open XM"
     },
     "empty": {
       "title": "No accounts",
@@ -311,17 +311,17 @@
   },
   "sponsors": {
     "pageTitle": "Sponsors",
-    "pageDesc": "Thanks to these sponsors for supporting Orbit Desk.",
+    "pageDesc": "Thanks to these sponsors for supporting XM.",
     "loading": "Loading sponsors...",
     "emptyTitle": "No sponsors yet",
     "emptyDesc": "The remote sponsor module is currently disabled.",
     "listAriaLabel": "Sponsor list",
-    "defaultDescription": "Thanks for supporting Orbit Desk.",
+    "defaultDescription": "Thanks for supporting XM.",
     "openSponsor": "Open"
   },
   "relay": {
     "pageTitle": "Exclusive Relay",
-    "pageDesc": "A partnered API service for Orbit Desk users that can be used with Codex API Key accounts.",
+    "pageDesc": "A partnered API service for XM users that can be used with Codex API Key accounts.",
     "loading": "Loading relay...",
     "emptyTitle": "Relay disabled",
     "emptyDesc": "The remote configuration has not enabled the exclusive relay.",
@@ -350,16 +350,16 @@
   },
   "apiKeyFun": {
     "eyebrow": "Relay",
-    "title": "APIKEY.FUN",
+    "title": "XM",
     "description": "The official Orbit relay, providing stable, open, and cost-effective large-model API access. It supports mainstream models such as Claude, OpenAI, and Gemini, and is suitable for unified configuration across Codex, Gemini CLI, Claude Code, and other developer tools. Register through the Orbit exclusive link to get a permanent top-up discount of up to 5%.",
     "register": "Exclusive signup",
     "docs": "Official docs",
     "viewNow": "View now",
     "queryTitle": "Key Quota Lookup",
-    "queryDesc": "Enter an APIKEY.FUN API Key to query quota automatically.",
+    "queryDesc": "Enter an XM API Key to query quota automatically.",
     "keyNotSet": "No key entered",
     "apiKeyLabel": "API Key",
-    "apiKeyPlaceholder": "Paste the API Key created in the APIKEY.FUN console",
+    "apiKeyPlaceholder": "Paste the API Key created in the XM console",
     "hideKey": "Hide",
     "showKey": "Show",
     "endpointLabel": "Endpoint",
@@ -370,7 +370,7 @@
     "saving": "Writing",
     "saveSuccess": "Written to Codex Provider: {{name}}",
     "toolsTitle": "Write Client Config",
-    "toolsDesc": "Write local client config files directly, following the APIKEY.FUN docs and CC Switch file layout.",
+    "toolsDesc": "Write local client config files directly, following the XM docs and CC Switch file layout.",
     "endpoint": {
       "global": "Global",
       "globalDesc": "Official default API Base for most network environments.",
@@ -729,7 +729,7 @@
   },
   "settings": {
     "title": "Settings",
-    "subtitle": "Customize your Orbit Desk experience.",
+    "subtitle": "Customize your XM experience.",
     "tabs": {
       "general": "General",
       "network": "Network",
@@ -888,7 +888,7 @@
       "floatingCardStartupDesc": "Display the floating account card automatically after app launch",
       "floatingCardAlwaysOnTop": "Keep floating card on top by default",
       "floatingCardAlwaysOnTopDesc": "New floating card windows stay on top when opened",
-      "appAutoLaunch": "Launch Orbit Desk at login",
+      "appAutoLaunch": "Launch XM at login",
       "appAutoLaunchDesc": "Automatically start the app after system sign-in",
       "startupWakeupDisabled": "Disabled",
       "startupWakeupImmediate": "Wake up immediately",
@@ -1045,7 +1045,7 @@
       "codexAppSpeedLaunchFailed": "Failed to restart Codex: {{error}}"
     },
     "network": {
-      "apiTitle": "Orbit API",
+      "apiTitle": "XM Local API",
       "wsService": "WebSocket Service",
       "wsServiceDesc": "Allow external programs (e.g., VS Code extension) to connect",
       "preferredPort": "Preferred Port",
@@ -1084,7 +1084,7 @@
       "proxyUrlRequired": "Proxy URL cannot be empty when global proxy is enabled."
     },
     "about": {
-      "appName": "Orbit Desk",
+      "appName": "XM",
       "slogan": "Professional Account Solution",
       "author": "Author",
       "wechat": "WeChat",
@@ -1883,18 +1883,18 @@
       "reauthEmailLabel": "Reauth account"
     },
     "token": {
-      "desc": "Paste session JSON, auth.json, account JSON, Sub2API JSON, accessToken, or refresh_token.",
-      "placeholder": "Example: paste session JSON, accessToken, Sub2API export JSON, or {\"accessToken\":\"eyJ...\"}",
+      "desc": "Paste session JSON, auth.json, account JSON, compatible relay JSON, accessToken, or refresh_token.",
+      "placeholder": "Example: paste session JSON, accessToken, compatible relay export JSON, or {\"accessToken\":\"eyJ...\"}",
       "formatSummary": "Required fields and examples",
-      "formatRequired": "Supports session JSON, full tokens (id_token + access_token), Sub2API export JSON, accessToken only, or refresh_token only. refresh_token-only import exchanges it online for full credentials first.",
+      "formatRequired": "Supports session JSON, full tokens (id_token + access_token), compatible relay export JSON, accessToken only, or refresh_token only. refresh_token-only import exchanges it online for full credentials first.",
       "formatSingleLabel": "Full tokens",
       "formatRefreshOnlyLabel": "session / accessToken / refresh_token example",
       "formatBatchLabel": "Batch example"
     },
     "exportFormat": {
       "label": "Export Format",
-      "cockpitTools": "Orbit Desk",
-      "sub2api": "sub2api",
+      "cockpitTools": "XM",
+      "sub2api": "Compatible relay",
       "cpa": "cpa",
       "downloadAll": "Download All",
       "cpaCardTitle": "Account {{index}}",
@@ -2215,7 +2215,7 @@
       },
       "providers": {
         "cockpit_api": {
-          "name": "Orbit API"
+          "name": "XM API"
         },
         "openai_official": {
           "name": "OpenAI Official"
@@ -2305,7 +2305,7 @@
       }
     },
     "cockpitApi": {
-      "panelTitle": "Orbit API Service Panel",
+      "panelTitle": "XM API Service Panel",
       "servicePanel": "Service Panel",
       "balance": "Balance",
       "requests": "Requests",
@@ -2486,7 +2486,7 @@
       "builtinProviders": "Built-in Providers",
       "sponsorHint": "The exclusive relay service URL has been filled in. After you enter an API Key, the card will query balance and usage automatically.",
       "integration": {
-        "sub2api": "Sub2API Compatible",
+        "sub2api": "Compatible Relay",
         "newApi": "New API Compatible"
       },
       "usage": {

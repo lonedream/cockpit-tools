@@ -3032,7 +3032,7 @@ async fn import_sub2api_export_from_value(
     let accounts = value
         .get("accounts")
         .and_then(|item| item.as_array())
-        .ok_or("Sub2API JSON 缺少 accounts 数组")?;
+        .ok_or("兼容中转 JSON 缺少 accounts 数组")?;
     let mut imported = Vec::new();
 
     for (index, item) in accounts.iter().enumerate() {
@@ -3041,7 +3041,7 @@ async fn import_sub2api_export_from_value(
         }
         let candidate = extract_codex_import_candidate_from_value(item).ok_or_else(|| {
             format!(
-                "Sub2API 第 {} 个 OpenAI OAuth 账号缺少有效 access_token",
+                "兼容中转第 {} 个 OpenAI OAuth 账号缺少有效 access_token",
                 index + 1
             )
         })?;
@@ -3049,7 +3049,7 @@ async fn import_sub2api_export_from_value(
     }
 
     if imported.is_empty() {
-        return Err("Sub2API JSON 中未找到可导入的 OpenAI OAuth access_token".to_string());
+        return Err("兼容中转 JSON 中未找到可导入的 OpenAI OAuth access_token".to_string());
     }
 
     Ok(Some(imported))
@@ -3706,7 +3706,7 @@ mod tests {
             }
         }));
         let value = serde_json::json!({
-            "name": "Sub2API account",
+            "name": "Compatible relay account",
             "notes": "imported from sub2api",
             "platform": "openai",
             "type": "oauth",
@@ -3716,7 +3716,7 @@ mod tests {
         });
 
         let candidate = extract_codex_import_candidate_from_value(&value)
-            .expect("Sub2API account should expose access_token");
+            .expect("Compatible relay account should expose access_token");
 
         match candidate {
             CodexJsonImportCandidate::AccessToken {

@@ -218,7 +218,7 @@
       "desc": "Bu alan tüm sayfalarda sağ üstte sabitlenir ve kampanya ya da marka reklamları için uygundur.",
       "action": "Ayrıntıları görüntüle"
     },
-    "appName": "Orbit Desk",
+    "appName": "XM",
     "collapse": "Daralt",
     "confirmDelete": "Silmeyi Onayla",
     "confirmDeleteTag": "Etiket Silmeyi Onayla",
@@ -265,12 +265,12 @@
   },
   "sponsors": {
     "pageTitle": "Sponsorlar",
-    "pageDesc": "Orbit Desk'u destekleyen sponsorlara teşekkür ederiz.",
+    "pageDesc": "XM'u destekleyen sponsorlara teşekkür ederiz.",
     "loading": "Sponsorlar yükleniyor...",
     "emptyTitle": "Henüz sponsor yok",
     "emptyDesc": "Uzak sponsor modülü şu anda devre dışı.",
     "listAriaLabel": "Sponsor listesi",
-    "defaultDescription": "Orbit Desk'u desteklediğiniz için teşekkürler.",
+    "defaultDescription": "XM'u desteklediğiniz için teşekkürler.",
     "openSponsor": "Aç"
   },
   "platformLayout": {
@@ -558,7 +558,7 @@
   },
   "settings": {
     "title": "Uygulama Ayarları",
-    "subtitle": "Orbit Desk deneyiminizi özelleştirin.",
+    "subtitle": "XM deneyiminizi özelleştirin.",
     "tabs": {
       "general": "Genel",
       "network": "Ağ",
@@ -716,7 +716,7 @@
       "sideNavLayoutClassic": "Klasik Düzen",
       "antigravityDualSwitchNoRestart": "Yeniden başlatmadan çift geçiş",
       "antigravityDualSwitchNoRestartDesc": "Hesap değiştirirken yerel hesap verisi yazımı ve eklentinin kesintisiz geçişi tek akışta yürütülür; Antigravity IDE yeniden başlatılmaz.",
-      "appAutoLaunch": "Oturum açıldığında Orbit Desk'u başlat",
+      "appAutoLaunch": "Oturum açıldığında XM'u başlat",
       "appAutoLaunchDesc": "Sistem oturumundan sonra uygulamayı otomatik başlat",
       "startupWakeupDisabled": "Devre dışı",
       "startupWakeupImmediate": "Hemen uyandır",
@@ -815,7 +815,7 @@
       "proxyUrlRequired": "Genel proxy etkin olduğunda proxy URL boş olamaz."
     },
     "about": {
-      "appName": "Orbit Desk",
+      "appName": "XM",
       "slogan": "Profesyonel Hesap Yönetimi Çözümü",
       "author": "Yazar",
       "wechat": "WeChat",
@@ -1707,7 +1707,7 @@
     },
     "exportFormat": {
       "label": "Dışa aktarma biçimi",
-      "cockpitTools": "Orbit Desk",
+      "cockpitTools": "XM",
       "sub2api": "sub2api biçimi",
       "cpa": "cpa biçimi",
       "downloadAll": "Tümünü indir",
@@ -2591,7 +2591,7 @@
       "builtinProviders": "Yerleşik Sağlayıcılar",
       "sponsorHint": "Özel aktarım servisinin URL’si dolduruldu. API Key girdikten sonra kart bakiye ve kullanımı otomatik sorgular.",
       "integration": {
-        "sub2api": "Sub2API uyumlu",
+        "sub2api": "Uyumlu Relay",
         "newApi": "New API uyumlu"
       },
       "usage": {
@@ -4237,7 +4237,7 @@
       "backToCurrent": "Geri",
       "switchToThisAccount": "Geç",
       "openDetails": "Ayrıntıları aç",
-      "openCockpitTools": "Orbit Desk'u aç"
+      "openCockpitTools": "XM'u aç"
     },
     "empty": {
       "title": "Hesap yok",
@@ -4360,7 +4360,7 @@
   },
   "relay": {
     "pageTitle": "Özel aktarım",
-    "pageDesc": "Orbit Desk kullanıcıları için Codex API Key hesaplarıyla kullanılabilen iş ortaklığı API servisi.",
+    "pageDesc": "XM kullanıcıları için Codex API Key hesaplarıyla kullanılabilen iş ortaklığı API servisi.",
     "loading": "Aktarım yükleniyor...",
     "emptyTitle": "Aktarım kapalı",
     "emptyDesc": "Uzak yapılandırma özel aktarımı etkinleştirmedi.",
@@ -4389,16 +4389,16 @@
   },
   "apiKeyFun": {
     "eyebrow": "Ara geçiş",
-    "title": "APIKEY.FUN relay",
+    "title": "XM relay",
     "description": "Orbit resmi ara geçiş hizmeti, büyük model API erişimi için kararlı, açık ve yüksek fiyat-performanslı bir çözüm sunar. Claude, OpenAI, Gemini gibi ana akım modelleri destekler; Codex, Gemini CLI, Claude Code ve diğer geliştirici araçlarında tek tip yapılandırma için uygundur. Orbit özel bağlantısıyla kaydolarak yüklemelerde kalıcı olarak %5’e varan indirim alabilirsiniz.",
     "register": "Özel kayıt linki",
     "docs": "Resmi doküman",
     "viewNow": "Hemen bak",
     "queryTitle": "Anahtar kotası",
-    "queryDesc": "Kotayı otomatik sorgulamak için APIKEY.FUN API Key girin.",
+    "queryDesc": "Kotayı otomatik sorgulamak için XM API Key girin.",
     "keyNotSet": "Anahtar yok",
     "apiKeyLabel": "API anahtarı",
-    "apiKeyPlaceholder": "APIKEY.FUN konsolunda oluşturulan API Key’i yapıştırın",
+    "apiKeyPlaceholder": "XM konsolunda oluşturulan API Key’i yapıştırın",
     "hideKey": "Gizle",
     "showKey": "Göster",
     "endpointLabel": "Bağlantı noktası",
@@ -4409,7 +4409,7 @@
     "saving": "Yazılıyor",
     "saveSuccess": "Codex Provider’a yazıldı: {{name}}",
     "toolsTitle": "İstemci config yaz",
-    "toolsDesc": "APIKEY.FUN dokümanına ve CC Switch dosya yapısına göre yerel istemci yapılandırma dosyalarını doğrudan yazar.",
+    "toolsDesc": "XM dokümanına ve CC Switch dosya yapısına göre yerel istemci yapılandırma dosyalarını doğrudan yazar.",
     "endpoint": {
       "global": "Küresel hat",
       "globalDesc": "Çoğu ağ ortamı için resmi varsayılan API Base.",
@@ -4475,12 +4475,12 @@
       "lastRemaining": "Son bakiye {{value}}",
       "notQueried": "Sorgulanmadı",
       "deleteButton": "Sil",
-      "editAlias": "Edit alias",
-      "renamePlaceholder": "Enter alias...",
+      "editAlias": "Takma adı düzenle",
+      "renamePlaceholder": "Takma ad girin...",
       "createdAt": "{{time}} eklendi",
       "saveFlash": "Kaydedildi"
     },
-    "copyKey": "Copy Key",
-    "clearKey": "Clear input"
+    "copyKey": "Anahtarı kopyala",
+    "clearKey": "Girdiyi temizle"
   }
 }
